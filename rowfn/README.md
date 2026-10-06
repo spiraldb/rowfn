@@ -5,11 +5,11 @@
 
 `rowfn` is an experimental framework for typed row functions on columnar arrays. Functions select
 inputs, outputs, and callbacks through a visitor. The framework executes those callbacks through
-host bindings, so Arrow and Vortex keep their own storage and allocation.
+backend bindings, while each backend keeps its native storage and allocation.
 
 The [component diagram](ARCHITECTURE.md) separates types, visitors, planning, execution, and bindings.
 The [Rust interface diagrams](INTERFACES.md) show their traits, associated types, and signatures.
-The [project overview](../README.md) introduces the experiment for Arrow maintainers.
+The [project overview](../README.md) describes the framework and included backend.
 
 ## Function authors
 
@@ -40,14 +40,14 @@ when a function returns an error.
 | --- | --- |
 | Understand the components. | [Architecture](ARCHITECTURE.md). |
 | Inspect the actual API. | [Rust interfaces](INTERFACES.md). |
-| Explore host integrations. | [Current and potential backends](BACKENDS.md). |
+| Explore backend integrations. | [Current and potential backends](BACKENDS.md). |
 | Write a function. | [Author guide](AUTHORING.md). |
-| Bind a host. | [Adapter guide](ADAPTERS.md). |
+| Add a backend. | [Adapter guide](ADAPTERS.md). |
 | Compare a native kernel. | [Comparison guide](COMPARING.md). |
 | Review unsafe invariants. | [Safety record](SAFETY.md). |
 
-`rowfn` depends on `rowfn-kernels`, with no Arrow or Vortex dependency. Registration, serialization,
-optimizer rules, and whole-batch functions remain host concerns. The Rust interfaces do not define
+`rowfn` depends on `rowfn-kernels`, with no backend dependency. Registration, serialization,
+optimizer rules, and whole-batch functions remain backend concerns. The Rust interfaces do not define
 a stable binary ABI.
 
 This package is unpublished. Historical measurements describe earlier source. The package split,

@@ -3,9 +3,9 @@
 
 //! Portable strict row functions for the experimental `rowfn` framework.
 //!
-//! Function definitions share their semantic dispatch and row operations across hosts. The default
-//! package has no host dependencies. Optional `arrow` and `vortex` features provide native mappings
-//! without changing the function definitions or registering them in a host catalog.
+//! Function definitions share semantic dispatch and row operations across backends. The default
+//! package has no backend dependency. Optional mappings connect native metadata to these definitions
+//! without registering a mandatory function catalog.
 
 #![deny(missing_docs)]
 

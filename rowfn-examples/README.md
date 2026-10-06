@@ -3,21 +3,21 @@
 
 # rowfn-examples
 
-Arrow-only fixtures and comparison benchmarks for the shared function definitions. This workspace
-has no Vortex dependency. Full cross-host fixtures remain in
-[integrations/vortex](../integrations/vortex/README.md).
+[Overview](../README.md) · [Comparison guide](../rowfn/COMPARING.md)
+
+Examples and benchmarks for the shared function definitions. The current harness uses Arrow because
+it is the first included backend. Future backend harnesses can use the same functions and fixtures.
 
 | Harness | Compares |
 | --- | --- |
-| `boundaries` | Direct collection, shared collection, and complete Arrow invocation. |
+| `boundaries` | Direct loops, shared collection, and complete invocation. |
 | `arrow_workloads` | Arithmetic, strings, dictionaries, lists, timestamps, and degenerate batches. |
-| `arrow_scalar` | Multiplication and literal string predicates. |
-| `arrow_families` | Arithmetic, bitwise operations, comparisons, patterns, substrings, and lengths. |
+| `arrow_scalar` | Multiplication and string predicates. |
+| `arrow_families` | Arithmetic, comparisons, patterns, substrings, and lengths. |
 
-Fixture checks run before timing when a benchmark is executed. Some references compose native
-kernels or use different output layouts. See the [comparison guide](../rowfn/COMPARING.md) for
-those qualifications and focused commands.
+When run, fixtures compare results before timing. Some references compose native kernels or use
+different output layouts. The [comparison guide](../rowfn/COMPARING.md) explains those limits.
 
-The export retains Arrow benchmark operations and replaces Vortex-only fixture panic helpers with
-standard `expect`. It has not been built, tested, or benchmarked. Historical reports describe their
-recorded source and compiler settings, not this exported workspace.
+The standalone export has not been built, tested, or benchmarked. [Recorded measurements](../BENCHMARKS.md)
+describe earlier source. Full cross-host fixtures are preserved with the
+[Vortex prototype](../integrations/vortex/README.md).

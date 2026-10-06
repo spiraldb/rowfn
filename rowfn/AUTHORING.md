@@ -177,26 +177,25 @@ selects the matching family, then calls one generic implementation of the row op
 Binary functions select each operand independently. The companion functions demonstrate this for
 trimming, concatenation, comparisons, patterns, substring, and lengths.
 
-The fixed `Utf8` signature remains useful for simple authoring. On Arrow it uses a generic layout
-view, so a row read still selects the storage variant. Use concrete text families when removing
-that dispatch or reading stored lengths and prefixes matters. This distinction does not change
-null propagation, callback restrictions, or output ownership.
+The fixed `Utf8` signature supplies `&str`. Concrete text families can retain stored lengths,
+prefixes, and layout information until needed. Their representation depends on the backend.
+Neither choice changes null propagation, callback restrictions, or output ownership.
 
-## Invoke on Arrow
+## Invoke a batch
 
-An `ArrowOperand` includes the array, its complete input field, and an explicit scalar flag.
-Supply the logical row count separately. A length-one array does not broadcast unless marked scalar.
+An `Operand<H>` contains a native column, its type metadata, and an explicit scalar flag. Supply the
+logical row count separately. A length-one column does not broadcast unless marked scalar.
 
 ```rust,ignore
-let fields = operands.iter().map(|input| input.dtype.clone()).collect::<Vec<_>>();
-let output = rowfn_arrow::plan(&function, &options, &fields)?;
-let result = rowfn_arrow::invoke(&function, &options, &operands, batch_rows, output)?;
+let planned = rowfn::plan::<H, _>(&function, &options, &input_types)?;
+let result = rowfn::execute::<H, _>(
+    &function, &options, &operands, batch_rows, planned.output_type(), &mut context,
+)?;
 ```
 
-`result` contains an Arrow array and its planned field. Empty and all-null batches retain that field.
-The `rowfn-functions` package supplies a complete Arrow example with checked addition and trimming.
-It also demonstrates runtime integer dispatch, prepared list scaling, and a downstream timestamp
-domain. Its optional Arrow mapping does not require Vortex.
+The result is `H::Column`. Empty and all-null batches retain planned metadata. A backend can wrap
+this boundary in its own function interface. The [included backend example](../rowfn-functions/examples/arrow.rs)
+shows one such invocation.
 
 ## Choose the appropriate boundary
 

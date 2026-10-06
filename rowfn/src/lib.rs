@@ -11,7 +11,7 @@
 //! Start with [`RowFn`] and [`RowVisitor`] to define a function. [`plan`] selects its typed output
 //! without decoding, and [`execute`] invokes it through host bindings. [`sink::ElementSink`] offers
 //! safe initialized scalar rows for immediate errors. Uninitialized sinks require explicit unsafe
-//! initialization evidence. See the package README for complete Arrow invocation and author guides.
+//! initialization evidence. See the package README for invocation and author guides.
 
 #![deny(missing_docs)]
 

@@ -3,14 +3,14 @@
 
 # Benchmark measurements
 
-The repository retains the reports, raw timings, summaries, commands, compiler metadata, and source
-snapshots from the RowFn experiments. Historical files use the earlier `rofl` name.
+Recorded results for particular backends and fixtures. The repository retains timings, summaries,
+commands, compiler metadata, and source snapshots. Historical files use the earlier `rofl` name.
 
 **These measurements describe their recorded source.** They do not benchmark the later package
 split, concrete text dispatch, rename, or standalone export. No fresh timings were collected for
 this index.
 
-## Start with the reports
+## Reports
 
 | Report | Answers |
 | --- | --- |
@@ -18,17 +18,16 @@ this index.
 | [Arrow investigation leads](research/row-fn-engine/arrow-performance-opportunities.md) | Which measured differences suggest native-kernel improvements? |
 | [ARM/x86 host comparison](research/row-fn-engine/measurements/2026-09-29-host-comparison/README.md) | How do selected shared functions behave on Arrow and Vortex across targets? |
 
-The main Arrow refresh used Arrow 59.3.0, an Apple M4 Max, Rust 1.98.0, LLVM 22.1.8, 16 CGUs, and
-no LTO. Results are medians of three process medians. Input construction and output planning are
-outside timing. Result allocation and publication are inside it.
+The main refresh used an Apple M4 Max, Arrow 59.3.0, Rust 1.98.0, LLVM 22.1.8, 16 CGUs, and no LTO.
+Results are medians of three process medians. Allocation and publication are timed. Input creation
+and output planning are not. Selected x86 runs used an Intel Xeon Platinum 8488C on EC2.
 
-The selected x86 runs used an Intel Xeon Platinum 8488C on EC2. Compare ratios within each target,
-rather than absolute ARM and x86 times. The reports distinguish native kernels from composed
-references and comparisons with different output storage.
+Compare ratios within a target, not absolute times across machines. Each report states its baseline
+and any output or error differences.
 
 ## Trace a result to its source
 
-The September 30 refresh is the main Arrow inventory:
+The September 30 refresh retains these artifacts:
 
 | Artifact | Contains |
 | --- | --- |
@@ -61,9 +60,9 @@ and old machine paths are not a portable benchmark environment.
 
 </details>
 
-The unsafe Vortex experiment does not establish a safe optimization and is separate from the Arrow
-execution paths. Arrow wins in these fixtures do not establish an improvement on current Arrow
-mainline or the speedup of a future Arrow patch. Other cases regress.
+The unsafe Vortex experiment skips validation and null sanitation. It does not establish a safe
+optimization. Wins in selected fixtures do not establish a general speedup or a measured improvement
+to a native backend. Other cases regress.
 
 The published non-Markdown measurement artifacts were compared byte for byte with the retained
 local originals on October 6, 2026. All 247 matched. Reports retain their original aggregation and

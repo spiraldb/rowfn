@@ -3,53 +3,47 @@
 
 # Backends
 
-[Overview](../README.md) · [Architecture](ARCHITECTURE.md)
+[Overview](../README.md) · [Add a backend](ADAPTERS.md)
 
-Arrow is in the standalone workspace. Vortex is preserved as an integration snapshot. DataFusion and DuckDB are potential
-integrations. Solid arrows below show existing invocation paths. Dashed arrows show proposals.
+A backend binds RowFn to a columnar system. It owns native storage and metadata, while functions
+and typed traversal remain shared.
+
+| System | Status |
+| --- | --- |
+| [Arrow](../rowfn-arrow/README.md) | Included backend. Latest changes have source review only. |
+| DataFusion | Potential integration over the Arrow backend. Not implemented. |
+| DuckDB | Potential native vector backend. Not implemented. |
+| Vortex | Earlier prototype preserved in [integrations/vortex](../integrations/vortex/README.md), outside the active workspace. |
+
+## Possible integrations
+
+Dashed arrows show paths that have not been implemented in this workspace.
 
 ```mermaid
 flowchart TB
-    A["Arrow caller"] --> RA["rowfn-arrow"]
-    V["Vortex registry"] --> RV["VortexRowFn + VortexHost"]
-    DF["DataFusion<br/>potential"] -.-> RA
-    D["DuckDB<br/>potential"] -.-> DB["Batch adapter<br/>proposed"]
-    RA --> R["rowfn"]
-    RV --> R
+    A["Arrow callers"] --> AB["rowfn-arrow"]
+    DF["DataFusion"] -.-> AB
+    D["DuckDB"] -.-> DB["Native vector bindings"]
+    O["Other systems"] -.-> OB["Backend bindings"]
+    AB --> R["rowfn"]
     DB -.-> R
-    class A,V,RA,RV host
+    OB -.-> R
+    class A,AB host
     class R core
-    class DF,D,DB proposed
+    class DF,D,DB,O,OB proposed
     classDef core fill:#eff6ff,stroke:#2563eb,color:#1e3a8a
     classDef host fill:#f0fdfa,stroke:#0f766e,color:#134e4a
     classDef proposed fill:#f8fafc,stroke:#64748b,color:#334155,stroke-dasharray:5 4
 ```
 
-| Backend | Status | Boundary |
-| --- | --- | --- |
-| [Arrow](../rowfn-arrow/README.md) | Implemented, with latest changes unverified. | Fields, explicit scalar operands, and Arrow arrays. |
-| [Vortex](../integrations/vortex/adapter/mod.rs) | Preserved integration snapshot, with latest changes unverified. | Native arrays, execution context, and existing function registry. |
-| DataFusion | Potential. | A UDF wrapper over `rowfn-arrow`. |
-| DuckDB | Potential. | Native vector bindings with a batch invocation boundary. |
+**DataFusion** could register a UDF wrapper and delegate execution to `rowfn-arrow`. The wrapper
+would own signatures, coercion, scalar markers, metadata, and error mapping. Its Arrow version must
+match the backend. See the [UDF interface](https://datafusion.apache.org/library-user-guide/functions/adding-udfs.html).
 
-## DataFusion: reuse Arrow bindings
+**DuckDB** could lend typed views over its [native data chunks](https://duckdb.org/docs/current/clients/c/data_chunk)
+and publish into DuckDB-owned output. The backend would define supported vector representations,
+validity, allocation, errors, and buffer lifetimes.
 
-DataFusion scalar UDFs receive columnar arguments and can return Arrow arrays. A RowFn wrapper could
-use that existing boundary and delegate execution to `rowfn-arrow`. See the
-[DataFusion UDF interface](https://datafusion.apache.org/library-user-guide/functions/adding-udfs.html).
-
-The wrapper would still own registration, signatures, coercion, scalar markers, output metadata,
-and error mapping. Its Arrow version must match the adapter. No wrapper has been implemented.
-
-## DuckDB: bind batches of vectors
-
-DuckDB exposes native vectors through its [data chunk interface](https://duckdb.org/docs/current/clients/c/data_chunk).
-A RowFn adapter could retain a chunk, lend typed views, and publish into DuckDB-owned output.
-
-The adapter must define supported vector representations, validity, allocation, errors, and buffer
-lifetimes. Any C/Rust boundary must carry a whole batch, rather than call Rust for every row.
-Rust traits are not a stable binary ABI. Arrow C Data could exchange arrays, but would not define
-function registration or invocation by itself. No DuckDB adapter or ABI has been implemented.
-
-Both integrations must preserve RowFn's strict null contract. Functions that need whole-batch access
-or custom null behavior can remain on the host's broader function interface.
+Other systems can implement the same [binding traits](INTERFACES.md). Any FFI must cross at a batch
+boundary. Rust traits are not a stable binary ABI, and exchanging arrays does not define function
+registration or invocation.

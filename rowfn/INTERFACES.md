@@ -120,9 +120,14 @@ trait OutputBinding<T: Default + 'static>: Host {
 
 </details>
 
-## Concrete hosts
+## Backend types
 
-[`Host`](src/host.rs) supplies these associated types. Binding traits provide the operations.
+Every backend defines `Column`, `NativeType`, `Context`, and `Error` through [`Host`](src/host.rs).
+Binding traits supply the operations. The executor uses those types without requiring one array
+layout or type system.
+
+<details>
+<summary>Included Arrow bindings and the earlier Vortex prototype</summary>
 
 | Type | [`ArrowHost`](../rowfn-arrow/src/lib.rs) | [`VortexHost`](../integrations/vortex/adapter/mod.rs) |
 | --- | --- | --- |
@@ -138,6 +143,8 @@ The `i64` bindings retain different storage and lend the same Rust input view:
 | `Decoded` | `ScalarBuffer<i64>`. | `Buffer<i64>`. |
 | `View<'a>` | `&'a [i64]`. | `&'a [i64]`. |
 | Output `Buffer` | [`PrimitiveOutput<i64>`](../rowfn-arrow/src/output.rs). | [`VortexBuffer<i64>`](../integrations/vortex/adapter/output.rs). |
+
+</details>
 
 Other interfaces have focused jobs: [`TypeBinding` and `BatchBinding`](src/host.rs) handle metadata
 and batch operations, [`OutputSink`](src/sink/mod.rs) lends writable rows, and

@@ -64,7 +64,27 @@ whose adapter retains validation and null sanitation.
 
 ## Evidence
 
-Arrow-only tests live in this package. Cross-host tests and benchmarks live in
-[`rowfn-examples`](../integrations/vortex/rowfn-examples/README.md). The adapter is unpublished and uses locked Arrow
+Arrow-only tests live in this package. Current examples and benchmarks live in
+[`rowfn-examples`](../rowfn-examples/README.md). Earlier cross-host fixtures remain in the Vortex snapshot. The adapter is unpublished and uses locked Arrow
 59.3.0. The [comparison guide](../rowfn/COMPARING.md) explains baseline qualifications, and the
 [project status](../README.md#status) identifies the latest unverified changes.
+
+## Native comparisons
+
+The comparison harness checks fixture values before timing. It does not establish equivalence for
+all inputs or errors. These differences apply to the recorded Arrow 59.3.0 comparisons:
+
+<details>
+<summary>Output and error qualifications</summary>
+
+- Substring fixtures compare logical strings, with native `Utf8` output versus owned `Utf8View`.
+- Some sink references copy into `Utf8View` to match ownership.
+- Dictionary references materialize logical rows. Null values and unused entries need coverage.
+- Strict RowFn suppresses row failures when any input is null. Native byte substring can report
+  invalid boundaries in null payloads, and scalar regex can reject a pattern on all-null text.
+- Error diagnostics are not automatically identical. Decoder and allocation failures stay terminal.
+- Floating comparisons use the native total ordering. NaNs and signed zero need explicit cases.
+- Compare fields for list shape, child nullability, timestamps, and extensions. Retain string output
+  after dropping inputs to check ownership.
+
+</details>

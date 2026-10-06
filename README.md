@@ -3,56 +3,56 @@
 
 # RowFn
 
-**Typed row functions, executed on columnar arrays.**
+**Typed row functions for columnar systems.**
 
-One function definition runs through Arrow or Vortex bindings. Each host keeps its own storage,
-allocation, validity, and output metadata.
+Define a row operation once and run it over columns. RowFn handles traversal, constants, nulls, and
+error propagation. A backend supplies its native types, storage, allocation, and output construction.
 
 ```mermaid
 flowchart TB
-    F["Shared RowFn definition"] --> E["RowFn framework"]
-    E --> A["rowfn-arrow"]
-    E --> V["Vortex adapter"]
+    F["RowFn definition<br/>typed row logic"] --> E["Shared executor"]
+    E --> B["Backend bindings<br/>types, storage, allocation"]
+    B --> C["Native column result"]
     class F function
     class E core
-    class A,V host
+    class B host
+    class C data
     classDef function fill:#fff7ed,stroke:#c2410c,color:#431407
     classDef core fill:#eff6ff,stroke:#2563eb,color:#1e3a8a
     classDef host fill:#f0fdfa,stroke:#0f766e,color:#134e4a
     classDef data fill:#f8fafc,stroke:#64748b,color:#334155
 ```
 
-For Arrow maintainers, the experiment offers another implementation of selected kernels to compare
-and investigate. Historical runs contain both wins and losses. It is not an upstream adoption proposal.
+The framework is independent of the backend. Arrow is the first backend included in this workspace.
+Other integrations have yet to be added. An earlier Vortex prototype is preserved as a research
+snapshot. See [backends](rowfn/BACKENDS.md) for the current scope.
 
-## Explore
+## Start here
 
-| Read | To understand |
+| Read | For |
 | --- | --- |
-| [Architecture](rowfn/ARCHITECTURE.md). | How types, visitors, execution, and bindings fit together. |
-| [Rust interfaces](rowfn/INTERFACES.md). | The actual traits, methods, and concrete host types. |
-| [Backends](rowfn/BACKENDS.md). | Implemented Arrow/Vortex bindings and potential DataFusion/DuckDB integrations. |
-| [Arrow example](rowfn-functions/examples/arrow.rs). | Checked addition and owned string output. |
-| [Kernel comparisons](rowfn/COMPARING.md). | Matched semantics and measurement boundaries. |
-| [Benchmark measurements](BENCHMARKS.md). | Reports, raw timings, source snapshots, and compiler metadata. |
+| [Architecture](rowfn/ARCHITECTURE.md). | Components and execution flow. |
+| [Rust interfaces](rowfn/INTERFACES.md). | Actual traits and types. |
+| [Write a function](rowfn/AUTHORING.md). | Callbacks, preparation, errors, and sinks. |
+| [Add a backend](rowfn/ADAPTERS.md). | Type and storage bindings. |
+| [Benchmarks](BENCHMARKS.md). | Recorded results and measurement limits. |
 
-## Try the example
+## Try an example
 
-From this checkout:
+The included example uses the Arrow backend:
 
 ```sh
 cargo run --locked -p rowfn-functions --features arrow --example arrow
 ```
 
-The workspace and Arrow fixtures have no Vortex dependency. The Vortex adapter, full cross-host
-fixtures, and matching patch are preserved under [integrations/vortex](integrations/vortex/README.md).
+It performs checked addition and writes owned string output. The function definitions remain
+backend-independent.
 
 ## Status
 
-The crates are experimental and remain unpublished to crates.io. Null inputs imply null output, and valid inputs cannot
-produce null. Whole-batch functions and custom null behavior can use other interfaces.
+The crates are experimental and unpublished to crates.io. Null inputs imply null output, and valid
+inputs cannot produce null. Whole-batch functions and custom null behavior can use other interfaces.
 
-The reports cover Arrow 59.3.0 and earlier code. The package split, text dispatch, rename, and
-standalone export remain unbuilt, untested, and unbenchmarked. See the
-[comparison guide](rowfn/COMPARING.md) for measurement limits and the
-[safety record](rowfn/SAFETY.md) for unsafe contracts.
+The latest package split, text dispatch, rename, and export have source review only. Historical
+measurements cover earlier code and do not establish current performance. See the
+[comparison guide](rowfn/COMPARING.md) and [safety record](rowfn/SAFETY.md) for details.

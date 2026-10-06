@@ -1,11 +1,10 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 <!-- SPDX-FileCopyrightText: Copyright the Vortex contributors -->
 
-# Binding a host
+# Adding a backend
 
-A host keeps its native arrays, runtime types, allocator, and errors. Implement focused binding
-traits on a local host marker. Row loops use typed views and do not call the registry or inspect
-native array encodings per row.
+A backend keeps its native columns, types, allocator, and errors. Implement the binding traits on
+a local `Host` marker. Row loops use typed views without inspecting native encodings per row.
 
 [Architecture](ARCHITECTURE.md) shows the execution path. [Rust interfaces](INTERFACES.md) shows the
 actual traits and types.
@@ -41,8 +40,8 @@ Text hosts can implement `TextBinding` to select physical storage during semanti
 Its three associated row families provide `TextValue`. Each concrete view borrows matching offset,
 header, and byte slices once. Length operations can read metadata without constructing a string.
 `text_layout` rejects unknown semantic mappings before a function selects its typed visitor.
-Vortex maps all three families to its existing view representation. Arrow supplies separate
-32-bit offsets, 64-bit offsets, and view headers. A host need not convert storage into another layout.
+A backend can supply separate offset and view layouts or map several families to one representation.
+It does not need to convert storage into a common layout.
 
 ## Output: allocate, then publish
 
@@ -79,11 +78,10 @@ A downstream package can own a custom row kind and implement its binding for exi
 
 A semantic capability implemented for a foreign host must belong to the implementing package,
 unless another local type makes the implementation legal. `rowfn-functions` owns its domain traits
-and timestamp kind, then supplies optional mappings for Arrow and Vortex in that same package.
-Its default dependency graph has no host dependencies. This arrangement avoids host wrappers and
-mandatory function catalogs in the adapters.
+and timestamp kind, so it can supply backend mappings in that package. Its default dependency graph
+has no backend dependency.
 
-Registration, IDs, serialization, optimizer rules, and statistics rules belong to the host or
-function package. Vortex's `VortexRowFn<F>` uses the existing scalar registry. Whole-batch functions
-can use that registry directly. Rust trait objects are not a stable FFI, so future foreign hosts
-need an explicitly defined batch invocation boundary.
+Registration, IDs, serialization, optimizer rules, and statistics rules belong to the backend or
+function package. A backend's broader function interface can support whole-batch operations without
+changing RowFn. Foreign-language integrations need a batch invocation boundary because Rust traits
+are not a stable binary ABI.

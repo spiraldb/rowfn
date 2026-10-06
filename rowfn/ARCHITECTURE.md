@@ -14,7 +14,7 @@ it through the host bindings. Types describe the values and metadata passed acro
 flowchart TB
     subgraph Types["Types"]
         K["RowKind::Value<br/>Rust callback inputs"]
-        M["H::NativeType<br/>Arrow Field or Vortex DType"]
+        M["H::NativeType<br/>Backend type metadata"]
     end
     subgraph Definition["Function and visitor"]
         F["RowFn::dispatch"] -->|selects a visit| V["RowVisitor"]
@@ -82,10 +82,7 @@ remain terminal. Preparation belongs to the invocation and can run again during 
 | [`rowfn`](README.md) | Types, visitors, planning, execution, and sinks. |
 | [`rowfn-kernels`](../rowfn-kernels/README.md) | Lane sources, borrowed bitmaps, and Boolean packing. |
 | [`rowfn-arrow`](../rowfn-arrow/README.md) | Arrow bindings and invocation. |
-| [Vortex adapter](../integrations/vortex/adapter/mod.rs) | Vortex bindings and the existing registry wrapper. |
-| [`rowfn-examples`](../integrations/vortex/rowfn-examples/README.md) | Arrow fixtures and benchmarks. Vortex registration is preserved in the integration snapshot. |
+| [`rowfn-examples`](../rowfn-examples/README.md) | Function examples and benchmarks using the included backend. |
 
-The framework and kernels have no host dependency. Arrow bindings have no Vortex dependency.
-Registration and whole-batch functions remain host concerns.
-
-[Backends](BACKENDS.md) separates the current adapters from potential DataFusion and DuckDB paths.
+The framework and kernels have no backend dependency. Registration and whole-batch functions remain
+backend concerns. [Backends](BACKENDS.md) lists current and potential integrations.
