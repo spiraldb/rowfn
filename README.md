@@ -33,7 +33,8 @@ and investigate. Historical runs contain both wins and losses. It is not an upst
 | [Rust interfaces](rowfn/INTERFACES.md). | The actual traits, methods, and concrete host types. |
 | [Backends](rowfn/BACKENDS.md). | Implemented Arrow/Vortex bindings and potential DataFusion/DuckDB integrations. |
 | [Arrow example](rowfn-functions/examples/arrow.rs). | Checked addition and owned string output. |
-| [Kernel comparisons](rowfn/COMPARING.md). | Matched semantics, measurement boundaries, and recorded results. |
+| [Kernel comparisons](rowfn/COMPARING.md). | Matched semantics and measurement boundaries. |
+| [Benchmark measurements](BENCHMARKS.md). | Reports, raw timings, source snapshots, and compiler metadata. |
 
 ## Try the example
 

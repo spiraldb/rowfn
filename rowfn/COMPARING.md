@@ -102,6 +102,8 @@ fixture, raw results, and source state, including uncommitted changes.
 
 ## Read the recorded results
 
+The [measurement index](../BENCHMARKS.md) links each report to its raw timings and source artifacts.
+
 The [full comparison](../research/row-fn-engine/compute-options.md) includes wins and losses.
 The [Arrow investigation leads](../research/row-fn-engine/arrow-performance-opportunities.md) link
 to their raw evidence. They describe Arrow 59.3.0 and earlier RowFn source, not current Arrow mainline.
