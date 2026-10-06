@@ -1,0 +1,2264 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 6fb32917a6..68ead10a57 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -8767,6 +8767,71 @@ version = "1.2.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "4e27ee8bb91ca0adcf0ecb116293afa12d393f9c2b9b9cd54d33e8078fe19839"
+ 
++[[package]]
++name = "rowfn"
++version = "0.1.0"
++dependencies = [
++ "rowfn-kernels",
++]
++
++[[package]]
++name = "rowfn-arrow"
++version = "0.1.0"
++dependencies = [
++ "arrow-array 59.3.0",
++ "arrow-buffer 59.3.0",
++ "arrow-data 59.3.0",
++ "arrow-schema 59.3.0",
++ "arrow-select 59.3.0",
++ "rowfn",
++]
++
++[[package]]
++name = "rowfn-examples"
++version = "0.1.0"
++dependencies = [
++ "arrow-arith 59.3.0",
++ "arrow-array 59.3.0",
++ "arrow-buffer 59.3.0",
++ "arrow-ord 59.3.0",
++ "arrow-schema 59.3.0",
++ "arrow-string 59.3.0",
++ "codspeed-divan-compat",
++ "memchr",
++ "rowfn",
++ "rowfn-arrow",
++ "rowfn-functions",
++ "rstest",
++ "vortex-array",
++ "vortex-buffer",
++ "vortex-error",
++ "vortex-session",
++]
++
++[[package]]
++name = "rowfn-functions"
++version = "0.1.0"
++dependencies = [
++ "arrow-array 59.3.0",
++ "arrow-buffer 59.3.0",
++ "arrow-schema 59.3.0",
++ "memchr",
++ "regex",
++ "regex-syntax",
++ "rowfn",
++ "rowfn-arrow",
++ "vortex-array",
++ "vortex-buffer",
++ "vortex-error",
++]
++
++[[package]]
++name = "rowfn-kernels"
++version = "0.1.0"
++dependencies = [
++ "rstest",
++]
++
+ [[package]]
+ name = "rstar"
+ version = "0.12.2"
+@@ -10649,6 +10714,7 @@ dependencies = [
+  "rand_distr 0.6.0",
+  "regex",
+  "regex-syntax",
++ "rowfn",
+  "rstest",
+  "rstest_reuse",
+  "rustc-hash",
+@@ -10831,6 +10897,7 @@ dependencies = [
+  "memmap2",
+  "mimalloc",
+  "num-traits",
++ "rowfn-kernels",
+  "rstest",
+  "serde",
+  "simdutf8",
+@@ -10943,6 +11010,7 @@ dependencies = [
+  "mimalloc",
+  "num-traits",
+  "rand 0.10.2",
++ "rowfn-kernels",
+  "vortex-bench-support",
+  "vortex-buffer",
+ ]
+diff --git a/Cargo.toml b/Cargo.toml
+index 4d73870beb..3e59fde60d 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -1,5 +1,11 @@
+ [workspace]
+ members = [
++    # Experimental independent row-function framework and adapters
++    "rowfn-kernels",
++    "rowfn",
++    "rowfn-arrow",
++    "rowfn-functions",
++    "rowfn-examples",
+     # Core crates in dependency order
+     "vortex-array-macros",
+     "vortex-error",
+@@ -105,6 +111,7 @@ arcref = "0.2.0"
+ arrow-arith = "59.2"
+ arrow-array = "59.2"
+ arrow-buffer = "59.2"
++arrow-ord = "59.2"
+ arrow-cast = "59.2"
+ arrow-data = "59.2"
+ arrow-ipc = "59.2"
+@@ -241,6 +248,10 @@ reqwest = { version = "0.13.0", features = [
+     "system-proxy",
+ ], default-features = false }
+ roaring = "0.11.0"
++rowfn = { version = "0.1.0", path = "rowfn" }
++rowfn-arrow = { version = "0.1.0", path = "rowfn-arrow" }
++rowfn-kernels = { version = "0.1.0", path = "rowfn-kernels" }
++rowfn-functions = { version = "0.1.0", path = "rowfn-functions" }
+ rstest = "0.26.1"
+ rstest_reuse = "0.7.0"
+ rustc-hash = "2.1.1"
+diff --git a/vortex-array/Cargo.toml b/vortex-array/Cargo.toml
+index f061e9bc57..3a642d80d9 100644
+--- a/vortex-array/Cargo.toml
++++ b/vortex-array/Cargo.toml
+@@ -58,6 +58,7 @@ prost-types = { workspace = true }
+ rand = { workspace = true }
+ regex = { workspace = true }
+ regex-syntax = { workspace = true }
++rowfn = { workspace = true }
+ rstest = { workspace = true, optional = true }
+ rstest_reuse = { workspace = true, optional = true }
+ rustc-hash = { workspace = true }
+diff --git a/vortex-array/src/arrays/primitive/compute/cast.rs b/vortex-array/src/arrays/primitive/compute/cast.rs
+index fdebc7d0d4..78555f6739 100644
+--- a/vortex-array/src/arrays/primitive/compute/cast.rs
++++ b/vortex-array/src/arrays/primitive/compute/cast.rs
+@@ -523,7 +523,9 @@ where
+     if infallible {
+         return match owned {
+             Some(mut buf) => {
+-                ReinterpretSink::<F, T>::new(buf.as_mut_slice()).map_into_in_place(|v: F| v.as_());
++                // SAFETY: NativePType values have no padding and accept every bit pattern.
++                unsafe { ReinterpretSink::<F, T>::new(buf.as_mut_slice()) }
++                    .map_into_in_place(|v: F| v.as_());
+                 // SAFETY: same size + alignment for NativePType
+                 let result: BufferMut<T> = unsafe { buf.transmute::<T>() };
+                 Ok(PrimitiveArray::new(result.freeze(), new_validity).into_array())
+@@ -542,7 +544,8 @@ where
+ 
+     let buffer: Buffer<T> = match (&mask, owned) {
+         (Mask::AllTrue(_), Some(mut buf)) => {
+-            ReinterpretSink::<F, T>::new(buf.as_mut_slice())
++            // SAFETY: NativePType values have no padding and accept every bit pattern.
++            unsafe { ReinterpretSink::<F, T>::new(buf.as_mut_slice()) }
+                 .try_map_in_place(|v: F| <T as NumCast>::from(v))
+                 .map_err(|_| overflow())?;
+             // SAFETY: same size + alignment for NativePType
+@@ -562,7 +565,8 @@ where
+         }
+         (Mask::AllFalse(_), _) => BufferMut::<T>::zeroed(len).freeze(),
+         (Mask::Values(m), Some(mut buf)) => {
+-            ReinterpretSink::<F, T>::new(buf.as_mut_slice())
++            // SAFETY: NativePType values have no padding and accept every bit pattern.
++            unsafe { ReinterpretSink::<F, T>::new(buf.as_mut_slice()) }
+                 .try_map_masked_in_place(m.bit_buffer(), |v: F| <T as NumCast>::from(v))
+                 .map_err(|_| overflow())?;
+             // SAFETY: same size + alignment for NativePType
+diff --git a/vortex-array/src/scalar_fn/unstable/mod.rs b/vortex-array/src/scalar_fn/unstable/mod.rs
+index 6849c0bc66..6623a96f97 100644
+--- a/vortex-array/src/scalar_fn/unstable/mod.rs
++++ b/vortex-array/src/scalar_fn/unstable/mod.rs
+@@ -7,3 +7,5 @@
+ //! the corresponding `unstable_*` Cargo feature before importing them.
+ 
+ pub mod row;
++
++pub mod rowfn;
+diff --git a/vortex-array/src/scalar_fn/unstable/row/mod.rs b/vortex-array/src/scalar_fn/unstable/row/mod.rs
+index d94e399dba..afb007848e 100644
+--- a/vortex-array/src/scalar_fn/unstable/row/mod.rs
++++ b/vortex-array/src/scalar_fn/unstable/row/mod.rs
+@@ -55,3 +55,8 @@ pub use visitor::RowVisitor;
+ mod vtable;
+ pub use vtable::execute_rows;
+ pub use vtable::row_fn_return_dtype;
++
++/// Reuse encoding-aware constant classification in the experimental adapter.
++pub(crate) fn constant_input(array: &crate::ArrayRef) -> Option<crate::ArrayRef> {
++    types::batch_const(array)
++}
+diff --git a/vortex-array/src/scalar_fn/unstable/row/types/element/tuple/indexed.rs b/vortex-array/src/scalar_fn/unstable/row/types/element/tuple/indexed.rs
+index 73605aa7d3..c936650ddb 100644
+--- a/vortex-array/src/scalar_fn/unstable/row/types/element/tuple/indexed.rs
++++ b/vortex-array/src/scalar_fn/unstable/row/types/element/tuple/indexed.rs
+@@ -74,7 +74,8 @@ impl<'a, T: InputElement> ArgColumnSource<'a, T> {
+     }
+ }
+ 
+-impl<'a, T: InputElement> IndexedSource for ArgColumnSource<'a, T> {
++// SAFETY: InputElement preserves each validated view, and constants address a fixed row domain.
++unsafe impl<'a, T: InputElement> IndexedSource for ArgColumnSource<'a, T> {
+     type Item = T::Elem<'a>;
+ 
+     fn len(&self) -> usize {
+@@ -102,7 +103,8 @@ struct ArgTupleSource<Sources> {
+     row_count: usize,
+ }
+ 
+-impl IndexedSource for ArgTupleSource<()> {
++// SAFETY: the private row count is stable, and unit reads do not access storage.
++unsafe impl IndexedSource for ArgTupleSource<()> {
+     type Item = ();
+ 
+     fn len(&self) -> usize {
+@@ -123,7 +125,8 @@ impl<'a, T: InputElement> ElementSource<'a, T> {
+     }
+ }
+ 
+-impl<'a, T: InputElement> IndexedSource for ElementSource<'a, T> {
++// SAFETY: InputElement requires this view's length and readable elements to remain stable.
++unsafe impl<'a, T: InputElement> IndexedSource for ElementSource<'a, T> {
+     type Item = T::Elem<'a>;
+ 
+     fn len(&self) -> usize {
+@@ -140,7 +143,8 @@ impl<'a, T: InputElement> IndexedSource for ElementSource<'a, T> {
+ /// An indexed element source yielding the one-tuples expected by a unary row closure.
+ pub struct UnaryTupleSource<Source>(Source);
+ 
+-impl<Source: IndexedSource> IndexedSource for UnaryTupleSource<Source> {
++// SAFETY: delegation preserves the wrapped source's stable length and readable index domain.
++unsafe impl<Source: IndexedSource> IndexedSource for UnaryTupleSource<Source> {
+     type Item = (Source::Item,);
+ 
+     fn len(&self) -> usize {
+@@ -159,7 +163,8 @@ pub struct ElementTupleSource<'a, Args: ElementTuple> {
+     row_count: usize,
+ }
+ 
+-impl<'a, Args: ElementTuple> IndexedSource for ElementTupleSource<'a, Args> {
++// SAFETY: unsafe indexed_source construction validates every retained view against row_count.
++unsafe impl<'a, Args: ElementTuple> IndexedSource for ElementTupleSource<'a, Args> {
+     type Item = Args::Elems<'a>;
+ 
+     fn len(&self) -> usize {
+@@ -238,7 +243,8 @@ impl<A: InputElement, B: InputElement> private::DecodedSource for (A, B) {
+ 
+ macro_rules! arg_tuple_source {
+     ($($source:ident: $idx:tt),+) => {
+-        impl<$($source: IndexedSource),+> IndexedSource
++        // SAFETY: construction checks every stable source against this tuple's row count.
++        unsafe impl<$($source: IndexedSource),+> IndexedSource
+             for ArgTupleSource<($($source,)+)>
+         {
+             type Item = ($($source::Item,)+);
+diff --git a/vortex-array/src/scalar_fn/unstable/row/types/sink/utf8.rs b/vortex-array/src/scalar_fn/unstable/row/types/sink/utf8.rs
+index 2ca2e5e13c..4eeec73c38 100644
+--- a/vortex-array/src/scalar_fn/unstable/row/types/sink/utf8.rs
++++ b/vortex-array/src/scalar_fn/unstable/row/types/sink/utf8.rs
+@@ -63,31 +63,39 @@ pub struct Utf8Writer<'a> {
+ impl Utf8Writer<'_> {
+     /// Write a string into this row and consume the row handle.
+     pub fn write(self, value: impl AsRef<str>) {
+-        let bytes = value.as_ref().as_bytes();
+-        if bytes.len() <= BinaryView::MAX_INLINED_SIZE {
+-            *self.view = BinaryView::make_view(bytes, 0, 0);
++        self.write_parts(&[value.as_ref()]);
++    }
++
++    /// Concatenate string parts directly into this row's output-owned storage.
++    pub fn write_parts(self, parts: &[&str]) {
++        let len = parts.iter().try_fold(0usize, |len, part| len.checked_add(part.len()))
++            .vortex_expect("Utf8Sink string byte count must fit usize");
++        if len <= BinaryView::MAX_INLINED_SIZE {
++            let mut bytes = [0; BinaryView::MAX_INLINED_SIZE];
++            let mut offset = 0;
++            for part in parts {
++                bytes[offset..offset + part.len()].copy_from_slice(part.as_bytes());
++                offset += part.len();
++            }
++            *self.view = BinaryView::make_view(&bytes[..len], 0, 0);
+             return;
+         }
+ 
+-        let needs_buffer = self
+-            .buffers
+-            .last()
+-            .is_none_or(|buffer| buffer.len().saturating_add(bytes.len()) > MAX_BUFFER_LEN);
++        let needs_buffer = self.buffers.last()
++            .is_none_or(|buffer| buffer.len().saturating_add(len) > MAX_BUFFER_LEN);
+         if needs_buffer {
+-            self.buffers.push(self.allocator.with_capacity(bytes.len()));
++            self.buffers.push(self.allocator.with_capacity(len));
+         }
+-
+         let buffer_index = u32::try_from(self.buffers.len() - 1)
+             .vortex_expect("Utf8Sink data buffer count must fit in u32");
+-        let buffer = self
+-            .buffers
+-            .last_mut()
++        let buffer = self.buffers.last_mut()
+             .vortex_expect("Utf8Sink creates a data buffer before writing");
+-        let offset =
+-            u32::try_from(buffer.len()).vortex_expect("Utf8Sink buffer offset must fit in u32");
+-
+-        buffer.extend_from_slice(bytes);
+-        *self.view = BinaryView::make_view(bytes, buffer_index, offset);
++        let offset = u32::try_from(buffer.len())
++            .vortex_expect("Utf8Sink buffer offset must fit in u32");
++        for part in parts {
++            buffer.extend_from_slice(part.as_bytes());
++        }
++        *self.view = BinaryView::make_view(&buffer[offset as usize..], buffer_index, offset);
+     }
+ }
+ 
+diff --git a/vortex-buffer/Cargo.toml b/vortex-buffer/Cargo.toml
+index 6cdd999aef..0b37656a24 100644
+--- a/vortex-buffer/Cargo.toml
++++ b/vortex-buffer/Cargo.toml
+@@ -29,6 +29,7 @@ bitvec = { workspace = true }
+ bytes = { workspace = true }
+ itertools = { workspace = true }
+ memmap2 = { workspace = true, optional = true }
++rowfn-kernels = { workspace = true }
+ serde = { workspace = true, optional = true }
+ simdutf8 = { workspace = true }
+ tracing = { workspace = true, optional = true }
+diff --git a/vortex-buffer/src/bit/mod.rs b/vortex-buffer/src/bit/mod.rs
+index c0d82e10b3..5488fa79e5 100644
+--- a/vortex-buffer/src/bit/mod.rs
++++ b/vortex-buffer/src/bit/mod.rs
+@@ -31,127 +31,7 @@ pub use meta::*;
+ pub use pack::*;
+ pub use view::*;
+ 
+-/// Packs up to 64 boolean values into a little-endian `u64` word.
+-///
+-/// This is [`collect_bool_words`] for a single word: a full 64-bit word is materialized as a
+-/// `[bool; 64]` and packed with the baseline SIMD byte→bit instruction of the target; shorter
+-/// lengths fall back to the bit-at-a-time [`collect_bool_word_scalar`] loop.
+-#[inline]
+-pub fn collect_bool_word<F>(len: usize, f: F) -> u64
+-where
+-    F: FnMut(usize) -> bool,
+-{
+-    assert!(len <= 64, "cannot pack {len} bits into a u64 word");
+-
+-    let mut word = [0u64; 1];
+-    collect_bool_words_inline(&mut word, len, f);
+-    word[0]
+-}
+-
+-/// Pack `len` boolean values returned by `f` into the prefix of `words`, LSB-first,
+-/// 64 bits per `u64`. `words` must have capacity for at least `len.div_ceil(64)` entries.
+-///
+-/// `f` is invoked exactly once per index, in ascending order `0..len`.
+-///
+-/// Writes via `=` (not `|=`), so the destination need not be zero-initialised.
+-///
+-/// The word loop packs with the baseline SIMD kernel of the target (SSE2 on x86-64, NEON on
+-/// aarch64), which inlines fully into the caller together with the predicate and the
+-/// `[bool; 64]` materialization — wider kernels would sit behind a non-inlinable
+-/// `#[target_feature]` boundary that deoptimizes expensive predicates. See
+-/// [`BitBuffer::collect_bool`] for the performance note on
+-/// avoiding bounds checks in `f`.
+-///
+-/// Prefer this entry point for every predicate; only switch to
+-/// [`collect_bool_words_multiversioned`] after carefully checking that your specific `f`
+-/// meets its contract.
+-#[inline]
+-pub fn collect_bool_words<F>(words: &mut [u64], len: usize, f: F)
+-where
+-    F: FnMut(usize) -> bool,
+-{
+-    let num_words = len.div_ceil(64);
+-    assert!(
+-        words.len() >= num_words,
+-        "words slice has {} entries, need at least {num_words}",
+-        words.len(),
+-    );
+-
+-    collect_bool_words_inline(words, len, f)
+-}
+-
+-/// Read up to 8 bytes as a little-endian `u64`, zero-padding the high bytes when fewer than 8
+-/// bytes are supplied.
+-///
+-/// This preserves Vortex's least-significant-bit-first bitmap numbering on little- and big-endian
+-/// targets. For a full 8-byte slice it lowers to a single word load.
+-#[inline]
+-pub fn read_u64_le(bytes: &[u8]) -> u64 {
+-    debug_assert!(bytes.len() <= 8);
+-    let mut buf = [0u8; 8];
+-    buf[..bytes.len()].copy_from_slice(bytes);
+-    u64::from_le_bytes(buf)
+-}
+-
+-/// Splice a packed word `w` (whose bits above the highest valid bit are zero) into
+-/// `words` at the given bit position.
+-///
+-/// The destination word at `bit_offset / 64` is OR'd, preserving any bits below
+-/// `bit_offset % 64`. When `w` has high bits that spill into the next word, those
+-/// bits are *assigned* (not OR'd) — so callers must ensure that next slot is zero
+-/// (e.g. via `BufferMut::zeroed`).
+-///
+-/// `words.len()` need only cover the slots `w` actually writes to: skipping the
+-/// spillover when its bits are all zero means a tail that fits entirely in the
+-/// leading word never touches `words[dest_word + 1]`.
+-#[inline]
+-pub fn splice_word_at_bit(words: &mut [u64], bit_offset: usize, word: u64) {
+-    let dest_word = bit_offset / 64;
+-    let bit_in_word = bit_offset % 64;
+-    words[dest_word] |= word << bit_in_word;
+-    if bit_in_word != 0 {
+-        let high = word >> (64 - bit_in_word);
+-        if high != 0 {
+-            words[dest_word + 1] = high;
+-        }
+-    }
+-}
+-
+-/// Pack `len` boolean values returned by `f` into `words` starting at bit position
+-/// `bit_offset`, LSB-first.
+-///
+-/// Composes [`collect_bool_word`] (pack up to 64 bools into a u64) with
+-/// [`splice_word_at_bit`] (merge the packed word into the destination via shift-OR).
+-///
+-/// `words` must have at least `(bit_offset + len).div_ceil(64)` entries; see
+-/// [`splice_word_at_bit`] for zero-init requirements on words above the cursor.
+-#[inline]
+-pub fn pack_bools_into_words<F>(words: &mut [u64], bit_offset: usize, len: usize, mut f: F)
+-where
+-    F: FnMut(usize) -> bool,
+-{
+-    if len == 0 {
+-        return;
+-    }
+-    let num_words = (bit_offset + len).div_ceil(64);
+-    assert!(
+-        words.len() >= num_words,
+-        "words slice has {} entries, need at least {num_words}",
+-        words.len(),
+-    );
+-
+-    let mut done = 0;
+-    while len - done >= 64 {
+-        let word = collect_bool_word(64, |bit| f(done + bit));
+-        splice_word_at_bit(words, bit_offset + done, word);
+-        done += 64;
+-    }
+-    let tail = len - done;
+-    if tail > 0 {
+-        let word = collect_bool_word(tail, |bit| f(done + bit));
+-        splice_word_at_bit(words, bit_offset + done, word);
+-    }
+-}
++pub use rowfn_kernels::bit::{collect_bool_word, collect_bool_words, read_u64_le, splice_word_at_bit, pack_bools_into_words};
+ 
+ /// Get the bit value at `index` out of `buf`.
+ ///
+diff --git a/vortex-buffer/src/bit/pack.rs b/vortex-buffer/src/bit/pack.rs
+index cf18008466..3c7c5a308c 100644
+--- a/vortex-buffer/src/bit/pack.rs
++++ b/vortex-buffer/src/bit/pack.rs
+@@ -1,546 +1,6 @@
+ // SPDX-License-Identifier: Apache-2.0
+ // SPDX-FileCopyrightText: Copyright the Vortex contributors
+ 
+-//! Kernels for packing boolean values into bitmap words.
+-//!
+-//! `collect_bool` materializes each full 64-bit chunk as a `[bool; 64]` (a loop the
+-//! auto-vectorizer turns into vector stores for simple predicates) and then packs the 64 bytes
+-//! into a single `u64` with a byte→bit kernel:
+-//!
+-//! - x86-64 AVX-512BW: one `vptestmb` produces the full 64-bit mask.
+-//! - x86-64 AVX2: two `vpmovmskb` halves.
+-//! - x86-64 SSE2 (baseline): four `pmovmskb` quarters.
+-//! - aarch64 NEON (baseline): per-lane `ushl` by the bit position, then an `addp` reduction tree.
+-//! - elsewhere (and under Miri): a branch-free SWAR multiply.
+-//!
+-//! There are two tiers. The default ([`collect_bool_words_inline`]) compiles the loop once
+-//! with the widest *statically-enabled* kernel (SSE2 / NEON / SWAR on stock targets) and
+-//! inlines fully into the caller — safe for arbitrary predicates. The opt-in tier
+-//! ([`collect_bool_words_multiversioned`]) compiles the loop — with `f` inside — once per CPU
+-//! feature level and selects a clone by runtime detection; only for predicates small and
+-//! simple enough that the per-level duplication and its `#[target_feature]` call boundary pay
+-//! off.
+-//!
+-//! The bit-at-a-time loop lives on as [`collect_bool_word_scalar`], the reference implementation
+-//! for tests and benchmarks. The word loop packs its tail chunk with [`collect_bool_word_tail`],
+-//! its own copy of that loop.
++//! Boolean packing implementations shared with other hosts.
+ 
+-/// Packs up to 64 boolean values into a little-endian `u64` word one bit at a time.
+-///
+-/// This is the scalar reference implementation behind
+-/// [`collect_bool_word`](crate::bit::collect_bool_word); prefer calling that entry point, which
+-/// takes the SIMD fast path for full 64-bit words.
+-#[inline]
+-pub fn collect_bool_word_scalar<F>(len: usize, mut f: F) -> u64
+-where
+-    F: FnMut(usize) -> bool,
+-{
+-    assert!(len <= 64, "cannot pack {len} bits into a u64 word");
+-
+-    let mut packed = 0;
+-    for bit_idx in 0..len {
+-        packed |= (f(bit_idx) as u64) << bit_idx;
+-    }
+-    packed
+-}
+-
+-/// Body of [`collect_bool_words`](crate::bit::collect_bool_words) (and, via a one-word slice,
+-/// of [`collect_bool_word`](crate::bit::collect_bool_word)): the word loop with the widest
+-/// pack kernel enabled *at compile time* — SSE2 on stock x86-64 (AVX2/AVX-512BW when built
+-/// with e.g. `-C target-cpu=native`), NEON on aarch64, SWAR elsewhere and under Miri.
+-///
+-/// Statically-enabled kernels are part of every function's feature set, so this loop
+-/// (predicate, the `[bool; 64]` materialization, and the pack) inlines fully into the caller
+-/// with no `#[target_feature]` boundary. That boundary is why *runtime*-detected wider kernels
+-/// are not used here: hiding an expensive, non-vectorizable predicate (e.g. FSST's per-string
+-/// DFA scan) behind a non-inlinable AVX-512 loop copy costs far more (~30% end to end) than
+-/// the wider pack saves — and an indirect call per word is worse still (~4x on cheap
+-/// predicates), since an opaque call target blocks fill/pack fusion regardless of how cheap
+-/// the kernel *selection* is. For provably cheap predicates, use [`collect_bool_words_multiversioned`].
+-#[allow(clippy::inline_always)]
+-#[inline(always)]
+-pub(crate) fn collect_bool_words_inline<F>(words: &mut [u64], len: usize, f: F)
+-where
+-    F: FnMut(usize) -> bool,
+-{
+-    #[cfg(all(
+-        target_arch = "x86_64",
+-        target_feature = "avx512f",
+-        target_feature = "avx512bw",
+-        not(miri)
+-    ))]
+-    {
+-        // SAFETY: AVX-512F/BW are statically enabled for this build (e.g. -C
+-        // target-cpu=native), so they are in every function's feature set and the kernel
+-        // inlines here like any other function.
+-        collect_bool_words_with(words, len, f, |bools| unsafe {
+-            pack_bool_word_avx512(bools)
+-        })
+-    }
+-    #[cfg(all(
+-        target_arch = "x86_64",
+-        target_feature = "avx2",
+-        not(all(target_feature = "avx512f", target_feature = "avx512bw")),
+-        not(miri)
+-    ))]
+-    {
+-        // SAFETY: AVX2 is statically enabled for this build.
+-        collect_bool_words_with(words, len, f, |bools| unsafe { pack_bool_word_avx2(bools) })
+-    }
+-    #[cfg(all(target_arch = "x86_64", not(target_feature = "avx2"), not(miri)))]
+-    {
+-        // SAFETY: SSE2 is part of the x86-64 baseline instruction set.
+-        collect_bool_words_with(words, len, f, |bools| unsafe { pack_bool_word_sse2(bools) })
+-    }
+-    #[cfg(all(target_arch = "aarch64", not(miri)))]
+-    {
+-        // SAFETY: NEON is part of the aarch64 baseline instruction set.
+-        collect_bool_words_with(words, len, f, |bools| unsafe { pack_bool_word_neon(bools) })
+-    }
+-    #[cfg(any(not(any(target_arch = "x86_64", target_arch = "aarch64")), miri))]
+-    collect_bool_words_with(words, len, f, pack_bool_word_swar)
+-}
+-
+-/// Word loop with the *widest* pack kernel the CPU offers (AVX-512BW, then AVX2, then the
+-/// baseline), for predicates known to be cheap.
+-///
+-/// The wide loop copies live behind a `#[target_feature]` function boundary that cannot inline
+-/// into the caller, which deoptimizes expensive predicates (see the module docs and
+-/// `collect_bool_words_inline`). Only route a predicate here when its evaluation is trivial
+-/// — e.g. the bounds-check-free slice gathers in the `From<&[bool]>` / `From<&[u8]>`
+-/// conversions, or unchecked slice comparisons like the `between` kernels — where the fused
+-/// AVX-512 loop is worth another ~2x over the baseline kernel.
+-///
+-/// `words` must hold at least `len.div_ceil(64)` entries and `f` is invoked with `0..len`,
+-/// exactly once per index in ascending order.
+-///
+-/// Panics if `words` is too short.
+-#[inline]
+-pub fn collect_bool_words_multiversioned<F>(words: &mut [u64], len: usize, f: F)
+-where
+-    F: FnMut(usize) -> bool,
+-{
+-    let num_words = len.div_ceil(64);
+-    assert!(
+-        words.len() >= num_words,
+-        "words slice has {} entries, need at least {num_words}",
+-        words.len(),
+-    );
+-
+-    // Without a full 64-bit word only the scalar tail would run; skip feature detection and
+-    // the `#[target_feature]` call boundary entirely.
+-    if len < 64 {
+-        return collect_bool_words_inline(words, len, f);
+-    }
+-
+-    #[cfg(all(target_arch = "x86_64", not(miri)))]
+-    {
+-        if is_x86_feature_detected!("avx512f") && is_x86_feature_detected!("avx512bw") {
+-            // SAFETY: runtime detection guarantees the required target features.
+-            return unsafe { collect_bool_words_avx512(words, len, f) };
+-        }
+-        if is_x86_feature_detected!("avx2") {
+-            // SAFETY: runtime detection guarantees the required target features.
+-            return unsafe { collect_bool_words_avx2(words, len, f) };
+-        }
+-    }
+-    collect_bool_words_inline(words, len, f)
+-}
+-
+-/// Shared word loop: materialize each full 64-bit chunk as a `[bool; 64]` and pack it with
+-/// `pack`; the tail chunk goes through the scalar loop.
+-///
+-/// Marked `#[inline(always)]` so each `#[target_feature]` wrapper gets its own fully-inlined
+-/// copy compiled with that feature set.
+-#[allow(clippy::inline_always)]
+-#[inline(always)]
+-fn collect_bool_words_with<F, P>(words: &mut [u64], len: usize, mut f: F, pack: P)
+-where
+-    F: FnMut(usize) -> bool,
+-    P: Fn(&[bool; 64]) -> u64,
+-{
+-    let full = len / 64;
+-    let remainder = len % 64;
+-
+-    for (word_idx, word) in words[..full].iter_mut().enumerate() {
+-        let offset = word_idx * 64;
+-        let mut bools = [false; 64];
+-        for (bit_idx, b) in bools.iter_mut().enumerate() {
+-            *b = f(offset + bit_idx);
+-        }
+-        *word = pack(&bools);
+-    }
+-
+-    if remainder != 0 {
+-        let offset = full * 64;
+-        words[full] = collect_bool_word_tail(remainder, |bit_idx| f(offset + bit_idx));
+-    }
+-}
+-
+-/// Tail chunk of [`collect_bool_words_with`]: a copy of [`collect_bool_word_scalar`] that always
+-/// inlines. `len` **must** be at most 64.
+-///
+-/// The word loop must keep the borrowed callback inline. An out-of-line tail lets the callback
+-/// state escape, and the full words packed by the same loop then fail to vectorize.
+-/// [`collect_bool_word_scalar`] stays an ordinary `#[inline]` function so that this constraint does
+-/// not reach its public callers, which include the scalar benchmark baselines.
+-#[expect(clippy::inline_always)]
+-#[inline(always)]
+-fn collect_bool_word_tail<F>(len: usize, mut f: F) -> u64
+-where
+-    F: FnMut(usize) -> bool,
+-{
+-    debug_assert!(len <= 64, "cannot pack {len} bits into a u64 word");
+-
+-    let mut packed = 0;
+-    for bit_idx in 0..len {
+-        packed |= (f(bit_idx) as u64) << bit_idx;
+-    }
+-    packed
+-}
+-
+-/// SSE2 copy of the [`collect_bool_words`](crate::bit::collect_bool_words) word loop.
+-///
+-/// `words` must hold at least `len.div_ceil(64)` entries and `f` is invoked with `0..len`.
+-///
+-/// # Safety
+-///
+-/// The caller must ensure the CPU supports SSE2 (always true on x86-64).
+-#[cfg(target_arch = "x86_64")]
+-#[target_feature(enable = "sse2")]
+-pub unsafe fn collect_bool_words_sse2<F: FnMut(usize) -> bool>(
+-    words: &mut [u64],
+-    len: usize,
+-    f: F,
+-) {
+-    // SAFETY: the caller guarantees SSE2 support.
+-    collect_bool_words_with(words, len, f, |bools| unsafe { pack_bool_word_sse2(bools) })
+-}
+-
+-/// AVX2 copy of the [`collect_bool_words`](crate::bit::collect_bool_words) word loop.
+-///
+-/// `words` must hold at least `len.div_ceil(64)` entries and `f` is invoked with `0..len`.
+-///
+-/// # Safety
+-///
+-/// The caller must ensure the CPU supports AVX2.
+-#[cfg(target_arch = "x86_64")]
+-#[target_feature(enable = "avx2")]
+-pub unsafe fn collect_bool_words_avx2<F: FnMut(usize) -> bool>(
+-    words: &mut [u64],
+-    len: usize,
+-    f: F,
+-) {
+-    // SAFETY: the caller guarantees AVX2 support.
+-    collect_bool_words_with(words, len, f, |bools| unsafe { pack_bool_word_avx2(bools) })
+-}
+-
+-/// AVX-512BW copy of the [`collect_bool_words`](crate::bit::collect_bool_words) word loop.
+-///
+-/// `words` must hold at least `len.div_ceil(64)` entries and `f` is invoked with `0..len`.
+-///
+-/// # Safety
+-///
+-/// The caller must ensure the CPU supports AVX-512F and AVX-512BW.
+-#[cfg(target_arch = "x86_64")]
+-#[target_feature(enable = "avx512f,avx512bw")]
+-pub unsafe fn collect_bool_words_avx512<F: FnMut(usize) -> bool>(
+-    words: &mut [u64],
+-    len: usize,
+-    f: F,
+-) {
+-    // SAFETY: the caller guarantees AVX-512F and AVX-512BW support.
+-    collect_bool_words_with(words, len, f, |bools| unsafe {
+-        pack_bool_word_avx512(bools)
+-    })
+-}
+-
+-/// NEON copy of the [`collect_bool_words`](crate::bit::collect_bool_words) word loop.
+-///
+-/// `words` must hold at least `len.div_ceil(64)` entries and `f` is invoked with `0..len`.
+-///
+-/// # Safety
+-///
+-/// The caller must ensure the CPU supports NEON (always true on aarch64).
+-#[cfg(target_arch = "aarch64")]
+-#[target_feature(enable = "neon")]
+-pub unsafe fn collect_bool_words_neon<F: FnMut(usize) -> bool>(
+-    words: &mut [u64],
+-    len: usize,
+-    f: F,
+-) {
+-    // SAFETY: the caller guarantees NEON support.
+-    collect_bool_words_with(words, len, f, |bools| unsafe { pack_bool_word_neon(bools) })
+-}
+-
+-/// Portable branch-free byte→bit pack kernel, used when no SIMD kernel is available.
+-///
+-/// Reads the bools eight at a time as a `u64` and gathers the eight `0x00`/`0x01` bytes into
+-/// eight contiguous bits with a single multiply: byte `i` contributes `2^(8i)`, and the magic
+-/// constant `0x0102_0408_1020_4080 = Σ 2^(56-7i)` shifts each contribution to bit `56 + i`
+-/// without any cross-term collisions, so the mask falls out of the top byte of the product.
+-#[inline]
+-pub fn pack_bool_word_swar(bools: &[bool; 64]) -> u64 {
+-    const MAGIC: u64 = 0x0102_0408_1020_4080;
+-
+-    let (chunks, rest) = bools.as_chunks::<8>();
+-    debug_assert!(rest.is_empty());
+-
+-    let mut packed = 0u64;
+-    for (chunk_idx, chunk) in chunks.iter().enumerate() {
+-        let word = u64::from_le_bytes(chunk.map(|b| b as u8));
+-        packed |= (word.wrapping_mul(MAGIC) >> 56) << (8 * chunk_idx);
+-    }
+-    packed
+-}
+-
+-/// SSE2 byte→bit pack kernel: four 16-byte `pcmpeqb`-against-zero + `pmovmskb` rounds.
+-///
+-/// # Safety
+-///
+-/// The caller must ensure the CPU supports SSE2 (always true on x86-64).
+-#[cfg(target_arch = "x86_64")]
+-#[inline]
+-#[target_feature(enable = "sse2")]
+-pub unsafe fn pack_bool_word_sse2(bools: &[bool; 64]) -> u64 {
+-    use std::arch::x86_64::__m128i;
+-    use std::arch::x86_64::_mm_cmpeq_epi8;
+-    use std::arch::x86_64::_mm_loadu_si128;
+-    use std::arch::x86_64::_mm_movemask_epi8;
+-    use std::arch::x86_64::_mm_setzero_si128;
+-
+-    let ptr = bools.as_ptr().cast::<u8>();
+-    let zero = _mm_setzero_si128();
+-
+-    let mut packed = 0u64;
+-    for lane in 0..4 {
+-        // SAFETY: `lane * 16 + 16 <= 64`, so the 16-byte load is in bounds.
+-        let chunk = unsafe { _mm_loadu_si128(ptr.add(lane * 16).cast::<__m128i>()) };
+-        // `cmpeq` against zero sets 0xFF for *false* bytes; invert to get the truthy mask.
+-        let zero_mask = _mm_movemask_epi8(_mm_cmpeq_epi8(chunk, zero)) as u32 as u64;
+-        packed |= (!zero_mask & 0xFFFF) << (16 * lane);
+-    }
+-    packed
+-}
+-
+-/// AVX2 byte→bit pack kernel: two 32-byte `vpcmpeqb`-against-zero + `vpmovmskb` rounds.
+-///
+-/// # Safety
+-///
+-/// The caller must ensure the CPU supports AVX2.
+-#[cfg(target_arch = "x86_64")]
+-#[inline]
+-#[target_feature(enable = "avx2")]
+-pub unsafe fn pack_bool_word_avx2(bools: &[bool; 64]) -> u64 {
+-    use std::arch::x86_64::__m256i;
+-    use std::arch::x86_64::_mm256_cmpeq_epi8;
+-    use std::arch::x86_64::_mm256_loadu_si256;
+-    use std::arch::x86_64::_mm256_movemask_epi8;
+-    use std::arch::x86_64::_mm256_setzero_si256;
+-
+-    let ptr = bools.as_ptr().cast::<u8>();
+-    let zero = _mm256_setzero_si256();
+-
+-    // SAFETY: both 32-byte loads are within the 64-byte array.
+-    let lo = unsafe { _mm256_loadu_si256(ptr.cast::<__m256i>()) };
+-    // SAFETY: see above.
+-    let hi = unsafe { _mm256_loadu_si256(ptr.add(32).cast::<__m256i>()) };
+-
+-    // `cmpeq` against zero sets 0xFF for *false* bytes; invert to get the truthy mask.
+-    let lo_mask = !(_mm256_movemask_epi8(_mm256_cmpeq_epi8(lo, zero)) as u32) as u64;
+-    let hi_mask = !(_mm256_movemask_epi8(_mm256_cmpeq_epi8(hi, zero)) as u32) as u64;
+-    lo_mask | (hi_mask << 32)
+-}
+-
+-/// AVX-512BW byte→bit pack kernel: a single 64-byte `vptestmb` produces the whole word.
+-///
+-/// # Safety
+-///
+-/// The caller must ensure the CPU supports AVX-512F and AVX-512BW.
+-#[cfg(target_arch = "x86_64")]
+-#[inline]
+-#[target_feature(enable = "avx512f,avx512bw")]
+-pub unsafe fn pack_bool_word_avx512(bools: &[bool; 64]) -> u64 {
+-    use std::arch::x86_64::__m512i;
+-    use std::arch::x86_64::_mm512_loadu_si512;
+-    use std::arch::x86_64::_mm512_test_epi8_mask;
+-
+-    // SAFETY: the 64-byte load covers exactly the `[bool; 64]` array.
+-    let chunk = unsafe { _mm512_loadu_si512(bools.as_ptr().cast::<__m512i>()) };
+-    // Mask bit `i` is set iff byte `i` AND byte `i` is nonzero, i.e. iff `bools[i]`.
+-    _mm512_test_epi8_mask(chunk, chunk)
+-}
+-
+-/// NEON byte→bit pack kernel: shift each `0x00`/`0x01` byte left by its bit position
+-/// (`ushl`), then fold the four vectors into one `u64` with a pairwise-add (`addp`) tree.
+-///
+-/// # Safety
+-///
+-/// The caller must ensure the CPU supports NEON (always true on aarch64).
+-#[cfg(target_arch = "aarch64")]
+-#[inline]
+-#[target_feature(enable = "neon")]
+-pub unsafe fn pack_bool_word_neon(bools: &[bool; 64]) -> u64 {
+-    use std::arch::aarch64::vgetq_lane_u64;
+-    use std::arch::aarch64::vld1q_s8;
+-    use std::arch::aarch64::vld1q_u8;
+-    use std::arch::aarch64::vpaddq_u8;
+-    use std::arch::aarch64::vreinterpretq_u64_u8;
+-    use std::arch::aarch64::vshlq_u8;
+-
+-    const BIT_SHIFTS: [i8; 16] = [0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7];
+-
+-    let ptr = bools.as_ptr().cast::<u8>();
+-    // SAFETY: loading 16 constant bytes from `BIT_SHIFTS`; the four 16-byte data loads below are
+-    // all within the 64-byte array.
+-    unsafe {
+-        let shifts = vld1q_s8(BIT_SHIFTS.as_ptr());
+-
+-        // Byte j of each vector becomes `bools[16v + j] << (j % 8)`.
+-        let m0 = vshlq_u8(vld1q_u8(ptr), shifts);
+-        let m1 = vshlq_u8(vld1q_u8(ptr.add(16)), shifts);
+-        let m2 = vshlq_u8(vld1q_u8(ptr.add(32)), shifts);
+-        let m3 = vshlq_u8(vld1q_u8(ptr.add(48)), shifts);
+-
+-        // Three rounds of pairwise adds sum each group of 8 weighted bytes into one mask byte,
+-        // yielding the 8 mask bytes in order in the low half of the final vector.
+-        let sum01 = vpaddq_u8(m0, m1);
+-        let sum23 = vpaddq_u8(m2, m3);
+-        let sum = vpaddq_u8(sum01, sum23);
+-        let sum = vpaddq_u8(sum, sum);
+-        vgetq_lane_u64::<0>(vreinterpretq_u64_u8(sum))
+-    }
+-}
+-
+-#[cfg(test)]
+-mod tests {
+-    use rstest::rstest;
+-
+-    use super::collect_bool_word_scalar;
+-    use super::pack_bool_word_swar;
+-
+-    fn patterns() -> Vec<[bool; 64]> {
+-        let mut patterns = vec![
+-            [false; 64],
+-            [true; 64],
+-            std::array::from_fn(|i| i % 2 == 0),
+-            std::array::from_fn(|i| i % 3 == 0),
+-            std::array::from_fn(|i| i < 32),
+-            std::array::from_fn(|i| i == 0 || i == 63),
+-        ];
+-        // A few deterministic pseudo-random patterns.
+-        let mut state = 0x9E37_79B9_7F4A_7C15u64;
+-        for _ in 0..8 {
+-            patterns.push(std::array::from_fn(|_| {
+-                state = state
+-                    .wrapping_mul(6364136223846793005)
+-                    .wrapping_add(1442695040888963407);
+-                (state >> 33) & 1 == 1
+-            }));
+-        }
+-        patterns
+-    }
+-
+-    fn reference(bools: &[bool; 64]) -> u64 {
+-        collect_bool_word_scalar(64, |i| bools[i])
+-    }
+-
+-    #[test]
+-    fn swar_matches_scalar() {
+-        for bools in patterns() {
+-            assert_eq!(pack_bool_word_swar(&bools), reference(&bools));
+-        }
+-    }
+-
+-    #[test]
+-    fn dispatch_matches_scalar() {
+-        for bools in patterns() {
+-            assert_eq!(
+-                crate::bit::collect_bool_word(64, |i| bools[i]),
+-                reference(&bools)
+-            );
+-        }
+-    }
+-
+-    #[cfg(all(target_arch = "x86_64", not(miri)))]
+-    #[test]
+-    fn sse2_matches_scalar() {
+-        for bools in patterns() {
+-            // SAFETY: SSE2 is part of the x86-64 baseline instruction set.
+-            assert_eq!(
+-                unsafe { super::pack_bool_word_sse2(&bools) },
+-                reference(&bools)
+-            );
+-        }
+-    }
+-
+-    #[cfg(all(target_arch = "x86_64", not(miri)))]
+-    #[test]
+-    fn avx2_matches_scalar() {
+-        if !is_x86_feature_detected!("avx2") {
+-            return;
+-        }
+-        for bools in patterns() {
+-            // SAFETY: runtime detection guarantees AVX2.
+-            assert_eq!(
+-                unsafe { super::pack_bool_word_avx2(&bools) },
+-                reference(&bools)
+-            );
+-        }
+-    }
+-
+-    #[cfg(all(target_arch = "x86_64", not(miri)))]
+-    #[test]
+-    fn avx512_matches_scalar() {
+-        if !(is_x86_feature_detected!("avx512f") && is_x86_feature_detected!("avx512bw")) {
+-            return;
+-        }
+-        for bools in patterns() {
+-            // SAFETY: runtime detection guarantees AVX-512F and AVX-512BW.
+-            assert_eq!(
+-                unsafe { super::pack_bool_word_avx512(&bools) },
+-                reference(&bools)
+-            );
+-        }
+-    }
+-
+-    #[cfg(all(target_arch = "aarch64", not(miri)))]
+-    #[test]
+-    fn neon_matches_scalar() {
+-        for bools in patterns() {
+-            // SAFETY: NEON is part of the aarch64 baseline instruction set.
+-            assert_eq!(
+-                unsafe { super::pack_bool_word_neon(&bools) },
+-                reference(&bools)
+-            );
+-        }
+-    }
+-
+-    #[rstest]
+-    #[case(0)]
+-    #[case(1)]
+-    #[case(63)]
+-    #[case(64)]
+-    #[case(65)]
+-    #[case(200)]
+-    fn multiversioned_matches_inline(#[case] len: usize) {
+-        let pattern = |i: usize| i.is_multiple_of(3) || i.is_multiple_of(7);
+-        let num_words = len.div_ceil(64);
+-        let mut multiversioned = vec![0u64; num_words];
+-        super::collect_bool_words_multiversioned(&mut multiversioned, len, pattern);
+-        let mut inline = vec![0u64; num_words];
+-        super::collect_bool_words_inline(&mut inline, len, pattern);
+-        assert_eq!(multiversioned, inline);
+-    }
+-
+-    #[rstest]
+-    #[case(0)]
+-    #[case(1)]
+-    #[case(5)]
+-    #[case(63)]
+-    #[case(64)]
+-    fn collect_bool_word_partial_lens_match(#[case] len: usize) {
+-        let expected = collect_bool_word_scalar(len, |i| i % 3 == 0);
+-        assert_eq!(crate::bit::collect_bool_word(len, |i| i % 3 == 0), expected);
+-    }
+-}
++pub use rowfn_kernels::bit::pack::*;
+diff --git a/vortex-buffer/src/bit/view.rs b/vortex-buffer/src/bit/view.rs
+index 073df5943b..cfe070717e 100644
+--- a/vortex-buffer/src/bit/view.rs
++++ b/vortex-buffer/src/bit/view.rs
+@@ -494,6 +494,18 @@ impl BitBufferMut {
+     }
+ }
+ 
++impl rowfn_kernels::bit::Bitmap for BitBuffer {
++    fn bitmap(&self) -> rowfn_kernels::bit::BitmapView<'_> {
++        rowfn_kernels::bit::BitmapView::new(self.inner().as_slice(), self.offset(), self.len())
++    }
++}
++
++impl rowfn_kernels::bit::Bitmap for BitBufferView<'_> {
++    fn bitmap(&self) -> rowfn_kernels::bit::BitmapView<'_> {
++        rowfn_kernels::bit::BitmapView::new(self.inner(), self.offset(), self.len())
++    }
++}
++
+ #[cfg(test)]
+ mod tests {
+     use crate::BitBuffer;
+diff --git a/vortex-compute/Cargo.toml b/vortex-compute/Cargo.toml
+index 07b489ede8..ddd39f8e31 100644
+--- a/vortex-compute/Cargo.toml
++++ b/vortex-compute/Cargo.toml
+@@ -17,6 +17,7 @@ version = { workspace = true }
+ all-features = true
+ 
+ [dependencies]
++rowfn-kernels = { workspace = true }
+ vortex-buffer = { workspace = true }
+ 
+ [dev-dependencies]
+diff --git a/vortex-compute/benches/lane_kernels.rs b/vortex-compute/benches/lane_kernels.rs
+index 1afa99de0d..de66778588 100644
+--- a/vortex-compute/benches/lane_kernels.rs
++++ b/vortex-compute/benches/lane_kernels.rs
+@@ -251,7 +251,8 @@ fn try_map_masked_in_place_narrow_i32_u32(bencher: Bencher, n: usize) {
+     bencher
+         .with_inputs(|| (f.values_i32.as_slice().to_vec(), f.mask.clone()))
+         .bench_values(|(mut values, mask)| {
+-            ReinterpretSink::<i32, u32>::new(values.as_mut_slice())
++            // SAFETY: u32 has no padding, and every u32 bit pattern is a valid i32.
++            unsafe { ReinterpretSink::<i32, u32>::new(values.as_mut_slice()) }
+                 .try_map_masked_in_place(&mask, <u32 as NumCast>::from)
+                 .unwrap();
+             values
+diff --git a/vortex-compute/src/lane_kernels/map_in_place.rs b/vortex-compute/src/lane_kernels/map_in_place.rs
+index 7ca58ac160..a422a9cfd5 100644
+--- a/vortex-compute/src/lane_kernels/map_in_place.rs
++++ b/vortex-compute/src/lane_kernels/map_in_place.rs
+@@ -326,7 +326,8 @@ mod tests {
+     fn reinterpret_sink_same_width_f32_u32() {
+         let mut buf: Vec<f32> = (0..130).map(|i| i as f32).collect();
+         let mask = BitBuffer::new_set(130);
+-        ReinterpretSink::<f32, u32>::new(buf.as_mut_slice())
++        // SAFETY: u32 has no padding, and every u32 bit pattern is a valid f32.
++        unsafe { ReinterpretSink::<f32, u32>::new(buf.as_mut_slice()) }
+             .try_map_masked_in_place(&mask, |f| Some(f.to_bits().wrapping_add(1)))
+             .unwrap();
+         // SAFETY: same size + alignment for f32 and u32; every slot now holds a u32 written by
+@@ -342,7 +343,9 @@ mod tests {
+     fn reinterpret_sink_failure_reports_lane() {
+         let mut buf: Vec<f32> = (0..200).map(|i| i as f32).collect();
+         let mask = BitBuffer::new_set(200);
+-        let res = ReinterpretSink::<f32, u32>::new(buf.as_mut_slice()).try_map_masked_in_place(
++        // SAFETY: u32 has no padding, and every u32 bit pattern is a valid f32.
++        let sink = unsafe { ReinterpretSink::<f32, u32>::new(buf.as_mut_slice()) };
++        let res = sink.try_map_masked_in_place(
+             &mask,
+             |f| {
+                 if f as u32 == 137 {
+diff --git a/vortex-compute/src/lane_kernels/map_into.rs b/vortex-compute/src/lane_kernels/map_into.rs
+index ee8c10b147..ec3272fe8d 100644
+--- a/vortex-compute/src/lane_kernels/map_into.rs
++++ b/vortex-compute/src/lane_kernels/map_into.rs
+@@ -1,400 +1,15 @@
+ // SPDX-License-Identifier: Apache-2.0
+ // SPDX-FileCopyrightText: Copyright the Vortex contributors
+ 
+-//! Out-of-place lane kernels: read from an [`IndexedSource`] and write into a
+-//! caller-provided `&mut [MaybeUninit<R>]`.
++//! Shared lane kernels, with Vortex storage conformance tests.
+ 
+-use std::mem::MaybeUninit;
+-use std::ops::BitOrAssign;
+-
+-use vortex_buffer::BitBuffer;
+-
+-use crate::lane_kernels::CHUNK_LEN;
+-use crate::lane_kernels::source::IndexedSource;
+-
+-/// Extension trait providing out-of-place lane-kernel methods on any [`IndexedSource`].
+-///
+-/// All methods have default implementations and are inherited via the blanket
+-/// `impl<S: IndexedSource> IndexedSourceExt for S` below. Bring the trait into
+-/// scope (`use vortex_compute::lane_kernels::IndexedSourceExt;`) to call
+-/// them with method syntax: `values.try_map_masked_into(&mask, &mut out, f)`.
+-///
+-/// Callbacks implement [`Fn`] because each lane must be independent. A callback that mutates
+-/// captured state introduces a loop-carried dependency that can prevent vectorization.
+-pub trait IndexedSourceExt: IndexedSource + Sized {
+-    /// Fallible map with mask-aware error attribution. `f` returns `Option<R>`;
+-    /// `None` indicates a per-lane failure (e.g. range overflow on a narrowing cast).
+-    ///
+-    /// **Null-lane failures are filtered automatically.** The closure is called on
+-    /// every lane regardless of validity; if a null lane's stored value causes `f(v)`
+-    /// to return `None`, the kernel does *not* propagate that as `Err`. The per-lane
+-    /// `is_none()` flags are bit-packed into a `u64` at the lane's position, then
+-    /// AND-combined with the chunk's validity bitmap — null-lane bits vanish.
+-    ///
+-    /// The closure shape is the same as [`try_map_into`] (`Fn(Item) -> Option<R>`);
+-    /// the mask parameter is what makes this kernel mask-aware. Callers that need to
+-    /// distinguish null lanes inside the closure (e.g. to short-circuit an expensive
+-    /// computation) should construct their own per-lane validity check externally; for
+-    /// the common case, the kernel's automatic filter is sufficient.
+-    ///
+-    /// On failure returns `Err(failing_lane_index)`. Lanes whose `f` returned `None`
+-    /// write `R::default()` into `out`, but the contents of `out` must not be relied
+-    /// upon when this function returns `Err`.
+-    ///
+-    /// [`try_map_into`]: IndexedSourceExt::try_map_into
+-    ///
+-    /// # Panics
+-    ///
+-    /// Panics if `self.len() != mask.len()` or `out.len() != self.len()`.
+-    #[inline]
+-    fn try_map_masked_into<R, F>(
+-        self,
+-        mask: &BitBuffer,
+-        out: &mut [MaybeUninit<R>],
+-        f: F,
+-    ) -> Result<(), usize>
+-    where
+-        R: Copy + Default,
+-        F: Fn(Self::Item) -> Option<R>,
+-    {
+-        #[allow(clippy::inline_always)]
+-        #[inline(always)]
+-        fn chunk<S, R, F>(
+-            values: &S,
+-            out: &mut [MaybeUninit<R>],
+-            f: &F,
+-            src_chunk: u64,
+-            base: usize,
+-            count: usize,
+-        ) -> Option<usize>
+-        where
+-            S: IndexedSource,
+-            R: Copy + Default,
+-            F: Fn(S::Item) -> Option<R>,
+-        {
+-            let mut fail_bits: u64 = 0;
+-            for bit_idx in 0..count {
+-                let idx = base + bit_idx;
+-                // SAFETY: caller guarantees base + count <= len.
+-                let val = unsafe { values.get_unchecked(idx) };
+-                let opt = f(val);
+-                fail_bits |= (opt.is_none() as u64) << bit_idx;
+-                let result = opt.unwrap_or_default();
+-                unsafe { out.get_unchecked_mut(idx).write(result) };
+-            }
+-            let valid_failures = fail_bits & src_chunk;
+-            (valid_failures != 0).then_some(base + valid_failures.trailing_zeros() as usize)
+-        }
+-
+-        let values = self;
+-        let len = values.len();
+-        assert_eq!(len, mask.len(), "values and mask must have the same length");
+-        assert_eq!(out.len(), len, "out must have the same length as values");
+-
+-        let chunks = mask.chunks();
+-        let chunks_count = len / 64;
+-        let remainder = len % 64;
+-
+-        for (chunk_idx, src_chunk) in chunks.iter().enumerate() {
+-            if let Some(idx) = chunk(&values, out, &f, src_chunk, chunk_idx * 64, 64) {
+-                return Err(idx);
+-            }
+-        }
+-        if remainder != 0
+-            && let Some(idx) = chunk(
+-                &values,
+-                out,
+-                &f,
+-                chunks.remainder_bits(),
+-                chunks_count * 64,
+-                remainder,
+-            )
+-        {
+-            return Err(idx);
+-        }
+-        Ok(())
+-    }
+-
+-    /// Apply `f(value)` lane-by-lane with **no validity awareness at all** — every
+-    /// closure invocation is treated as "happened", regardless of whether the lane
+-    /// is null. Use this only when the input is known non-nullable.
+-    ///
+-    /// # Panics
+-    ///
+-    /// Panics if `out.len() != self.len()`.
+-    #[inline]
+-    fn map_into<R, F>(self, out: &mut [MaybeUninit<R>], f: F)
+-    where
+-        F: Fn(Self::Item) -> R,
+-    {
+-        #[allow(clippy::inline_always)]
+-        #[inline(always)]
+-        fn chunk<S, R, F>(values: &S, out: &mut [MaybeUninit<R>], f: &F, base: usize, count: usize)
+-        where
+-            S: IndexedSource,
+-            F: Fn(S::Item) -> R,
+-        {
+-            for bit_idx in 0..count {
+-                let idx = base + bit_idx;
+-                // SAFETY: caller guarantees base + count <= len.
+-                let val = unsafe { values.get_unchecked(idx) };
+-                unsafe { out.get_unchecked_mut(idx).write(f(val)) };
+-            }
+-        }
+-
+-        let values = self;
+-        let len = values.len();
+-        assert_eq!(out.len(), len, "out must have the same length as values");
+-
+-        let chunks_count = len / CHUNK_LEN;
+-        let remainder = len % CHUNK_LEN;
+-
+-        for chunk_idx in 0..chunks_count {
+-            chunk(&values, out, &f, chunk_idx * CHUNK_LEN, CHUNK_LEN);
+-        }
+-        if remainder != 0 {
+-            chunk(&values, out, &f, chunks_count * CHUNK_LEN, remainder);
+-        }
+-    }
+-
+-    /// Apply the predicate `f(value)` lane-by-lane and bit-pack the results into
+-    /// `words`, LSB-first, 64 lanes per `u64`.
+-    ///
+-    /// This is the kernel shape behind comparison operators: each lane read is an
+-    /// independent indexed load (drive two columns via [`LaneZip`]) and the 64
+-    /// per-lane booleans of a chunk reduce into a single word with `OR + shift`,
+-    /// which the autovectorizer lowers to a vector compare plus movemask.
+-    ///
+-    /// Words are written with `=` (not `|=`), so `words` need not be
+-    /// zero-initialised. Bits at positions `>= self.len()` in the last word are
+-    /// written as zero.
+-    ///
+-    /// Like [`map_into`], this kernel has no validity awareness; pair the packed
+-    /// bits with a separately computed validity mask.
+-    ///
+-    /// [`LaneZip`]: crate::lane_kernels::LaneZip
+-    /// [`map_into`]: IndexedSourceExt::map_into
+-    ///
+-    /// # Panics
+-    ///
+-    /// Panics if `words.len() < self.len().div_ceil(64)`.
+-    #[inline]
+-    fn map_bits_into<F>(self, words: &mut [u64], f: F)
+-    where
+-        F: Fn(Self::Item) -> bool,
+-    {
+-        #[allow(clippy::inline_always)]
+-        #[inline(always)]
+-        fn chunk<S, F>(values: &S, f: &F, base: usize, count: usize) -> u64
+-        where
+-            S: IndexedSource,
+-            F: Fn(S::Item) -> bool,
+-        {
+-            let mut packed: u64 = 0;
+-            for bit_idx in 0..count {
+-                // SAFETY: caller guarantees base + count <= len.
+-                let val = unsafe { values.get_unchecked(base + bit_idx) };
+-                packed |= (f(val) as u64) << bit_idx;
+-            }
+-            packed
+-        }
+-
+-        let values = self;
+-        let len = values.len();
+-        let num_words = len.div_ceil(64);
+-        assert!(
+-            words.len() >= num_words,
+-            "words slice has {} entries, need at least {num_words}",
+-            words.len(),
+-        );
+-
+-        let full = len / 64;
+-        let remainder = len % 64;
+-
+-        for word_idx in 0..full {
+-            words[word_idx] = chunk(&values, &f, word_idx * 64, 64);
+-        }
+-        if remainder != 0 {
+-            words[full] = chunk(&values, &f, full * 64, remainder);
+-        }
+-    }
+-
+-    /// Split value/failure map with **no validity awareness at all**: write every lane's value
+-    /// unconditionally and OR-reduce its failure evidence into the return.
+-    ///
+-    /// The fastest checked shape, running at the speed of the unchecked [`map_into`] in exchange
+-    /// for reporting only _that_ some lane failed and never exiting early. Re-run the now known
+-    /// cold input through [`try_map_into`] or [`try_map_masked_into`] to attribute the failure or
+-    /// to drop the null-lane ones. The evidence reduces inside the kernel because a captured `&mut`
+-    /// becomes a loop-carried memory dependence that blocks vectorization.
+-    ///
+-    /// Anything other than [`Default`] means failure, and `bool` is the ordinary `Fail`. Wider
+-    /// words exist for operations where deriving a `bool` costs the vectorization it guards.
+-    /// **`Fail` must be no wider than `R`**, asserted below, or the reduction rather than the
+-    /// operation decides how many lanes fit in a vector.
+-    ///
+-    /// [`map_into`]: IndexedSourceExt::map_into
+-    /// [`try_map_into`]: IndexedSourceExt::try_map_into
+-    /// [`try_map_masked_into`]: IndexedSourceExt::try_map_masked_into
+-    ///
+-    /// # Panics
+-    ///
+-    /// Panics if `out.len() != self.len()`.
+-    #[inline]
+-    fn map_checked_into<R, Fail, Apply>(self, out: &mut [MaybeUninit<R>], apply: Apply) -> Fail
+-    where
+-        Fail: Copy + Default + BitOrAssign,
+-        Apply: Fn(Self::Item) -> (R, Fail),
+-    {
+-        const {
+-            assert!(
+-                size_of::<Fail>() <= size_of::<R>(),
+-                "failure evidence must be no wider than the value, or it bounds the vector width"
+-            )
+-        };
+-
+-        let values = self;
+-        let len = values.len();
+-        assert_eq!(out.len(), len, "out must have the same length as values");
+-
+-        let mut failed = Fail::default();
+-        for idx in 0..len {
+-            // SAFETY: idx < len by the loop bound, and out.len() == len.
+-            let val = unsafe { values.get_unchecked(idx) };
+-
+-            let (result, failure) = apply(val);
+-            failed |= failure;
+-
+-            // SAFETY: idx < len == out.len().
+-            unsafe { out.get_unchecked_mut(idx).write(result) };
+-        }
+-        failed
+-    }
+-
+-    /// Fallible map with **no validity awareness at all** — every `None` returned
+-    /// by the closure is treated as a failure, even at null lanes.
+-    ///
+-    /// # Use this only for non-nullable inputs.
+-    ///
+-    /// For nullable inputs with a fallible closure, use [`try_map_masked_into`] —
+-    /// it has the same value-only closure shape (and the same perf win) but
+-    /// **correctly suppresses null-lane failures** via per-chunk
+-    /// `fail_bits & mask_chunk`.
+-    ///
+-    /// Using this kernel on a nullable input where a null lane's stored value
+-    /// would cause `f` to return `None` will produce a spurious `Err`. This is a
+-    /// correctness footgun on purpose — the name and this doc are how the API
+-    /// signals "you must know your input has no nulls."
+-    ///
+-    /// On failure returns `Err(failing_lane_index)`.
+-    ///
+-    /// [`try_map_masked_into`]: IndexedSourceExt::try_map_masked_into
+-    ///
+-    /// # Panics
+-    ///
+-    /// Panics if `out.len() != self.len()`.
+-    #[inline]
+-    fn try_map_into<R, F>(self, out: &mut [MaybeUninit<R>], f: F) -> Result<(), usize>
+-    where
+-        R: Copy + Default,
+-        F: Fn(Self::Item) -> Option<R>,
+-    {
+-        /// Returns `true` if any lane in `[base, base+count)` failed (OR-reduced);
+-        /// the cold attribution path is called at the kernel level so it can be
+-        /// inlined separately for full vs remainder.
+-        #[allow(clippy::inline_always)]
+-        #[inline(always)]
+-        fn chunk<S, R, F>(
+-            values: &S,
+-            out: &mut [MaybeUninit<R>],
+-            f: &F,
+-            base: usize,
+-            count: usize,
+-        ) -> bool
+-        where
+-            S: IndexedSource,
+-            R: Copy + Default,
+-            F: Fn(S::Item) -> Option<R>,
+-        {
+-            let mut fail_acc: u64 = 0;
+-            for bit_idx in 0..count {
+-                let idx = base + bit_idx;
+-                // SAFETY: caller guarantees base + count <= len.
+-                let val = unsafe { values.get_unchecked(idx) };
+-                let opt = f(val);
+-                fail_acc |= opt.is_none() as u64;
+-                let result = opt.unwrap_or_default();
+-                unsafe { out.get_unchecked_mut(idx).write(result) };
+-            }
+-            fail_acc != 0
+-        }
+-
+-        let values = self;
+-        let len = values.len();
+-        assert_eq!(out.len(), len, "out must have the same length as values");
+-
+-        let chunks_count = len / CHUNK_LEN;
+-        let remainder = len % CHUNK_LEN;
+-
+-        for chunk_idx in 0..chunks_count {
+-            let base = chunk_idx * CHUNK_LEN;
+-            if chunk(&values, out, &f, base, CHUNK_LEN) {
+-                return Err(attribute_failure_no_mask(&values, base, CHUNK_LEN, &f));
+-            }
+-        }
+-        if remainder != 0 {
+-            let base = chunks_count * CHUNK_LEN;
+-            if chunk(&values, out, &f, base, remainder) {
+-                return Err(attribute_failure_no_mask(&values, base, remainder, &f));
+-            }
+-        }
+-        Ok(())
+-    }
+-}
+-
+-impl<S: IndexedSource> IndexedSourceExt for S {}
+-
+-/// Shared cold scan: walks a chunk, returns the first lane index where
+-/// `lane_fails(bit_idx, value)` returns `true`. Used by
+-/// [`attribute_failure_no_mask`].
+-///
+-/// Caller guarantees `base + chunk_len <= values.len()`.
+-#[cold]
+-#[inline(never)]
+-fn cold_scan<S>(
+-    values: &S,
+-    base: usize,
+-    chunk_len: usize,
+-    lane_fails: impl Fn(usize /* bit_idx */, S::Item) -> bool,
+-) -> usize
+-where
+-    S: IndexedSource,
+-{
+-    for bit_idx in 0..chunk_len {
+-        let idx = base + bit_idx;
+-        // SAFETY: caller guarantees idx < values.len().
+-        let val = unsafe { values.get_unchecked(idx) };
+-        if lane_fails(bit_idx, val) {
+-            return idx;
+-        }
+-    }
+-    unreachable!("cold_scan called without a failing lane")
+-}
+-
+-/// Cold attribution for the no-mask variant. Replays `f` over the chunk to find
+-/// the first lane that returns `None`.
+-#[inline]
+-fn attribute_failure_no_mask<S, R, F>(values: &S, base: usize, chunk_len: usize, f: &F) -> usize
+-where
+-    S: IndexedSource,
+-    F: Fn(S::Item) -> Option<R>,
+-{
+-    cold_scan(values, base, chunk_len, |_bit_idx, val| f(val).is_none())
+-}
++pub use rowfn_kernels::lane_kernels::map_into::*;
+ 
+ #[cfg(test)]
+ #[allow(clippy::cast_possible_truncation)]
+ mod tests {
++    use std::mem::MaybeUninit;
++
+     use vortex_buffer::BitBuffer;
+     use vortex_buffer::BitBufferMut;
+ 
+diff --git a/vortex-compute/src/lane_kernels/sink.rs b/vortex-compute/src/lane_kernels/sink.rs
+index 86826fd521..e9f32d8bff 100644
+--- a/vortex-compute/src/lane_kernels/sink.rs
++++ b/vortex-compute/src/lane_kernels/sink.rs
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: Apache-2.0
+ // SPDX-FileCopyrightText: Copyright the Vortex contributors
+ 
+-//! Writable lane sink — the [`IndexedSink`] trait and the [`ReinterpretSink`] adapter
++//! Writable lane sink, the [`IndexedSink`] trait and the [`ReinterpretSink`] adapter
+ //! for in-place type-punning kernels.
+ 
+ use std::marker::PhantomData;
+@@ -10,12 +10,12 @@ use std::mem::size_of;
+ 
+ use crate::lane_kernels::source::IndexedSource;
+ 
+-/// An [`IndexedSource`] that also supports unchecked indexed writes — the binding
++/// An [`IndexedSource`] that also supports unchecked indexed writes, the binding
+ /// for in-place kernels.
+ ///
+ /// `Write` is the type written by `set_unchecked` and may differ from
+ /// `IndexedSource::Item` (the read type). For the canonical `&mut [T]` impl
+-/// both are `T`. The decoupling is what makes [`ReinterpretSink`] possible —
++/// both are `T`. The decoupling is what makes [`ReinterpretSink`] possible,
+ /// a wrapper that reads `F` and writes `T` over the same backing memory when
+ /// the two have identical size and alignment.
+ ///
+@@ -66,7 +66,18 @@ impl<'a, F, T> ReinterpretSink<'a, F, T> {
+     ///
+     /// Panics if `size_of::<F>() != size_of::<T>()` or
+     /// `align_of::<F>() != align_of::<T>()`.
+-    pub fn new(slice: &'a mut [F]) -> Self {
++    ///
++    /// # Safety
++    /// Every T value written through this sink must also be a fully initialized, valid F value.
++    /// This must hold after partial writes and errors, while the original F slice still exists.
++    /// Equal-width numeric primitives satisfy this requirement. Arbitrary Copy types do not.
++    ///
++    /// ```compile_fail
++    /// use vortex_compute::lane_kernels::ReinterpretSink;
++    /// let mut values = [false];
++    /// let sink = ReinterpretSink::<bool, u8>::new(&mut values);
++    /// ```
++    pub unsafe fn new(slice: &'a mut [F]) -> Self {
+         assert_eq!(
+             size_of::<F>(),
+             size_of::<T>(),
+@@ -84,7 +95,9 @@ impl<'a, F, T> ReinterpretSink<'a, F, T> {
+     }
+ }
+ 
+-impl<F: Copy, T: Copy> IndexedSource for ReinterpretSink<'_, F, T> {
++// SAFETY: the slice length is stable. The unsafe constructor requires writes to preserve valid,
++// initialized F values, including when traversal fails after a partial update.
++unsafe impl<F: Copy, T: Copy> IndexedSource for ReinterpretSink<'_, F, T> {
+     type Item = F;
+     #[inline]
+     fn len(&self) -> usize {
+diff --git a/vortex-compute/src/lane_kernels/source.rs b/vortex-compute/src/lane_kernels/source.rs
+index f578d7a295..961ef3d7f9 100644
+--- a/vortex-compute/src/lane_kernels/source.rs
++++ b/vortex-compute/src/lane_kernels/source.rs
+@@ -1,92 +1,9 @@
+ // SPDX-License-Identifier: Apache-2.0
+ // SPDX-FileCopyrightText: Copyright the Vortex contributors
+ 
+-//! Read-only lane source — the [`IndexedSource`] trait and the [`LaneZip`] adapter.
++//! Shared lane kernels, with Vortex storage conformance tests.
+ 
+-/// A length-known source supporting unchecked indexed reads.
+-///
+-/// Implemented for `&[T]` (with `T: Copy`) and for [`LaneZip`] over two `IndexedSource`s.
+-/// The kernels in this crate require this trait instead of `Iterator` so that lane
+-/// reads carry no inter-iteration data dependency — the autovectorizer treats each
+-/// lane independently.
+-pub trait IndexedSource {
+-    /// The per-lane item type passed through the kernel by value.
+-    type Item;
+-    /// Logical lane count.
+-    fn len(&self) -> usize;
+-    /// Returns true when there are no lanes.
+-    fn is_empty(&self) -> bool {
+-        self.len() == 0
+-    }
+-    /// Read the lane at `i` without bounds checking.
+-    ///
+-    /// # Safety
+-    ///
+-    /// `i` must be strictly less than `self.len()`.
+-    unsafe fn get_unchecked(&self, i: usize) -> Self::Item;
+-}
+-
+-impl<T: Copy> IndexedSource for &[T] {
+-    type Item = T;
+-    #[inline]
+-    fn len(&self) -> usize {
+-        <[T]>::len(self)
+-    }
+-    #[inline]
+-    unsafe fn get_unchecked(&self, i: usize) -> T {
+-        // SAFETY: caller guarantees i < self.len().
+-        unsafe { *<[T]>::get_unchecked(self, i) }
+-    }
+-}
+-
+-impl<T: Copy> IndexedSource for &mut [T] {
+-    type Item = T;
+-    #[inline]
+-    fn len(&self) -> usize {
+-        <[T]>::len(self)
+-    }
+-    #[inline]
+-    unsafe fn get_unchecked(&self, i: usize) -> T {
+-        // SAFETY: caller guarantees i < self.len().
+-        unsafe { *<[T]>::get_unchecked(self, i) }
+-    }
+-}
+-
+-/// Pair of two [`IndexedSource`]s of equal length. Yields `(A::Item, B::Item)` per lane.
+-///
+-/// Use this to drive a binary kernel from two columns. Length equality is enforced at
+-/// construction, and the private fields prevent callers from bypassing that check.
+-#[derive(Clone, Copy)]
+-pub struct LaneZip<A, B>(A, B);
+-
+-impl<A: IndexedSource, B: IndexedSource> LaneZip<A, B> {
+-    /// Build a `LaneZip` from two equal-length sources.
+-    ///
+-    /// # Panics
+-    ///
+-    /// Panics if the two operands have different lengths.
+-    pub fn new(a: A, b: B) -> Self {
+-        assert_eq!(
+-            a.len(),
+-            b.len(),
+-            "LaneZip operands must have the same length"
+-        );
+-        Self(a, b)
+-    }
+-}
+-
+-impl<A: IndexedSource, B: IndexedSource> IndexedSource for LaneZip<A, B> {
+-    type Item = (A::Item, B::Item);
+-    #[inline]
+-    fn len(&self) -> usize {
+-        self.0.len()
+-    }
+-    #[inline]
+-    unsafe fn get_unchecked(&self, i: usize) -> (A::Item, B::Item) {
+-        // SAFETY: caller guarantees i < self.len(); `new` enforces matching lengths.
+-        unsafe { (self.0.get_unchecked(i), self.1.get_unchecked(i)) }
+-    }
+-}
++pub use rowfn_kernels::lane_kernels::source::*;
+ 
+ #[cfg(test)]
+ mod tests {
+diff --git a/vortex-array/src/scalar_fn/unstable/rowfn/batch.rs b/vortex-array/src/scalar_fn/unstable/rowfn/batch.rs
+new file mode 100644
+index 0000000000..4eb50fdb48
+--- /dev/null
++++ b/vortex-array/src/scalar_fn/unstable/rowfn/batch.rs
+@@ -0,0 +1,116 @@
++// SPDX-License-Identifier: Apache-2.0
++// SPDX-FileCopyrightText: Copyright the Vortex contributors
++
++//! Lazy validity, native metadata, and final publication for Vortex row calls.
++
++use ::rowfn::{BatchBinding, Operand, Selection, TypeBinding, ValiditySummary};
++use vortex_error::{VortexResult, vortex_bail, vortex_ensure};
++use vortex_mask::Mask;
++
++use super::VortexHost;
++use crate::{ArrayRef, ExecutionCtx, IntoArray};
++use crate::arrays::{ConstantArray, ExtensionArray};
++use crate::builtins::ArrayBuiltins;
++use crate::dtype::{DType, Nullability};
++use crate::scalar::Scalar;
++use crate::validity::Validity;
++
++impl TypeBinding for VortexHost {
++    fn nullable(dtype: &DType) -> bool { dtype.is_nullable() }
++    fn with_nullable(dtype: &DType, nullable: bool) -> DType { dtype.with_nullability(Nullability::from(nullable)) }
++    fn validate_label(storage: &DType, output: &DType) -> VortexResult<()> {
++        if storage == output { return Ok(()); }
++        if let DType::Extension(extension) = output {
++            vortex_ensure!(extension.storage_dtype() == storage, "output extension must preserve storage type");
++            return Ok(());
++        }
++        vortex_bail!("output label must preserve storage type, got {output}")
++    }
++}
++
++/// Resolved Vortex validity, retaining bitmap storage and offsets.
++pub struct VortexSelection(Mask);
++// SAFETY: Mask retains its length and true count. Each traversal visits the immutable mask
++// in increasing order and returns immediately if its callback fails.
++unsafe impl Selection for VortexSelection {
++    fn len(&self) -> usize { self.0.len() }
++    fn count(&self) -> usize { self.0.true_count() }
++    fn try_for_each<E>(&self, mut visit: impl FnMut(usize) -> Result<(), E>) -> Result<(), E> {
++        match &self.0 {
++            Mask::AllTrue(rows) => (0..*rows).try_for_each(visit),
++            Mask::AllFalse(_) => Ok(()),
++            Mask::Values(values) => values.bit_buffer().try_for_each_set_index(|index| visit(index)),
++        }
++    }
++}
++
++impl BatchBinding for VortexHost {
++    type Validity = Validity;
++    type Selection = VortexSelection;
++    fn validate_operand(input: &Operand<Self>, rows: usize) -> VortexResult<()> {
++        vortex_ensure!(input.column.dtype() == &input.dtype, "input metadata must match its column");
++        vortex_ensure!(input.column.len() == rows || (input.scalar && input.column.len() == 1),
++            "input must match logical batch length, got {}", input.column.len());
++        if input.scalar {
++            vortex_ensure!(super::super::row::constant_input(&input.column).is_some(),
++                "a Vortex scalar operand must use a recognized constant encoding");
++        }
++        Ok(())
++    }
++    fn validity(inputs: &[Operand<Self>], rows: usize, ctx: &mut ExecutionCtx) -> VortexResult<Validity> {
++        let mut validity = Validity::NonNullable;
++        for input in inputs {
++            let input_validity = if input.scalar && input.column.len() != rows {
++                if input.column.all_valid(ctx)? { Validity::AllValid } else { Validity::AllInvalid }
++            } else {
++                input.column.validity()?
++            };
++            validity = validity.and(input_validity)?;
++        }
++        Ok(validity)
++    }
++    fn validity_summary(validity: &Validity) -> ValiditySummary {
++        match validity {
++            Validity::NonNullable | Validity::AllValid => ValiditySummary::All,
++            Validity::AllInvalid => ValiditySummary::None,
++            Validity::Array(_) => ValiditySummary::Unknown,
++        }
++    }
++    fn selection(validity: &Validity, rows: usize, ctx: &mut ExecutionCtx) -> VortexResult<VortexSelection> {
++        Ok(VortexSelection(validity.execute_mask(rows, ctx)?))
++    }
++    fn filter(input: &Operand<Self>, selection: &VortexSelection, _: &mut ExecutionCtx) -> VortexResult<Operand<Self>> {
++        let column = if input.scalar && input.column.len() == 1 {
++            input.column.clone()
++        } else {
++            input.column.filter(selection.0.clone())?
++        };
++        Ok(Operand { column, dtype: input.dtype.clone(), scalar: input.scalar })
++    }
++    fn all_null(dtype: &DType, rows: usize, _: &mut ExecutionCtx) -> VortexResult<ArrayRef> {
++        Ok(ConstantArray::new(Scalar::null(dtype.clone()), rows).into_array())
++    }
++    fn broadcast(column: ArrayRef, rows: usize, ctx: &mut ExecutionCtx) -> VortexResult<ArrayRef> {
++        vortex_ensure!(column.len() == 1 && column.all_valid(ctx)?, "scalar output must contain one valid row");
++        Ok(ConstantArray::new(column.execute_scalar(0, ctx)?, rows).into_array())
++    }
++    fn publish(column: ArrayRef, storage: &DType, output: &DType, validity: &Validity,
++        rows: usize, ctx: &mut ExecutionCtx) -> VortexResult<ArrayRef> {
++        vortex_ensure!(column.len() == rows, "row output must match batch length, got {}", column.len());
++        vortex_ensure!(column.dtype().with_nullability(Nullability::NonNullable) == *storage,
++            "row output must match planned storage, got {}", column.dtype());
++        vortex_ensure!(column.all_valid(ctx)?, "row callbacks cannot produce null from valid inputs");
++        let mut column = match validity {
++            Validity::Array(valid) => column.mask(valid.clone())?,
++            Validity::AllInvalid if rows != 0 => return Self::all_null(output, rows, ctx),
++            _ => column,
++        };
++        if let DType::Extension(extension) = output {
++            if storage != &output.with_nullability(Nullability::NonNullable) {
++                let extension = extension.with_nullability(column.dtype().nullability());
++                column = ExtensionArray::try_new(extension, column)?.into_array();
++            }
++        }
++        column.cast(output.clone())
++    }
++}
+diff --git a/vortex-array/src/scalar_fn/unstable/rowfn/input.rs b/vortex-array/src/scalar_fn/unstable/rowfn/input.rs
+new file mode 100644
+index 0000000000..ed05e9eada
+--- /dev/null
++++ b/vortex-array/src/scalar_fn/unstable/rowfn/input.rs
+@@ -0,0 +1,177 @@
++// SPDX-License-Identifier: Apache-2.0
++// SPDX-FileCopyrightText: Copyright the Vortex contributors
++
++//! Vortex decoders retain native owners and lend the shared row value families.
++
++use ::rowfn::FixedSizeList;
++use ::rowfn::InputBinding;
++use ::rowfn::RowKind;
++use ::rowfn::RowView;
++use ::rowfn::TextBinding;
++use ::rowfn::TextLayout;
++use ::rowfn::TextValue;
++use ::rowfn::Utf8;
++use vortex_buffer::{BitBuffer, Buffer};
++use vortex_error::{VortexResult, vortex_bail, vortex_ensure};
++
++use super::VortexHost;
++use crate::{ArrayRef, ExecutionCtx};
++use crate::arrays::{BoolArray, FixedSizeListArray, PrimitiveArray};
++use crate::arrays::fixed_size_list::{FixedSizeListArrayExt, FixedSizeListArraySlotsExt};
++use crate::dtype::{DType, NativePType};
++use crate::scalar_fn::unstable::row::{InputElement, Utf8Column, ViewLen};
++
++impl<T> InputBinding<T> for VortexHost
++where T: NativePType + for<'a> RowKind<Value<'a> = T> {
++    type Decoded = Buffer<T>;
++    type View<'a> = &'a [T];
++    const DENSE_SAFE: bool = true;
++    const DECODE_INFALLIBLE: bool = true;
++    fn validate(dtype: &DType) -> VortexResult<()> { <T as InputElement>::validate(dtype) }
++    fn decode(column: &ArrayRef, scalar: bool, ctx: &mut ExecutionCtx) -> VortexResult<Buffer<T>> {
++        let column = super::decoded_input(column, scalar)?;
++        Ok(column.execute::<PrimitiveArray>(ctx)?.into_buffer::<T>())
++    }
++    fn can_decode_null_tolerant(_: &ArrayRef) -> VortexResult<bool> { Ok(true) }
++    fn view(decoded: &Buffer<T>) -> &[T] { decoded.as_slice() }
++}
++
++/// A borrowed Boolean input view with its original bitmap offset.
++pub struct BoolView<'a>(&'a BitBuffer);
++// SAFETY: BitBuffer retains a stable initialized bit range throughout the borrow.
++unsafe impl<'a> RowView<'a, bool> for BoolView<'a> {
++    fn len(&self) -> usize { self.0.len() }
++    unsafe fn get_unchecked(&self, index: usize) -> bool {
++        // SAFETY: the caller bounds the index by this bitmap's logical length.
++        unsafe { self.0.value_unchecked(index) }
++    }
++}
++impl InputBinding<bool> for VortexHost {
++    type Decoded = BitBuffer;
++    type View<'a> = BoolView<'a>;
++    const DENSE_SAFE: bool = true;
++    const DECODE_INFALLIBLE: bool = true;
++    fn validate(dtype: &DType) -> VortexResult<()> { <bool as InputElement>::validate(dtype) }
++    fn decode(column: &ArrayRef, scalar: bool, ctx: &mut ExecutionCtx) -> VortexResult<BitBuffer> {
++        let column = super::decoded_input(column, scalar)?;
++        Ok(column.execute::<BoolArray>(ctx)?.into_bit_buffer())
++    }
++    fn can_decode_null_tolerant(_: &ArrayRef) -> VortexResult<bool> { Ok(true) }
++    fn view(decoded: &BitBuffer) -> BoolView<'_> { BoolView(decoded) }
++}
++
++/// A validated UTF-8 view borrowed from the existing decoder's retained buffers.
++pub struct StringView<'a>(<Utf8Column as InputElement>::View<'a>);
++// SAFETY: Utf8Column validates UTF-8 and sanitizes null payloads before lending this exact view.
++unsafe impl<'a> RowView<'a, Utf8> for StringView<'a> {
++    fn len(&self) -> usize { self.0.len() }
++    unsafe fn get_unchecked(&self, index: usize) -> &'a str {
++        // SAFETY: the caller supplies an index within the validated retained view.
++        unsafe { Utf8Column::get_from_view_unchecked(&self.0, index) }.as_str()
++    }
++}
++impl InputBinding<Utf8> for VortexHost {
++    type Decoded = <Utf8Column as InputElement>::Column;
++    type View<'a> = StringView<'a>;
++    const DENSE_SAFE: bool = true;
++    const DECODE_INFALLIBLE: bool = true;
++    fn validate(dtype: &DType) -> VortexResult<()> { Utf8Column::validate(dtype) }
++    fn decode(column: &ArrayRef, scalar: bool, ctx: &mut ExecutionCtx) -> VortexResult<Self::Decoded> {
++        let column = super::decoded_input(column, scalar)?;
++        Utf8Column::decode(column, ctx)
++    }
++    fn can_decode_null_tolerant(_: &ArrayRef) -> VortexResult<bool> { Ok(true) }
++    fn view(decoded: &Self::Decoded) -> StringView<'_> { StringView(Utf8Column::view(decoded)) }
++}
++
++/// Vortex text rows retain the validated string view until bytes are requested.
++pub struct VortexText;
++
++impl RowKind for VortexText {
++    type Value<'a> = crate::scalar_fn::unstable::row::Utf8View<'a>;
++}
++
++impl TextValue for crate::scalar_fn::unstable::row::Utf8View<'_> {
++    fn as_str(&self) -> &str { self.as_str() }
++
++    fn byte_len(&self) -> usize { self.raw_view().len() as usize }
++
++    fn prefix(&self, len: usize) -> &[u8] {
++        if (self.raw_view().len() as usize) < len { return &[]; }
++        if len <= 4 { return &self.prefix()[..len]; }
++        &self.as_str().as_bytes()[..len]
++    }
++}
++
++// SAFETY: the existing decoder validates UTF-8, sanitizes nulls, and retains both headers and data.
++unsafe impl<'a> RowView<'a, VortexText> for StringView<'a> {
++    fn len(&self) -> usize { self.0.len() }
++    unsafe fn get_unchecked(&self, index: usize) -> <VortexText as RowKind>::Value<'a> {
++        // SAFETY: the caller supplies an index within the retained validated view.
++        unsafe { Utf8Column::get_from_view_unchecked(&self.0, index) }
++    }
++}
++
++impl InputBinding<VortexText> for VortexHost {
++    type Decoded = <Utf8Column as InputElement>::Column;
++    type View<'a> = StringView<'a>;
++    const DENSE_SAFE: bool = true;
++    const DECODE_INFALLIBLE: bool = true;
++    fn validate(dtype: &DType) -> VortexResult<()> { <Self as InputBinding<Utf8>>::validate(dtype) }
++    fn decode(column: &ArrayRef, scalar: bool, ctx: &mut ExecutionCtx) -> VortexResult<Self::Decoded> {
++        <Self as InputBinding<Utf8>>::decode(column, scalar, ctx)
++    }
++    fn can_decode_null_tolerant(_: &ArrayRef) -> VortexResult<bool> { Ok(true) }
++    fn view(decoded: &Self::Decoded) -> StringView<'_> { StringView(Utf8Column::view(decoded)) }
++}
++
++impl TextBinding for VortexHost {
++    type Text = VortexText;
++    type Offset32 = VortexText;
++    type Offset64 = VortexText;
++
++    fn text_layout(dtype: &DType) -> VortexResult<TextLayout> {
++        <Self as InputBinding<VortexText>>::validate(dtype)?;
++        Ok(TextLayout::View)
++    }
++}
++
++/// Retained list children and an explicit count of logical rows.
++pub struct ListValues<T> { values: Buffer<T>, width: usize, rows: usize }
++/// Borrowed fixed-size row view.
++pub struct ListView<'a, T> { values: &'a [T], width: usize, rows: usize }
++// SAFETY: decoding validates rows * width against this retained child slice, including width zero.
++unsafe impl<'a, T: 'static> RowView<'a, FixedSizeList<T>> for ListView<'a, T> {
++    fn len(&self) -> usize { self.rows }
++    #[inline]
++    unsafe fn get_unchecked(&self, index: usize) -> &'a [T] {
++        let start = index * self.width;
++        // SAFETY: decoded shape and the caller's index establish the full child range.
++        unsafe { self.values.get_unchecked(start..start + self.width) }
++    }
++}
++impl<T: NativePType> InputBinding<FixedSizeList<T>> for VortexHost {
++    type Decoded = ListValues<T>;
++    type View<'a> = ListView<'a, T>;
++    const DENSE_SAFE: bool = true;
++    const DECODE_INFALLIBLE: bool = true;
++    fn validate(dtype: &DType) -> VortexResult<()> {
++        let DType::FixedSizeList(child, _, _) = dtype else { vortex_bail!("expected fixed-size list, got {dtype}"); };
++        vortex_ensure!(!child.is_nullable(), "fixed-size-list children must be non-nullable");
++        <T as InputElement>::validate(child)
++    }
++    fn decode(column: &ArrayRef, scalar: bool, ctx: &mut ExecutionCtx) -> VortexResult<Self::Decoded> {
++        let column = super::decoded_input(column, scalar)?;
++        let list = column.execute::<FixedSizeListArray>(ctx)?;
++        let width = list.list_size() as usize;
++        let rows = list.len();
++        vortex_ensure!(list.elements().all_valid(ctx)?, "fixed-size-list children must be valid");
++        let values = list.elements().clone().execute::<PrimitiveArray>(ctx)?.into_buffer::<T>();
++        vortex_ensure!(rows.checked_mul(width) == Some(values.len()), "fixed-size-list shape mismatch");
++        Ok(ListValues { values, width, rows })
++    }
++    fn can_decode_null_tolerant(_: &ArrayRef) -> VortexResult<bool> { Ok(true) }
++    fn view(decoded: &Self::Decoded) -> Self::View<'_> {
++        ListView { values: decoded.values.as_slice(), width: decoded.width, rows: decoded.rows }
++    }
++}
+diff --git a/vortex-array/src/scalar_fn/unstable/rowfn/mod.rs b/vortex-array/src/scalar_fn/unstable/rowfn/mod.rs
+new file mode 100644
+index 0000000000..6f36ca723d
+--- /dev/null
++++ b/vortex-array/src/scalar_fn/unstable/rowfn/mod.rs
+@@ -0,0 +1,59 @@
++// SPDX-License-Identifier: Apache-2.0
++// SPDX-FileCopyrightText: Copyright the Vortex contributors
++
++//! Experimental Vortex bindings for the independent `rowfn` executor.
++//!
++//! The existing `row` module remains the comparison implementation. Registration uses the normal
++//! scalar-function registry through [`VortexRowFn`], with no new built-in catalog entry.
++
++use ::rowfn::{Host, Operand};
++use vortex_error::{VortexError, VortexResult, vortex_err};
++
++use crate::{ArrayRef, ExecutionCtx};
++use crate::dtype::DType;
++
++mod batch;
++mod input;
++mod output;
++
++mod registration;
++pub use registration::VortexRowFn;
++
++/// Local marker on which Vortex implements portable binding capabilities.
++#[derive(Clone, Copy, Debug)]
++pub struct VortexHost;
++
++impl Host for VortexHost {
++    type Column = ArrayRef;
++    type NativeType = DType;
++    type Context = ExecutionCtx;
++    type Error = VortexError;
++    fn error(message: &str) -> VortexError { vortex_err!("{message}") }
++}
++
++/// Retain a Vortex input and classify constants through the existing encoding-aware helper.
++pub fn operand(column: ArrayRef) -> Operand<VortexHost> {
++    let scalar = !column.is_empty() && super::row::constant_input(&column).is_some();
++    Operand { dtype: column.dtype().clone(), column, scalar }
++}
++
++/// Retain the value beneath a recognized constant wrapper before decoding its first row.
++///
++/// A masked constant can have a null first row and valid later rows. Decoding the masked first row
++/// would sanitize UTF-8 to an empty string and lose the constant used by those valid rows.
++pub fn decoded_input(column: &ArrayRef, scalar: bool) -> VortexResult<ArrayRef> {
++    if !scalar { return Ok(column.clone()); }
++    let constant = super::row::constant_input(column)
++        .ok_or_else(|| vortex_err!("scalar input must retain a recognized constant encoding"))?;
++    constant.slice(0..1)
++}
++
++/// Execute shared dispatch using Vortex's native input and planned output metadata.
++pub fn execute<F: ::rowfn::RowFn<VortexHost>>(function: &F, options: &F::Options,
++    inputs: &[ArrayRef], rows: usize, output: &DType, ctx: &mut ExecutionCtx) -> VortexResult<ArrayRef> {
++    let operands: Vec<_> = inputs.iter().cloned().map(operand).collect();
++    ::rowfn::execute::<VortexHost, F>(function, options, &operands, rows, output, ctx)
++}
++
++#[cfg(test)]
++mod tests;
+diff --git a/vortex-array/src/scalar_fn/unstable/rowfn/output.rs b/vortex-array/src/scalar_fn/unstable/rowfn/output.rs
+new file mode 100644
+index 0000000000..61c2183df3
+--- /dev/null
++++ b/vortex-array/src/scalar_fn/unstable/rowfn/output.rs
+@@ -0,0 +1,107 @@
++// SPDX-License-Identifier: Apache-2.0
++// SPDX-FileCopyrightText: Copyright the Vortex contributors
++
++//! Vortex-owned output allocation, sinks, and zero-copy primitive publication.
++
++use std::mem::MaybeUninit;
++use std::sync::Arc;
++
++use ::rowfn::{BooleanOutput, OutputBinding, OutputBuffer};
++use ::rowfn::kernels::lane_kernels::IndexedSource;
++use ::rowfn::sink::{ListOutput, OutputSink, Utf8Output, WriteUtf8};
++use vortex_buffer::{BitBuffer, BufferAllocatorRef};
++use vortex_error::{VortexResult, vortex_err};
++
++use super::VortexHost;
++use crate::{ArrayRef, ExecutionCtx, IntoArray};
++use crate::arrays::{BoolArray, FixedSizeListArray};
++use crate::dtype::{DType, NativePType, Nullability};
++use crate::scalar_fn::unstable::row::{self as legacy, OutputElement, ViewLen};
++use crate::validity::Validity;
++
++/// The existing allocator-aware storage and its publication resource.
++pub struct VortexBuffer<T: OutputElement> {
++    values: T::Buffer,
++    allocator: BufferAllocatorRef,
++}
++// SAFETY: the existing OutputBuffer contract preserves slots and permits partial abandonment.
++unsafe impl<T: OutputElement> OutputBuffer<T> for VortexBuffer<T> {
++    type Finished = ArrayRef;
++    fn slots(&mut self) -> &mut [MaybeUninit<T>] { legacy::OutputBuffer::slots(&mut self.values) }
++    unsafe fn finish(self, len: usize) -> ArrayRef {
++        // SAFETY: the caller supplies exactly the initialized prefix required by both contracts.
++        unsafe { legacy::OutputBuffer::finish(self.values, len, &self.allocator) }
++    }
++}
++impl<T: NativePType> OutputBinding<T> for VortexHost {
++    type Buffer = VortexBuffer<T>;
++    fn output_type() -> DType { T::element_dtype() }
++    fn allocate(rows: usize, ctx: &mut ExecutionCtx) -> VortexResult<Self::Buffer> {
++        Ok(VortexBuffer { values: T::with_capacity(rows, ctx.allocator()), allocator: ctx.allocator().clone() })
++    }
++}
++impl OutputBinding<bool> for VortexHost {
++    type Buffer = VortexBuffer<bool>;
++    fn output_type() -> DType { bool::element_dtype() }
++    fn allocate(rows: usize, ctx: &mut ExecutionCtx) -> VortexResult<Self::Buffer> {
++        Ok(VortexBuffer { values: bool::with_capacity(rows, ctx.allocator()), allocator: ctx.allocator().clone() })
++    }
++    fn build_from<S: IndexedSource>(source: S, apply: impl Fn(S::Item) -> bool,
++        ctx: &mut ExecutionCtx) -> VortexResult<ArrayRef> {
++        Ok(bool::build_from(source, apply, ctx.allocator()))
++    }
++}
++// SAFETY: the shared packing kernels invoke callbacks only within the supplied logical length.
++unsafe impl BooleanOutput for VortexHost {
++    fn collect_bool<const MULTIVERSIONED: bool>(rows: usize, apply: impl FnMut(usize) -> bool,
++        ctx: &mut ExecutionCtx) -> VortexResult<ArrayRef> {
++        let bits = if MULTIVERSIONED {
++            BitBuffer::collect_bool_multiversioned_in(rows, apply, ctx.allocator().clone())
++        } else {
++            BitBuffer::collect_bool_in(rows, apply, ctx.allocator().clone())
++        };
++        Ok(BoolArray::new(bits, Validity::NonNullable).into_array())
++    }
++}
++impl<T: NativePType> ListOutput<T> for VortexHost {
++    fn list_type(width: usize) -> VortexResult<DType> {
++        let width = u32::try_from(width).map_err(|_| vortex_err!("list width must fit u32"))?;
++        Ok(DType::FixedSizeList(Arc::new(T::element_dtype()), width, Nullability::NonNullable))
++    }
++    fn finish_list(children: ArrayRef, rows: usize, width: usize, _: &mut ExecutionCtx) -> VortexResult<ArrayRef> {
++        let width = u32::try_from(width).map_err(|_| vortex_err!("list width must fit u32"))?;
++        Ok(FixedSizeListArray::try_new(children, width, Validity::NonNullable, rows)?.into_array())
++    }
++}
++
++/// Reuses the existing output-owned UTF-8 sink and its execution allocator.
++pub struct VortexUtf8Sink(legacy::Utf8Sink);
++impl WriteUtf8 for legacy::Utf8Writer<'_> {
++    fn write(self, value: &str) { self.write(value); }
++    fn write_parts(self, parts: &[&str]) { self.write_parts(parts); }
++}
++impl Utf8Output for VortexHost { type Sink = VortexUtf8Sink; }
++// SAFETY: delegation retains the existing initialized UTF-8 row mapping and ownership contract.
++unsafe impl OutputSink<VortexHost> for VortexUtf8Sink {
++    type Params = ();
++    type Rows<'a> = <legacy::Utf8Sink as legacy::OutputSink>::Rows<'a>;
++    type Row<'a> = legacy::Utf8Writer<'a>;
++    type WriteToken = ();
++    fn storage_type(params: &()) -> VortexResult<DType> {
++        Ok(<legacy::Utf8Sink as legacy::OutputSink>::storage_dtype(params))
++    }
++    fn allocate(rows: usize, params: &(), ctx: &mut ExecutionCtx) -> VortexResult<Self> {
++        <legacy::Utf8Sink as legacy::OutputSink>::with_capacity(rows, params, ctx.allocator()).map(Self)
++    }
++    fn rows(&mut self) -> Self::Rows<'_> { legacy::OutputSink::rows(&mut self.0) }
++    fn len(rows: &Self::Rows<'_>) -> usize { rows.len() }
++    fn initialize(rows: &mut Self::Rows<'_>) { <legacy::Utf8Sink as legacy::OutputSink>::initialize_skipped_rows(rows); }
++    unsafe fn row<'a>(rows: &'a mut Self::Rows<'_>, index: usize) -> Self::Row<'a> {
++        // SAFETY: both row contracts require the same validated index and exact row mapping.
++        unsafe { <legacy::Utf8Sink as legacy::OutputSink>::row_unchecked(rows, index) }
++    }
++    unsafe fn finish(self, _: &mut ExecutionCtx) -> VortexResult<ArrayRef> {
++        // SAFETY: every row remains an initialized view into output-owned storage.
++        unsafe { legacy::OutputSink::finish(self.0) }
++    }
++}
+diff --git a/vortex-array/src/scalar_fn/unstable/rowfn/registration.rs b/vortex-array/src/scalar_fn/unstable/rowfn/registration.rs
+new file mode 100644
+index 0000000000..6e3e36f130
+--- /dev/null
++++ b/vortex-array/src/scalar_fn/unstable/rowfn/registration.rs
+@@ -0,0 +1,49 @@
++// SPDX-License-Identifier: Apache-2.0
++// SPDX-FileCopyrightText: Copyright the Vortex contributors
++
++//! Registration through the existing scalar-function vtable and session registry.
++
++use std::fmt::{Debug, Display};
++use std::hash::Hash;
++
++use ::rowfn::RowFn;
++use vortex_error::VortexResult;
++
++use super::{VortexHost, execute};
++use crate::{ArrayRef, ExecutionCtx};
++use crate::dtype::DType;
++use crate::expr::{Expression, union_child_validities};
++use crate::scalar_fn::{Arity, ChildName, ExecutionArgs, ScalarFnId, ScalarFnVTable};
++
++/// Explicit Vortex identity and registry boundary for an independently defined row function.
++///
++/// This wrapper leaves serialization unsupported. A package that needs persistence or custom
++/// optimizer hooks can implement its own vtable and delegate to [`super::execute`]. Whole-batch
++/// implementations continue to implement [`ScalarFnVTable`] directly.
++#[derive(Clone)]
++pub struct VortexRowFn<F> { id: ScalarFnId, function: F }
++impl<F> VortexRowFn<F> {
++    /// Associate a host registry ID with a portable function definition.
++    pub fn new(id: ScalarFnId, function: F) -> Self { Self { id, function } }
++}
++impl<F: RowFn<VortexHost>> ScalarFnVTable for VortexRowFn<F>
++where F::Options: 'static + Send + Sync + Clone + Debug + Display + PartialEq + Eq + Hash {
++    type Options = F::Options;
++    fn id(&self) -> ScalarFnId { self.id }
++    fn arity(&self, _: &Self::Options) -> Arity { Arity::Exact(F::ARG_NAMES.len()) }
++    fn child_name(&self, _: &Self::Options, index: usize) -> ChildName { F::ARG_NAMES[index].into() }
++    fn return_dtype(&self, options: &Self::Options, args: &[DType]) -> VortexResult<DType> {
++        Ok(::rowfn::plan::<VortexHost, F>(&self.function, options, args)?.output_type().clone())
++    }
++    fn execute(&self, options: &Self::Options, args: &dyn ExecutionArgs, ctx: &mut ExecutionCtx) -> VortexResult<ArrayRef> {
++        let inputs = (0..args.num_inputs()).map(|index| args.get(index)).collect::<VortexResult<Vec<_>>>()?;
++        let types: Vec<_> = inputs.iter().map(|input| input.dtype().clone()).collect();
++        let output = self.return_dtype(options, &types)?;
++        execute(&self.function, options, &inputs, args.row_count(), &output, ctx)
++    }
++    fn validity(&self, _: &Self::Options, expression: &Expression) -> VortexResult<Option<Expression>> {
++        union_child_validities(expression)
++    }
++    fn is_strict(&self, _: &Self::Options) -> bool { true }
++    fn is_infallible(&self, _: &Self::Options) -> bool { F::INFALLIBLE }
++}
+diff --git a/vortex-array/src/scalar_fn/unstable/rowfn/tests.rs b/vortex-array/src/scalar_fn/unstable/rowfn/tests.rs
+new file mode 100644
+index 0000000000..71b8818431
+--- /dev/null
++++ b/vortex-array/src/scalar_fn/unstable/rowfn/tests.rs
+@@ -0,0 +1,51 @@
++// SPDX-License-Identifier: Apache-2.0
++// SPDX-FileCopyrightText: Copyright the Vortex contributors
++
++//! Allocation conformance uses the existing in-crate tracking allocator.
++
++use ::rowfn::{OutputBinding, OutputBuffer};
++use ::rowfn::sink::{OutputSink, UninitElementSink};
++use vortex_error::VortexResult;
++
++use super::VortexHost;
++use crate::{VortexSessionExecute, array_session};
++use crate::arrays::Primitive;
++use crate::memory::test_allocator::tracking_allocator;
++
++#[test]
++fn output_uses_execution_allocator_and_retains_primitive_allocation() -> VortexResult<()> {
++    let (allocator, tracker) = tracking_allocator();
++    let mut ctx = array_session().create_execution_ctx().with_allocator(allocator);
++    let mut buffer = <VortexHost as OutputBinding<i64>>::allocate(3, &mut ctx)?;
++    let slots = &mut buffer.slots()[..3];
++    let pointer = slots.as_ptr().cast::<i64>();
++    for (slot, value) in slots.iter_mut().zip([1, 2, 3]) { slot.write(value); }
++    let mut buffer = buffer;
++    assert_eq!(buffer.slots().as_ptr().cast::<i64>(), pointer);
++    // SAFETY: the exact three published slots remain initialized across the move and second view.
++    let output = unsafe { buffer.finish(3) };
++    let primitive = output.as_::<Primitive>();
++    let values = primitive.as_slice::<i64>();
++    assert_eq!(values.as_ptr(), pointer);
++    tracker.assert_owns(values);
++    assert_eq!(tracker.live_allocations(), 1);
++    drop(output);
++    assert_eq!(tracker.live_allocations(), 0);
++    Ok(())
++}
++
++#[test]
++fn partially_initialized_sink_can_be_abandoned() -> VortexResult<()> {
++    let (allocator, tracker) = tracking_allocator();
++    let mut ctx = array_session().create_execution_ctx().with_allocator(allocator);
++    let mut sink = UninitElementSink::<VortexHost, i64>::allocate(4, &(), &mut ctx)?;
++    {
++        let mut rows = sink.rows();
++        // SAFETY: row zero is within the retained four-row view.
++        let row = unsafe { UninitElementSink::<VortexHost, i64>::row(&mut rows, 0) };
++        row.write(12);
++    }
++    drop(sink);
++    assert_eq!(tracker.live_allocations(), 0);
++    Ok(())
++}

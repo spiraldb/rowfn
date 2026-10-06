@@ -1,0 +1,36 @@
+   Compiling num-traits v0.2.19
+   Compiling libc v0.2.189
+   Compiling once_cell v1.21.4
+   Compiling hashbrown v0.17.1
+   Compiling syn v2.0.119
+   Compiling getrandom v0.3.4
+   Compiling num-integer v0.1.47
+   Compiling chrono v0.4.45
+   Compiling num-complex v0.4.6
+   Compiling num-bigint v0.5.1
+   Compiling zerocopy-derive v0.8.57
+   Compiling zerocopy v0.8.57
+   Compiling half v2.7.1
+   Compiling ahash v0.8.12
+   Compiling arrow-buffer v59.3.0
+   Compiling arrow-data v59.3.0
+   Compiling arrow-array v59.3.0
+   Compiling arrow-select v59.3.0
+   Compiling rofl-arrow v0.1.0 (/Users/connor/spiral/vortex-data/vortex4/rofl-arrow)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.70s
+   Doc-tests rofl
+
+running 3 tests
+test rofl/src/sink/element.rs - sink::element::InitializedElement (line 19) - compile fail ... ok
+test rofl/src/sink/element.rs - sink::element::InitializedElement (line 13) - compile fail ... ok
+test rofl/src/sink/list.rs - sink::list::InitializedRow (line 22) - compile fail ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+   Doc-tests rofl_arrow
+
+running 1 test
+test rofl-arrow/src/lib.rs - (line 12) - compile fail ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+

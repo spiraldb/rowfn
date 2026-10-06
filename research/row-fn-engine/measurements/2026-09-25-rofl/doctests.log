@@ -1,0 +1,30 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s
+   Doc-tests rofl
+
+running 3 tests
+test rofl/src/sink/element.rs - sink::element::InitializedElement (line 19) - compile fail ... ok
+test rofl/src/sink/element.rs - sink::element::InitializedElement (line 13) - compile fail ... ok
+test rofl/src/sink/list.rs - sink::list::InitializedRow (line 22) - compile fail ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+   Doc-tests rofl_arrow
+
+running 1 test
+test rofl-arrow/src/lib.rs - (line 12) - compile fail ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+   Doc-tests rofl_examples
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests rofl_kernels
+
+running 1 test
+test rofl-kernels/src/lane_kernels/source.rs - lane_kernels::source::IndexedSource (line 18) - compile fail ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+

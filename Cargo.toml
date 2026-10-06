@@ -1,0 +1,53 @@
+[workspace]
+resolver = "3"
+members = ["rowfn-kernels", "rowfn", "rowfn-arrow", "rowfn-functions", "rowfn-examples"]
+exclude = ["integrations/vortex/rowfn-examples"]
+
+[workspace.package]
+authors = ["Vortex Authors <hello@vortex.dev>"]
+categories = ["database-implementations", "data-structures"]
+edition = "2024"
+homepage = "https://github.com/spiraldb/rowfn"
+repository = "https://github.com/spiraldb/rowfn"
+keywords = ["columnar", "kernels", "experimental"]
+license = "Apache-2.0"
+rust-version = "1.95"
+
+[workspace.dependencies]
+arrow-arith = "=59.3.0"
+arrow-array = "=59.3.0"
+arrow-buffer = "=59.3.0"
+arrow-data = "=59.3.0"
+arrow-ord = "=59.3.0"
+arrow-schema = "=59.3.0"
+arrow-select = "=59.3.0"
+arrow-string = "=59.3.0"
+divan = { package = "codspeed-divan-compat", version = "=5.0.1" }
+memchr = "=2.8.3"
+regex = "=1.13.1"
+regex-syntax = "=0.8.11"
+rstest = "=0.26.1"
+rowfn = { version = "0.1.0", path = "rowfn" }
+rowfn-arrow = { version = "0.1.0", path = "rowfn-arrow" }
+rowfn-kernels = { version = "0.1.0", path = "rowfn-kernels" }
+rowfn-functions = { version = "0.1.0", path = "rowfn-functions" }
+
+[workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+# Vortex bindings are compiled only through the preserved integration manifest.
+unexpected_cfgs = { level = "deny", check-cfg = ['cfg(codspeed)', 'cfg(feature, values("vortex"))'] }
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+
+[profile.release]
+codegen-units = 1
+lto = "off"
+
+[profile.bench]
+codegen-units = 16
+lto = false
+debug = "limited"
+
+[profile.bench.package."*"]
+debug = false

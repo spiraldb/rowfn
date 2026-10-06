@@ -1,0 +1,4 @@
+   Compiling rofl-examples v0.1.0 (/Users/connor/spiral/vortex-data/vortex4/rofl-examples)
+    Finished `bench` profile [optimized + debuginfo] target(s) in 1.85s
+  Executable benches/arrow_workloads.rs (target/release/deps/arrow_workloads-c779a9f473e8d9cf)
+  Executable benches/boundaries.rs (target/release/deps/boundaries-aeac0eb71915d338)

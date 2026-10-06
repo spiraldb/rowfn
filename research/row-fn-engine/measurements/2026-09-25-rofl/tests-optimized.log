@@ -1,0 +1,69 @@
+   Compiling rofl-kernels v0.1.0 (/Users/connor/spiral/vortex-data/vortex4/rofl-kernels)
+   Compiling rofl-arrow v0.1.0 (/Users/connor/spiral/vortex-data/vortex4/rofl-arrow)
+   Compiling rofl v0.1.0 (/Users/connor/spiral/vortex-data/vortex4/rofl)
+   Compiling rofl-examples v0.1.0 (/Users/connor/spiral/vortex-data/vortex4/rofl-examples)
+    Finished `bench` profile [optimized + debuginfo] target(s) in 7.64s
+────────────
+ Nextest run ID 9fdd8628-9e5a-4d1b-bd40-381ff390e329 with nextest profile: default
+    Starting 59 tests across 11 binaries
+        PASS [   0.011s] ( 1/59) rofl::failure_boundary lazy_all_null_validity_suppresses_only_rejected_row_evidence
+        PASS [   0.013s] ( 2/59) rofl::failure_boundary lazy_all_null_validity_cannot_suppress_infrastructure_errors
+        PASS [   0.015s] ( 3/59) rofl-arrow::storage partially_initialized_scalar_sink_can_be_abandoned
+        PASS [   0.016s] ( 4/59) rofl-examples::arithmetic length_one_array_is_not_a_scalar
+        PASS [   0.016s] ( 5/59) rofl-examples::arithmetic checked_add_conformance::case_1_empty
+        PASS [   0.016s] ( 6/59) rofl-arrow::storage primitive_publication_preserves_allocation_and_initialized_prefix
+        PASS [   0.016s] ( 7/59) rofl-examples::arithmetic checked_add_conformance::case_4_all_valid
+        PASS [   0.017s] ( 8/59) rofl-examples::arithmetic dispatch_selects_signed_and_unsigned_widths
+        PASS [   0.017s] ( 9/59) rofl-examples::arithmetic externally_registered_nullary_function
+        PASS [   0.017s] (10/59) rofl-examples::arithmetic checked_add_conformance::case_2_all_null
+        PASS [   0.017s] (11/59) rofl-examples::arithmetic errors_on_valid_rows_are_observable_in_both_hosts
+        PASS [   0.017s] (12/59) rofl-arrow::invocation independent_arrow_invocation_preserves_nullable_values
+        PASS [   0.017s] (13/59) rofl-examples::arithmetic boolean_retry_suppresses_only_null_payload_overflow
+        PASS [   0.017s] (14/59) rofl-examples::arithmetic checked_add_conformance::case_3_partial
+        PASS [   0.017s] (15/59) rofl-examples::arithmetic deferred_boolean_modes_report_valid_overflow
+        PASS [   0.017s] (16/59) rofl-examples::arithmetic division_skips_invalid_payloads
+        PASS [   0.012s] (17/59) rofl-examples::arithmetic null_scalar_suppresses_row_errors_without_losing_output_type
+        PASS [   0.011s] (18/59) rofl-examples::arithmetic scalar_only_and_zero_logical_rows
+        PASS [   0.010s] (19/59) rofl-examples::arithmetic scalar_representations_and_sliced_primitives_agree
+        PASS [   0.011s] (20/59) rofl-examples::arrow_storage boolean_slices_preserve_offsets_and_tails::case_1
+        PASS [   0.011s] (21/59) rofl-examples::arrow_storage boolean_slices_preserve_offsets_and_tails::case_2
+        PASS [   0.010s] (22/59) rofl-examples::arrow_storage dictionary_strings_preserve_value_nulls
+        PASS [   0.011s] (23/59) rofl-examples::arrow_storage dictionary_null_values_and_unused_overflow
+        PASS [   0.011s] (24/59) rofl-examples::arrow_storage boolean_slices_preserve_offsets_and_tails::case_3
+        PASS [   0.010s] (25/59) rofl-examples::arrow_storage masked_vortex_string_constant_retains_value_after_null_first_row
+        PASS [   0.012s] (26/59) rofl-examples::arrow_storage boolean_slices_preserve_offsets_and_tails::case_5
+        PASS [   0.012s] (27/59) rofl-examples::arrow_storage boolean_slices_preserve_offsets_and_tails::case_4
+        PASS [   0.012s] (28/59) rofl-examples::arrow_storage boolean_slices_preserve_offsets_and_tails::case_7
+        PASS [   0.011s] (29/59) rofl-examples::arrow_storage empty_and_null_strings_keep_planned_view_metadata
+        PASS [   0.012s] (30/59) rofl-examples::arrow_storage boolean_slices_preserve_offsets_and_tails::case_6
+        PASS [   0.012s] (31/59) rofl-examples::arrow_storage boolean_slices_preserve_offsets_and_tails::case_9
+        PASS [   0.014s] (32/59) rofl-examples::arrow_storage boolean_slices_preserve_offsets_and_tails::case_8
+        PASS [   0.010s] (33/59) rofl-examples::arrow_storage string_layouts_slices_and_output_ownership
+        PASS [   0.010s] (34/59) rofl-examples::custom_binding custom_decoder_uses_filtered_domain_and_scattered_output
+        PASS [   0.007s] (35/59) rofl-kernels bit::pack::tests::collect_bool_word_partial_lens_match::case_1
+        PASS [   0.014s] (36/59) rofl-examples::arrow_storage unknown_extensions_do_not_become_integers
+        PASS [   0.008s] (37/59) rofl-kernels bit::pack::tests::collect_bool_word_partial_lens_match::case_3
+        PASS [   0.010s] (38/59) rofl-examples::custom_binding dense_decoder_failure_cannot_be_suppressed_by_filtering_null_payloads
+        PASS [   0.010s] (39/59) rofl-examples::custom_binding selected_scalar_uses_ordinary_decoder
+        PASS [   0.010s] (40/59) rofl-examples::custom_binding decoder_error_is_terminal_on_a_valid_row
+        PASS [   0.009s] (41/59) rofl-kernels bit::pack::tests::collect_bool_word_partial_lens_match::case_2
+        PASS [   0.012s] (42/59) rofl-examples::metadata list_binding_rejects_nullable_children_and_factor_mismatch
+        PASS [   0.012s] (43/59) rofl-examples::metadata output_field_mismatch_is_rejected_even_when_all_rows_are_null
+        PASS [   0.010s] (44/59) rofl-kernels bit::pack::tests::collect_bool_word_partial_lens_match::case_4
+        PASS [   0.012s] (45/59) rofl-examples::metadata sliced_float32_lists_share_runtime_dispatch
+        PASS [   0.012s] (46/59) rofl-examples::metadata timestamp_metadata_survives_empty_all_null_and_partial_batches
+        PASS [   0.013s] (47/59) rofl-examples::metadata list_scaling_preserves_shape_and_prepares_each_constant_factor
+        PASS [   0.008s] (48/59) rofl-kernels bit::pack::tests::collect_bool_word_partial_lens_match::case_5
+        PASS [   0.013s] (49/59) rofl-examples::metadata timestamp_units_and_null_only_overflow_preserve_ticks
+        PASS [   0.007s] (50/59) rofl-kernels bit::pack::tests::dispatch_matches_scalar
+        PASS [   0.007s] (51/59) rofl-kernels bit::pack::tests::multiversioned_matches_inline::case_1
+        PASS [   0.007s] (52/59) rofl-kernels bit::pack::tests::multiversioned_matches_inline::case_5
+        PASS [   0.007s] (53/59) rofl-kernels bit::pack::tests::multiversioned_matches_inline::case_6
+        PASS [   0.007s] (54/59) rofl-kernels bit::pack::tests::multiversioned_matches_inline::case_4
+        PASS [   0.007s] (55/59) rofl-kernels bit::pack::tests::multiversioned_matches_inline::case_3
+        PASS [   0.007s] (56/59) rofl-kernels bit::pack::tests::multiversioned_matches_inline::case_2
+        PASS [   0.008s] (57/59) rofl-kernels bit::pack::tests::neon_matches_scalar
+        PASS [   0.007s] (58/59) rofl-kernels bit::pack::tests::swar_matches_scalar
+        PASS [   0.007s] (59/59) rofl-kernels bit::view::tests::unpadded_slices_match_bit_access
+────────────
+     Summary [   0.047s] 59 tests run: 59 passed, 0 skipped

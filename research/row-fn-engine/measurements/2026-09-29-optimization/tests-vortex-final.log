@@ -1,0 +1,19 @@
+   Compiling ahash v0.8.12
+   Compiling vortex-buffer v0.1.0 (/Users/connor/spiral/vortex-data/vortex4/vortex-buffer)
+   Compiling vortex-mask v0.1.0 (/Users/connor/spiral/vortex-data/vortex4/vortex-mask)
+   Compiling vortex-compute v0.1.0 (/Users/connor/spiral/vortex-data/vortex4/vortex-compute)
+   Compiling hashbrown v0.14.5
+   Compiling dashmap v6.2.1
+   Compiling lasso v0.7.3
+   Compiling vortex-session v0.1.0 (/Users/connor/spiral/vortex-data/vortex4/vortex-session)
+   Compiling vortex-array v0.1.0 (/Users/connor/spiral/vortex-data/vortex4/vortex-array)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 38.56s
+────────────
+ Nextest run ID c76a3b22-fefe-4bf2-8020-f9bb1b66d609 with nextest profile: default
+    Starting 4 tests across 1 binary (3788 tests skipped)
+        PASS [   0.017s] (1/4) vortex-array scalar_fn::unstable::row::types::sink::utf8::tests::sink_finishes_empty_and_skipped_rows
+        PASS [   0.017s] (2/4) vortex-array scalar_fn::unstable::row::types::sink::utf8::tests::sink_writes_owned_borrowed_and_cow_values
+        PASS [   0.017s] (3/4) vortex-array scalar_fn::unstable::rofl::tests::partially_initialized_sink_can_be_abandoned
+        PASS [   0.018s] (4/4) vortex-array scalar_fn::unstable::rofl::tests::output_uses_execution_allocator_and_retains_primitive_allocation
+────────────
+     Summary [   0.022s] 4 tests run: 4 passed, 3788 skipped

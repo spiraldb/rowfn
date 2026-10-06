@@ -1,0 +1,840 @@
+   Compiling vortex-array v0.1.0 (/Users/connor/spiral/vortex-data/vortex4/vortex-array)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 20.95s
+────────────
+ Nextest run ID 5381c142-c03b-4852-8f6d-bf3aeef21c55 with nextest profile: default
+    Starting 833 tests across 3 binaries (3859 tests skipped)
+        PASS [   0.009s] (  1/833) vortex-buffer bit::buf::tests::last_set_index_handles_offsets_and_padding::case_6
+        PASS [   0.010s] (  2/833) vortex-buffer bit::buf::tests::last_set_index_handles_offsets_and_padding::case_3
+        PASS [   0.011s] (  3/833) vortex-buffer bit::buf::tests::last_set_index_handles_offsets_and_padding::case_5
+        PASS [   0.011s] (  4/833) vortex-buffer bit::buf::tests::last_set_index_handles_offsets_and_padding::case_4
+        PASS [   0.010s] (  5/833) vortex-buffer bit::buf::tests::last_set_index_handles_offsets_and_padding::case_8
+        PASS [   0.010s] (  6/833) vortex-buffer bit::buf::tests::test_bool
+        PASS [   0.011s] (  7/833) vortex-buffer bit::buf::tests::last_set_index_handles_offsets_and_padding::case_2
+        PASS [   0.011s] (  8/833) vortex-buffer bit::buf::tests::test_count_range::case_3
+        PASS [   0.011s] (  9/833) vortex-buffer bit::buf::tests::test_count_range::case_2
+        PASS [   0.011s] ( 10/833) vortex-buffer bit::buf::tests::test_byte_aligned_bytes
+        PASS [   0.011s] ( 11/833) vortex-buffer bit::buf::tests::test_count_range::case_1
+        PASS [   0.012s] ( 12/833) vortex-buffer bit::buf::tests::last_set_index_handles_offsets_and_padding::case_7
+        PASS [   0.017s] ( 13/833) vortex-array scalar_fn::unstable::rofl::tests::partially_initialized_sink_can_be_abandoned
+        PASS [   0.017s] ( 14/833) vortex-array scalar_fn::unstable::rofl::tests::output_uses_execution_allocator_and_retains_primitive_allocation
+        PASS [   0.017s] ( 15/833) vortex-buffer bit::buf::tests::last_set_index_handles_offsets_and_padding::case_1
+        PASS [   0.017s] ( 16/833) vortex-buffer bit::arrow::tests::test_from_arrow
+        PASS [   0.008s] ( 17/833) vortex-buffer bit::buf::tests::test_count_range::case_5
+        PASS [   0.009s] ( 18/833) vortex-buffer bit::buf::tests::test_count_range::case_4
+        PASS [   0.008s] ( 19/833) vortex-buffer bit::buf::tests::test_count_range_with_offset::case_1
+        PASS [   0.008s] ( 20/833) vortex-buffer bit::buf::tests::test_iter_bits::case_1
+        PASS [   0.008s] ( 21/833) vortex-buffer bit::buf::tests::test_for_each_set_index_with_offset::case_2
+        PASS [   0.008s] ( 22/833) vortex-buffer bit::buf::tests::test_count_range_with_offset::case_2
+        PASS [   0.008s] ( 23/833) vortex-buffer bit::buf::tests::test_iter_bits::case_2
+        PASS [   0.009s] ( 24/833) vortex-buffer bit::buf::tests::test_from_indices_out_of_bounds
+        PASS [   0.009s] ( 25/833) vortex-buffer bit::buf::tests::test_for_each_set_index_all_set
+        PASS [   0.009s] ( 26/833) vortex-buffer bit::buf::tests::test_for_each_set_index_with_offset::case_1
+        PASS [   0.009s] ( 27/833) vortex-buffer bit::buf::tests::test_from_indices_dense_crosses_words
+        PASS [   0.009s] ( 28/833) vortex-buffer bit::buf::tests::test_iter_bits::case_3
+        PASS [   0.007s] ( 29/833) vortex-buffer bit::buf::tests::test_iter_bits::case_7
+        PASS [   0.008s] ( 30/833) vortex-buffer bit::buf::tests::test_iter_bits::case_6
+        PASS [   0.008s] ( 31/833) vortex-buffer bit::buf::tests::test_iter_bits::case_4
+        PASS [   0.007s] ( 32/833) vortex-buffer bit::buf::tests::test_iter_bits_catches_wrong_byte_offset::case_2
+        PASS [   0.009s] ( 33/833) vortex-buffer bit::buf::tests::test_iter_bits::case_5
+        PASS [   0.008s] ( 34/833) vortex-buffer bit::buf::tests::test_iter_bits_catches_wrong_byte_offset::case_3
+        PASS [   0.007s] ( 35/833) vortex-buffer bit::buf::tests::test_iter_bits_with_offset::case_1
+        PASS [   0.009s] ( 36/833) vortex-buffer bit::buf::tests::test_iter_bits_catches_wrong_byte_offset::case_1
+        PASS [   0.008s] ( 37/833) vortex-buffer bit::buf::tests::test_iter_bits_catches_wrong_byte_offset::case_4
+        PASS [   0.008s] ( 38/833) vortex-buffer bit::buf::tests::test_iter_bits_with_offset::case_4
+        PASS [   0.009s] ( 39/833) vortex-buffer bit::buf::tests::test_iter_bits_with_offset::case_2
+        PASS [   0.009s] ( 40/833) vortex-buffer bit::buf::tests::test_iter_bits_with_offset::case_6
+        PASS [   0.009s] ( 41/833) vortex-buffer bit::buf::tests::test_iter_bits_with_offset::case_3
+        PASS [   0.009s] ( 42/833) vortex-buffer bit::buf::tests::test_iter_bits_with_offset::case_5
+        PASS [   0.008s] ( 43/833) vortex-buffer bit::buf::tests::test_iter_bits_with_offset::case_7
+        PASS [   0.008s] ( 44/833) vortex-buffer bit::buf::tests::test_map_cmp_conditional
+        PASS [   0.008s] ( 45/833) vortex-buffer bit::buf::tests::test_map_cmp_identity::case_6
+        PASS [   0.010s] ( 46/833) vortex-buffer bit::buf::tests::test_map_cmp_identity::case_1
+        PASS [   0.009s] ( 47/833) vortex-buffer bit::buf::tests::test_map_cmp_identity::case_5
+        PASS [   0.009s] ( 48/833) vortex-buffer bit::buf::tests::test_map_cmp_identity::case_2
+        PASS [   0.009s] ( 49/833) vortex-buffer bit::buf::tests::test_map_cmp_identity::case_3
+        PASS [   0.008s] ( 50/833) vortex-buffer bit::buf::tests::test_map_cmp_negate::case_1
+        PASS [   0.009s] ( 51/833) vortex-buffer bit::buf::tests::test_map_cmp_identity::case_4
+        PASS [   0.008s] ( 52/833) vortex-buffer bit::buf::tests::test_map_cmp_negate::case_3
+        PASS [   0.008s] ( 53/833) vortex-buffer bit::buf::tests::test_map_cmp_negate::case_2
+        PASS [   0.009s] ( 54/833) vortex-buffer bit::buf::tests::test_map_cmp_identity::case_7
+        PASS [   0.008s] ( 55/833) vortex-buffer bit::buf::tests::test_map_cmp_negate::case_4
+        PASS [   0.008s] ( 56/833) vortex-buffer bit::buf::tests::test_set_index_visitors_match_set_indices::case_3
+        PASS [   0.008s] ( 57/833) vortex-buffer bit::buf::tests::test_set_index_visitors_match_set_indices::case_1
+        PASS [   0.008s] ( 58/833) vortex-buffer bit::buf::tests::test_map_cmp_negate::case_5
+        PASS [   0.008s] ( 59/833) vortex-buffer bit::buf::tests::test_set_index_visitors_match_set_indices::case_2
+        PASS [   0.008s] ( 60/833) vortex-buffer bit::buf::tests::test_padded_equaltiy
+        PASS [   0.008s] ( 61/833) vortex-buffer bit::buf::tests::test_set_index_visitors_match_set_indices::case_4
+        PASS [   0.008s] ( 62/833) vortex-buffer bit::buf::tests::test_set_index_visitors_match_set_indices::case_6
+        PASS [   0.009s] ( 63/833) vortex-buffer bit::buf::tests::test_set_index_visitors_match_set_indices::case_5
+        PASS [   0.007s] ( 64/833) vortex-buffer bit::buf_mut::tests::append_false_after_truncate_reads_back_false
+        PASS [   0.008s] ( 65/833) vortex-buffer bit::buf::tests::test_try_for_each_set_index_stops_on_error
+        PASS [   0.007s] ( 66/833) vortex-buffer bit::buf_mut::tests::from_buffer_accepts_offset_plus_len_within_the_buffer::case_3
+        PASS [   0.009s] ( 67/833) vortex-buffer bit::buf::tests::test_set_index_visitors_match_set_indices::case_7
+        PASS [   0.008s] ( 68/833) vortex-buffer bit::buf_mut::tests::from_buffer_accepts_offset_plus_len_within_the_buffer::case_1
+        PASS [   0.008s] ( 69/833) vortex-buffer bit::buf_mut::tests::from_buffer_accepts_offset_plus_len_within_the_buffer::case_2
+        PASS [   0.009s] ( 70/833) vortex-buffer bit::buf::tests::test_slice_offset_calculation
+        PASS [   0.007s] ( 71/833) vortex-buffer bit::buf_mut::tests::from_buffer_rejects_offset_plus_len_past_the_buffer::case_1_offset_pushes_past_the_end
+        PASS [   0.009s] ( 72/833) vortex-buffer bit::buf_mut::tests::append_after_clear_reads_back_false
+        PASS [   0.007s] ( 73/833) vortex-buffer bit::buf_mut::tests::from_buffer_does_not_wrap_on_a_huge_offset
+        PASS [   0.008s] ( 74/833) vortex-buffer bit::buf_mut::tests::from_buffer_allows_offsets_beyond_one_byte
+        PASS [   0.008s] ( 75/833) vortex-buffer bit::buf_mut::tests::from_buffer_rejects_offset_plus_len_past_the_buffer::case_2_offset_alone_past_the_end
+        PASS [   0.009s] ( 76/833) vortex-buffer bit::buf_mut::tests::from_buffer_accepts_offset_plus_len_within_the_buffer::case_4
+        PASS [   0.007s] ( 77/833) vortex-buffer bit::buf_mut::tests::test_append_alternating_with_offset
+        PASS [   0.007s] ( 78/833) vortex-buffer bit::buf_mut::tests::from_buffer_rejects_offset_plus_len_past_the_buffer::case_3_len_alone_past_the_end
+        PASS [   0.007s] ( 79/833) vortex-buffer bit::buf_mut::tests::test_append_buffer_after_truncate
+        PASS [   0.007s] ( 80/833) vortex-buffer bit::buf_mut::tests::test_append_buffer_long::case_2_dst_unaligned
+        PASS [   0.007s] ( 81/833) vortex-buffer bit::buf_mut::tests::test_append_n
+        PASS [   0.008s] ( 82/833) vortex-buffer bit::buf_mut::tests::test_append_buffer_long::case_1_both_aligned
+        PASS [   0.007s] ( 83/833) vortex-buffer bit::buf_mut::tests::test_append_buffer_long::case_4_mismatched
+        PASS [   0.008s] ( 84/833) vortex-buffer bit::buf_mut::tests::test_append_buffer_with_offsets
+        PASS [   0.007s] ( 85/833) vortex-buffer bit::buf_mut::tests::test_append_n_true_with_offset
+        PASS [   0.009s] ( 86/833) vortex-buffer bit::buf_mut::tests::take_preserves_allocator
+        PASS [   0.008s] ( 87/833) vortex-buffer bit::buf_mut::tests::test_append_buffer_long::case_5_equal_nonzero
+        PASS [   0.007s] ( 88/833) vortex-buffer bit::buf_mut::tests::test_bits_mut
+        PASS [   0.009s] ( 89/833) vortex-buffer bit::buf_mut::tests::test_append_buffer_long::case_3_src_unaligned
+        PASS [   0.010s] ( 90/833) vortex-buffer bit::buf_mut::tests::test_append_n_false_with_offset
+        PASS [   0.010s] ( 91/833) vortex-buffer bit::buf_mut::tests::test_append_n_with_offset_crossing_boundary
+        PASS [   0.010s] ( 92/833) vortex-buffer bit::buf_mut::tests::test_append_with_offset
+        PASS [   0.007s] ( 93/833) vortex-buffer bit::buf_mut::tests::test_capacity_with_offset
+        PASS [   0.007s] ( 94/833) vortex-buffer bit::buf_mut::tests::test_from_iterator_with_incorrect_size_hint
+        PASS [   0.007s] ( 95/833) vortex-buffer bit::buf_mut::tests::test_freeze_with_offset
+        PASS [   0.007s] ( 96/833) vortex-buffer bit::buf_mut::tests::test_new_set_new_unset
+        PASS [   0.008s] ( 97/833) vortex-buffer bit::buf_mut::tests::test_mixed_operations_with_offset
+        PASS [   0.007s] ( 98/833) vortex-buffer bit::buf_mut::tests::test_reserve_with_offset
+        PASS [   0.007s] ( 99/833) vortex-buffer bit::buf_mut::tests::test_value_unchecked_with_offset
+        PASS [   0.007s] (100/833) vortex-buffer bit::buf_mut::tests::test_reserve_ensures_len_plus_additional
+        PASS [   0.006s] (101/833) vortex-buffer bit::buf_mut::tests::test_with_offset_byte_boundary
+        PASS [   0.007s] (102/833) vortex-buffer bit::buf_mut::tests::test_set_unset_unchecked_with_offset
+        PASS [   0.007s] (103/833) vortex-buffer bit::buf_mut::tests::test_with_large_offset
+        PASS [   0.007s] (104/833) vortex-buffer bit::buf_mut::tests::test_truncate_with_offset
+        PASS [   0.007s] (105/833) vortex-buffer bit::buf_mut::tests::test_with_offset_within_byte
+        PASS [   0.007s] (106/833) vortex-buffer bit::buf_mut::tests::test_with_offset_zero
+        PASS [   0.008s] (107/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_01_0usize
+        PASS [   0.008s] (108/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_02_1
+        PASS [   0.007s] (109/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_03_2
+        PASS [   0.007s] (110/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_04_7
+        PASS [   0.006s] (111/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_09_17
+        PASS [   0.007s] (112/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_06_9
+        PASS [   0.008s] (113/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_05_8
+        PASS [   0.008s] (114/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_07_15
+        PASS [   0.007s] (115/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_10_31
+        PASS [   0.008s] (116/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_08_16
+        PASS [   0.007s] (117/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_12_33
+        PASS [   0.007s] (118/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_14_64
+        PASS [   0.007s] (119/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_13_63
+        PASS [   0.007s] (120/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_15_65
+        PASS [   0.010s] (121/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_11_32
+        PASS [   0.007s] (122/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_16_127
+        PASS [   0.007s] (123/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_17_128
+        PASS [   0.008s] (124/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_18_255
+        PASS [   0.007s] (125/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_19_256
+        PASS [   0.007s] (126/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_01_0usize
+        PASS [   0.007s] (127/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_20_257
+        PASS [   0.008s] (128/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_01_0usize::slice_len_21_513
+        PASS [   0.006s] (129/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_06_9
+        PASS [   0.006s] (130/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_07_15
+        PASS [   0.007s] (131/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_03_2
+        PASS [   0.007s] (132/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_05_8
+        PASS [   0.008s] (133/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_08_16
+        PASS [   0.008s] (134/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_04_7
+        PASS [   0.008s] (135/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_09_17
+        PASS [   0.009s] (136/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_02_1
+        PASS [   0.008s] (137/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_10_31
+        PASS [   0.007s] (138/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_12_33
+        PASS [   0.008s] (139/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_11_32
+        PASS [   0.007s] (140/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_14_64
+        PASS [   0.007s] (141/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_13_63
+        PASS [   0.006s] (142/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_18_255
+        PASS [   0.007s] (143/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_16_127
+        PASS [   0.007s] (144/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_19_256
+        PASS [   0.008s] (145/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_17_128
+        PASS [   0.009s] (146/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_15_65
+        PASS [   0.007s] (147/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_21_513
+        PASS [   0.007s] (148/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_02_1::slice_len_20_257
+        PASS [   0.007s] (149/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_01_0usize
+        PASS [   0.006s] (150/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_03_2
+        PASS [   0.008s] (151/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_02_1
+        PASS [   0.007s] (152/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_04_7
+        PASS [   0.008s] (153/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_05_8
+        PASS [   0.007s] (154/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_08_16
+        PASS [   0.008s] (155/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_07_15
+        PASS [   0.008s] (156/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_06_9
+        PASS [   0.007s] (157/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_10_31
+        PASS [   0.007s] (158/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_11_32
+        PASS [   0.007s] (159/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_09_17
+        PASS [   0.006s] (160/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_15_65
+        PASS [   0.006s] (161/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_16_127
+        PASS [   0.007s] (162/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_13_63
+        PASS [   0.007s] (163/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_12_33
+        PASS [   0.007s] (164/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_14_64
+        PASS [   0.006s] (165/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_17_128
+        PASS [   0.007s] (166/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_19_256
+        PASS [   0.007s] (167/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_18_255
+        PASS [   0.007s] (168/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_20_257
+        PASS [   0.007s] (169/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_02_1
+        PASS [   0.007s] (170/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_01_0usize
+        PASS [   0.008s] (171/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_03_2::slice_len_21_513
+        PASS [   0.007s] (172/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_03_2
+        PASS [   0.007s] (173/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_04_7
+        PASS [   0.007s] (174/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_06_9
+        PASS [   0.007s] (175/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_05_8
+        PASS [   0.007s] (176/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_07_15
+        PASS [   0.007s] (177/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_10_31
+        PASS [   0.007s] (178/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_11_32
+        PASS [   0.007s] (179/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_12_33
+        PASS [   0.008s] (180/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_08_16
+        PASS [   0.008s] (181/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_09_17
+        PASS [   0.007s] (182/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_14_64
+        PASS [   0.007s] (183/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_15_65
+        PASS [   0.009s] (184/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_13_63
+        PASS [   0.007s] (185/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_19_256
+        PASS [   0.007s] (186/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_16_127
+        PASS [   0.007s] (187/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_21_513
+        PASS [   0.007s] (188/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_18_255
+        PASS [   0.006s] (189/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_02_1
+        PASS [   0.007s] (190/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_20_257
+        PASS [   0.007s] (191/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_01_0usize
+        PASS [   0.008s] (192/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_04_3::slice_len_17_128
+        PASS [   0.007s] (193/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_05_8
+        PASS [   0.006s] (194/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_07_15
+        PASS [   0.008s] (195/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_04_7
+        PASS [   0.007s] (196/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_06_9
+        PASS [   0.009s] (197/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_03_2
+        PASS [   0.008s] (198/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_08_16
+        PASS [   0.008s] (199/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_09_17
+        PASS [   0.008s] (200/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_10_31
+        PASS [   0.007s] (201/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_11_32
+        PASS [   0.007s] (202/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_12_33
+        PASS [   0.007s] (203/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_13_63
+        PASS [   0.007s] (204/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_16_127
+        PASS [   0.007s] (205/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_14_64
+        PASS [   0.007s] (206/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_15_65
+        PASS [   0.006s] (207/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_19_256
+        PASS [   0.007s] (208/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_18_255
+        PASS [   0.007s] (209/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_20_257
+        PASS [   0.007s] (210/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_21_513
+        PASS [   0.006s] (211/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_02_1
+        PASS [   0.008s] (212/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_05_4::slice_len_17_128
+        PASS [   0.008s] (213/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_01_0usize
+        PASS [   0.008s] (214/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_03_2
+        PASS [   0.007s] (215/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_04_7
+        PASS [   0.007s] (216/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_05_8
+        PASS [   0.007s] (217/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_08_16
+        PASS [   0.008s] (218/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_07_15
+        PASS [   0.008s] (219/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_06_9
+        PASS [   0.007s] (220/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_11_32
+        PASS [   0.007s] (221/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_13_63
+        PASS [   0.008s] (222/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_10_31
+        PASS [   0.008s] (223/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_09_17
+        PASS [   0.007s] (224/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_16_127
+        PASS [   0.007s] (225/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_14_64
+        PASS [   0.008s] (226/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_12_33
+        PASS [   0.007s] (227/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_17_128
+        PASS [   0.008s] (228/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_15_65
+        PASS [   0.007s] (229/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_18_255
+        PASS [   0.007s] (230/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_20_257
+        PASS [   0.007s] (231/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_21_513
+        PASS [   0.009s] (232/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_06_5::slice_len_19_256
+        PASS [   0.007s] (233/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_01_0usize
+        PASS [   0.007s] (234/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_02_1
+        PASS [   0.007s] (235/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_03_2
+        PASS [   0.007s] (236/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_05_8
+        PASS [   0.007s] (237/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_06_9
+        PASS [   0.007s] (238/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_09_17
+        PASS [   0.008s] (239/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_08_16
+        PASS [   0.009s] (240/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_04_7
+        PASS [   0.008s] (241/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_10_31
+        PASS [   0.008s] (242/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_07_15
+        PASS [   0.007s] (243/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_12_33
+        PASS [   0.008s] (244/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_11_32
+        PASS [   0.008s] (245/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_13_63
+        PASS [   0.006s] (246/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_15_65
+        PASS [   0.007s] (247/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_14_64
+        PASS [   0.007s] (248/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_16_127
+        PASS [   0.008s] (249/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_17_128
+        PASS [   0.007s] (250/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_19_256
+        PASS [   0.008s] (251/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_18_255
+        PASS [   0.007s] (252/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_02_1
+        PASS [   0.007s] (253/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_04_7
+        PASS [   0.007s] (254/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_01_0usize
+        PASS [   0.007s] (255/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_03_2
+        PASS [   0.007s] (256/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_06_9
+        PASS [   0.008s] (257/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_20_257
+        PASS [   0.007s] (258/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_07_15
+        PASS [   0.007s] (259/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_08_16
+        PASS [   0.009s] (260/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_07_6::slice_len_21_513
+        PASS [   0.009s] (261/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_05_8
+        PASS [   0.007s] (262/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_10_31
+        PASS [   0.006s] (263/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_11_32
+        PASS [   0.008s] (264/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_09_17
+        PASS [   0.007s] (265/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_13_63
+        PASS [   0.007s] (266/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_12_33
+        PASS [   0.007s] (267/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_14_64
+        PASS [   0.007s] (268/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_19_256
+        PASS [   0.007s] (269/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_16_127
+        PASS [   0.007s] (270/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_17_128
+        PASS [   0.007s] (271/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_21_513
+        PASS [   0.008s] (272/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_15_65
+        PASS [   0.007s] (273/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_20_257
+        PASS [   0.008s] (274/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_08_7::slice_len_18_255
+        PASS [   0.007s] (275/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_01_0usize
+        PASS [   0.008s] (276/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_02_1
+        PASS [   0.008s] (277/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_03_2
+        PASS [   0.007s] (278/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_05_8
+        PASS [   0.008s] (279/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_04_7
+        PASS [   0.008s] (280/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_06_9
+        PASS [   0.007s] (281/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_07_15
+        PASS [   0.007s] (282/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_08_16
+        PASS [   0.007s] (283/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_09_17
+        PASS [   0.007s] (284/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_10_31
+        PASS [   0.007s] (285/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_12_33
+        PASS [   0.007s] (286/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_13_63
+        PASS [   0.007s] (287/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_15_65
+        PASS [   0.008s] (288/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_11_32
+        PASS [   0.007s] (289/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_16_127
+        PASS [   0.008s] (290/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_14_64
+        PASS [   0.007s] (291/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_17_128
+        PASS [   0.006s] (292/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_19_256
+        PASS [   0.007s] (293/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_20_257
+        PASS [   0.007s] (294/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_21_513
+        PASS [   0.009s] (295/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_09_8::slice_len_18_255
+        PASS [   0.007s] (296/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_01_0usize
+        PASS [   0.007s] (297/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_03_2
+        PASS [   0.007s] (298/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_05_8
+        PASS [   0.008s] (299/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_02_1
+        PASS [   0.007s] (300/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_04_7
+        PASS [   0.007s] (301/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_07_15
+        PASS [   0.007s] (302/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_09_17
+        PASS [   0.008s] (303/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_06_9
+        PASS [   0.008s] (304/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_08_16
+        PASS [   0.007s] (305/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_11_32
+        PASS [   0.007s] (306/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_10_31
+        PASS [   0.008s] (307/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_12_33
+        PASS [   0.007s] (308/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_13_63
+        PASS [   0.007s] (309/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_14_64
+        PASS [   0.007s] (310/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_15_65
+        PASS [   0.007s] (311/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_16_127
+        PASS [   0.006s] (312/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_18_255
+        PASS [   0.008s] (313/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_17_128
+        PASS [   0.007s] (314/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_19_256
+        PASS [   0.007s] (315/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_20_257
+        PASS [   0.007s] (316/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_01_0usize
+        PASS [   0.007s] (317/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_03_2
+        PASS [   0.008s] (318/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_10_9::slice_len_21_513
+        PASS [   0.007s] (319/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_02_1
+        PASS [   0.007s] (320/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_04_7
+        PASS [   0.007s] (321/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_05_8
+        PASS [   0.007s] (322/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_08_16
+        PASS [   0.008s] (323/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_06_9
+        PASS [   0.008s] (324/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_07_15
+        PASS [   0.007s] (325/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_10_31
+        PASS [   0.007s] (326/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_09_17
+        PASS [   0.006s] (327/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_13_63
+        PASS [   0.007s] (328/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_12_33
+        PASS [   0.009s] (329/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_11_32
+        PASS [   0.007s] (330/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_14_64
+        PASS [   0.008s] (331/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_15_65
+        PASS [   0.007s] (332/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_16_127
+        PASS [   0.007s] (333/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_17_128
+        PASS [   0.007s] (334/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_19_256
+        PASS [   0.007s] (335/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_18_255
+        PASS [   0.007s] (336/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_20_257
+        PASS [   0.007s] (337/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_11_10::slice_len_21_513
+        PASS [   0.006s] (338/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_01_0usize
+        PASS [   0.007s] (339/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_02_1
+        PASS [   0.007s] (340/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_05_8
+        PASS [   0.007s] (341/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_03_2
+        PASS [   0.007s] (342/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_04_7
+        PASS [   0.007s] (343/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_06_9
+        PASS [   0.007s] (344/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_08_16
+        PASS [   0.007s] (345/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_07_15
+        PASS [   0.006s] (346/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_10_31
+        PASS [   0.007s] (347/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_09_17
+        PASS [   0.006s] (348/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_13_63
+        PASS [   0.007s] (349/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_11_32
+        PASS [   0.007s] (350/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_14_64
+        PASS [   0.007s] (351/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_15_65
+        PASS [   0.007s] (352/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_17_128
+        PASS [   0.007s] (353/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_16_127
+        PASS [   0.009s] (354/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_12_33
+        PASS [   0.007s] (355/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_19_256
+        PASS [   0.007s] (356/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_01_0usize
+        PASS [   0.009s] (357/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_18_255
+        PASS [   0.008s] (358/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_21_513
+        PASS [   0.008s] (359/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_12_11::slice_len_20_257
+        PASS [   0.007s] (360/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_02_1
+        PASS [   0.007s] (361/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_03_2
+        PASS [   0.007s] (362/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_05_8
+        PASS [   0.007s] (363/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_04_7
+        PASS [   0.007s] (364/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_06_9
+        PASS [   0.008s] (365/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_07_15
+        PASS [   0.007s] (366/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_09_17
+        PASS [   0.007s] (367/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_10_31
+        PASS [   0.007s] (368/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_11_32
+        PASS [   0.008s] (369/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_08_16
+        PASS [   0.007s] (370/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_12_33
+        PASS [   0.006s] (371/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_14_64
+        PASS [   0.007s] (372/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_16_127
+        PASS [   0.009s] (373/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_13_63
+        PASS [   0.007s] (374/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_19_256
+        PASS [   0.008s] (375/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_15_65
+        PASS [   0.008s] (376/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_17_128
+        PASS [   0.008s] (377/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_18_255
+        PASS [   0.007s] (378/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_20_257
+        PASS [   0.007s] (379/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_13_12::slice_len_21_513
+        PASS [   0.007s] (380/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_03_2
+        PASS [   0.007s] (381/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_02_1
+        PASS [   0.008s] (382/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_01_0usize
+        PASS [   0.007s] (383/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_06_9
+        PASS [   0.007s] (384/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_05_8
+        PASS [   0.007s] (385/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_07_15
+        PASS [   0.008s] (386/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_04_7
+        PASS [   0.007s] (387/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_08_16
+        PASS [   0.007s] (388/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_09_17
+        PASS [   0.007s] (389/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_11_32
+        PASS [   0.008s] (390/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_10_31
+        PASS [   0.006s] (391/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_16_127
+        PASS [   0.007s] (392/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_13_63
+        PASS [   0.008s] (393/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_12_33
+        PASS [   0.007s] (394/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_15_65
+        PASS [   0.008s] (395/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_14_64
+        PASS [   0.007s] (396/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_20_257
+        PASS [   0.008s] (397/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_18_255
+        PASS [   0.008s] (398/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_19_256
+        PASS [   0.007s] (399/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_21_513
+        PASS [   0.007s] (400/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_01_0usize
+        PASS [   0.008s] (401/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_02_1
+        PASS [   0.009s] (402/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_14_13::slice_len_17_128
+        PASS [   0.008s] (403/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_03_2
+        PASS [   0.007s] (404/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_04_7
+        PASS [   0.007s] (405/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_06_9
+        PASS [   0.007s] (406/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_07_15
+        PASS [   0.008s] (407/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_05_8
+        PASS [   0.008s] (408/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_09_17
+        PASS [   0.008s] (409/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_08_16
+        PASS [   0.007s] (410/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_11_32
+        PASS [   0.007s] (411/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_12_33
+        PASS [   0.008s] (412/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_10_31
+        PASS [   0.007s] (413/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_13_63
+        PASS [   0.007s] (414/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_16_127
+        PASS [   0.007s] (415/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_14_64
+        PASS [   0.007s] (416/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_17_128
+        PASS [   0.007s] (417/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_19_256
+        PASS [   0.007s] (418/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_18_255
+        PASS [   0.010s] (419/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_15_65
+        PASS [   0.006s] (420/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_21_513
+        PASS [   0.007s] (421/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_01_0usize
+        PASS [   0.006s] (422/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_03_2
+        PASS [   0.006s] (423/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_02_1
+        PASS [   0.007s] (424/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_05_8
+        PASS [   0.007s] (425/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_07_15
+        PASS [   0.008s] (426/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_04_7
+        PASS [   0.010s] (427/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_15_14::slice_len_20_257
+        PASS [   0.007s] (428/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_06_9
+        PASS [   0.006s] (429/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_10_31
+        PASS [   0.007s] (430/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_09_17
+        PASS [   0.006s] (431/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_12_33
+        PASS [   0.008s] (432/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_08_16
+        PASS [   0.008s] (433/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_11_32
+        PASS [   0.007s] (434/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_15_65
+        PASS [   0.007s] (435/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_16_127
+        PASS [   0.007s] (436/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_14_64
+        PASS [   0.007s] (437/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_18_255
+        PASS [   0.007s] (438/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_17_128
+        PASS [   0.007s] (439/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_19_256
+        PASS [   0.011s] (440/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_13_63
+        PASS [   0.007s] (441/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_20_257
+        PASS [   0.008s] (442/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_16_15::slice_len_21_513
+        PASS [   0.007s] (443/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_03_2
+        PASS [   0.007s] (444/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_04_7
+        PASS [   0.007s] (445/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_05_8
+        PASS [   0.008s] (446/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_02_1
+        PASS [   0.009s] (447/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_01_0usize
+        PASS [   0.007s] (448/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_06_9
+        PASS [   0.007s] (449/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_08_16
+        PASS [   0.008s] (450/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_07_15
+        PASS [   0.007s] (451/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_12_33
+        PASS [   0.008s] (452/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_09_17
+        PASS [   0.008s] (453/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_10_31
+        PASS [   0.007s] (454/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_11_32
+        PASS [   0.006s] (455/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_14_64
+        PASS [   0.007s] (456/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_13_63
+        PASS [   0.007s] (457/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_15_65
+        PASS [   0.006s] (458/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_20_257
+        PASS [   0.007s] (459/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_18_255
+        PASS [   0.007s] (460/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_16_127
+        PASS [   0.007s] (461/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_19_256
+        PASS [   0.008s] (462/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_17_128
+        PASS [   0.007s] (463/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_17_16::slice_len_21_513
+        PASS [   0.007s] (464/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_03_2
+        PASS [   0.006s] (465/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_07_15
+        PASS [   0.007s] (466/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_04_7
+        PASS [   0.007s] (467/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_08_16
+        PASS [   0.009s] (468/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_02_1
+        PASS [   0.010s] (469/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_01_0usize
+        PASS [   0.007s] (470/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_06_9
+        PASS [   0.007s] (471/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_09_17
+        PASS [   0.008s] (472/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_05_8
+        PASS [   0.008s] (473/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_10_31
+        PASS [   0.007s] (474/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_12_33
+        PASS [   0.007s] (475/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_13_63
+        PASS [   0.007s] (476/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_15_65
+        PASS [   0.007s] (477/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_16_127
+        PASS [   0.008s] (478/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_11_32
+        PASS [   0.008s] (479/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_14_64
+        PASS [   0.006s] (480/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_17_128
+        PASS [   0.006s] (481/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_21_513
+        PASS [   0.008s] (482/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_18_255
+        PASS [   0.007s] (483/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_20_257
+        PASS [   0.007s] (484/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_01_0usize
+        PASS [   0.007s] (485/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_02_1
+        PASS [   0.008s] (486/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_18_17::slice_len_19_256
+        PASS [   0.008s] (487/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_03_2
+        PASS [   0.007s] (488/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_04_7
+        PASS [   0.007s] (489/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_05_8
+        PASS [   0.006s] (490/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_09_17
+        PASS [   0.007s] (491/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_07_15
+        PASS [   0.007s] (492/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_06_9
+        PASS [   0.007s] (493/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_08_16
+        PASS [   0.008s] (494/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_10_31
+        PASS [   0.008s] (495/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_12_33
+        PASS [   0.009s] (496/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_11_32
+        PASS [   0.007s] (497/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_13_63
+        PASS [   0.008s] (498/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_14_64
+        PASS [   0.006s] (499/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_19_256
+        PASS [   0.007s] (500/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_18_255
+        PASS [   0.007s] (501/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_20_257
+        PASS [   0.008s] (502/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_16_127
+        PASS [   0.008s] (503/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_17_128
+        PASS [   0.007s] (504/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_21_513
+        PASS [   0.009s] (505/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_19_18::slice_len_15_65
+        PASS [   0.007s] (506/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_03_2
+        PASS [   0.007s] (507/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_04_7
+        PASS [   0.007s] (508/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_01_0usize
+        PASS [   0.007s] (509/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_05_8
+        PASS [   0.009s] (510/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_02_1
+        PASS [   0.007s] (511/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_07_15
+        PASS [   0.007s] (512/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_06_9
+        PASS [   0.006s] (513/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_09_17
+        PASS [   0.008s] (514/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_08_16
+        PASS [   0.007s] (515/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_13_63
+        PASS [   0.007s] (516/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_11_32
+        PASS [   0.007s] (517/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_12_33
+        PASS [   0.008s] (518/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_10_31
+        PASS [   0.008s] (519/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_14_64
+        PASS [   0.007s] (520/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_18_255
+        PASS [   0.008s] (521/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_15_65
+        PASS [   0.008s] (522/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_16_127
+        PASS [   0.007s] (523/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_19_256
+        PASS [   0.008s] (524/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_17_128
+        PASS [   0.007s] (525/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_20_257
+        PASS [   0.007s] (526/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_20_19::slice_len_21_513
+        PASS [   0.007s] (527/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_01_0usize
+        PASS [   0.007s] (528/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_02_1
+        PASS [   0.007s] (529/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_03_2
+        PASS [   0.006s] (530/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_08_16
+        PASS [   0.007s] (531/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_06_9
+        PASS [   0.008s] (532/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_07_15
+        PASS [   0.009s] (533/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_04_7
+        PASS [   0.009s] (534/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_05_8
+        PASS [   0.007s] (535/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_09_17
+        PASS [   0.007s] (536/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_10_31
+        PASS [   0.007s] (537/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_11_32
+        PASS [   0.007s] (538/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_12_33
+        PASS [   0.007s] (539/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_14_64
+        PASS [   0.007s] (540/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_13_63
+        PASS [   0.007s] (541/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_15_65
+        PASS [   0.007s] (542/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_16_127
+        PASS [   0.007s] (543/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_17_128
+        PASS [   0.006s] (544/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_19_256
+        PASS [   0.008s] (545/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_18_255
+        PASS [   0.007s] (546/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_21_513
+        PASS [   0.007s] (547/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_21_20::slice_len_20_257
+        PASS [   0.006s] (548/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_04_7
+        PASS [   0.007s] (549/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_02_1
+        PASS [   0.007s] (550/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_03_2
+        PASS [   0.007s] (551/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_01_0usize
+        PASS [   0.007s] (552/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_07_15
+        PASS [   0.007s] (553/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_10_31
+        PASS [   0.008s] (554/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_06_9
+        PASS [   0.008s] (555/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_08_16
+        PASS [   0.009s] (556/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_05_8
+        PASS [   0.008s] (557/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_09_17
+        PASS [   0.007s] (558/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_12_33
+        PASS [   0.007s] (559/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_11_32
+        PASS [   0.008s] (560/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_13_63
+        PASS [   0.007s] (561/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_14_64
+        PASS [   0.007s] (562/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_15_65
+        PASS [   0.007s] (563/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_17_128
+        PASS [   0.008s] (564/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_16_127
+        PASS [   0.007s] (565/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_18_255
+        PASS [   0.007s] (566/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_21_513
+        PASS [   0.007s] (567/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_20_257
+        PASS [   0.008s] (568/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_22_21::slice_len_19_256
+        PASS [   0.007s] (569/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_03_2
+        PASS [   0.007s] (570/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_04_7
+        PASS [   0.008s] (571/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_02_1
+        PASS [   0.007s] (572/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_06_9
+        PASS [   0.007s] (573/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_07_15
+        PASS [   0.008s] (574/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_05_8
+        PASS [   0.009s] (575/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_01_0usize
+        PASS [   0.008s] (576/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_08_16
+        PASS [   0.007s] (577/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_09_17
+        PASS [   0.007s] (578/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_11_32
+        PASS [   0.008s] (579/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_10_31
+        PASS [   0.006s] (580/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_12_33
+        PASS [   0.007s] (581/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_15_65
+        PASS [   0.007s] (582/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_14_64
+        PASS [   0.007s] (583/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_13_63
+        PASS [   0.007s] (584/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_16_127
+        PASS [   0.007s] (585/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_17_128
+        PASS [   0.007s] (586/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_18_255
+        PASS [   0.007s] (587/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_19_256
+        PASS [   0.006s] (588/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_02_1
+        PASS [   0.007s] (589/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_21_513
+        PASS [   0.007s] (590/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_23_22::slice_len_20_257
+        PASS [   0.007s] (591/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_01_0usize
+        PASS [   0.007s] (592/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_03_2
+        PASS [   0.008s] (593/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_04_7
+        PASS [   0.007s] (594/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_07_15
+        PASS [   0.007s] (595/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_09_17
+        PASS [   0.009s] (596/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_05_8
+        PASS [   0.008s] (597/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_06_9
+        PASS [   0.007s] (598/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_11_32
+        PASS [   0.009s] (599/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_08_16
+        PASS [   0.007s] (600/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_12_33
+        PASS [   0.006s] (601/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_14_64
+        PASS [   0.009s] (602/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_10_31
+        PASS [   0.007s] (603/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_13_63
+        PASS [   0.007s] (604/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_17_128
+        PASS [   0.007s] (605/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_18_255
+        PASS [   0.007s] (606/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_15_65
+        PASS [   0.007s] (607/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_16_127
+        PASS [   0.007s] (608/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_19_256
+        PASS [   0.007s] (609/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_01_0usize
+        PASS [   0.007s] (610/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_03_2
+        PASS [   0.008s] (611/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_20_257
+        PASS [   0.007s] (612/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_02_1
+        PASS [   0.008s] (613/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_24_23::slice_len_21_513
+        PASS [   0.006s] (614/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_05_8
+        PASS [   0.007s] (615/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_06_9
+        PASS [   0.006s] (616/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_09_17
+        PASS [   0.008s] (617/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_04_7
+        PASS [   0.007s] (618/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_07_15
+        PASS [   0.007s] (619/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_10_31
+        PASS [   0.007s] (620/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_13_63
+        PASS [   0.008s] (621/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_11_32
+        PASS [   0.009s] (622/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_08_16
+        PASS [   0.009s] (623/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_12_33
+        PASS [   0.008s] (624/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_14_64
+        PASS [   0.007s] (625/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_19_256
+        PASS [   0.006s] (626/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_20_257
+        PASS [   0.007s] (627/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_15_65
+        PASS [   0.007s] (628/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_18_255
+        PASS [   0.008s] (629/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_16_127
+        PASS [   0.008s] (630/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_17_128
+        PASS [   0.007s] (631/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_01_0usize
+        PASS [   0.008s] (632/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_25_24::slice_len_21_513
+        PASS [   0.007s] (633/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_02_1
+        PASS [   0.007s] (634/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_03_2
+        PASS [   0.007s] (635/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_04_7
+        PASS [   0.007s] (636/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_06_9
+        PASS [   0.007s] (637/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_07_15
+        PASS [   0.008s] (638/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_05_8
+        PASS [   0.007s] (639/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_09_17
+        PASS [   0.008s] (640/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_08_16
+        PASS [   0.007s] (641/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_11_32
+        PASS [   0.007s] (642/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_10_31
+        PASS [   0.007s] (643/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_13_63
+        PASS [   0.008s] (644/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_12_33
+        PASS [   0.008s] (645/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_14_64
+        PASS [   0.007s] (646/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_17_128
+        PASS [   0.007s] (647/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_19_256
+        PASS [   0.008s] (648/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_15_65
+        PASS [   0.008s] (649/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_18_255
+        PASS [   0.008s] (650/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_16_127
+        PASS [   0.007s] (651/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_20_257
+        PASS [   0.007s] (652/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_26_25::slice_len_21_513
+        PASS [   0.007s] (653/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_01_0usize
+        PASS [   0.007s] (654/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_02_1
+        PASS [   0.007s] (655/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_04_7
+        PASS [   0.008s] (656/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_03_2
+        PASS [   0.007s] (657/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_07_15
+        PASS [   0.008s] (658/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_06_9
+        PASS [   0.008s] (659/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_05_8
+        PASS [   0.007s] (660/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_09_17
+        PASS [   0.007s] (661/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_10_31
+        PASS [   0.006s] (662/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_14_64
+        PASS [   0.007s] (663/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_11_32
+        PASS [   0.007s] (664/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_12_33
+        PASS [   0.007s] (665/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_15_65
+        PASS [   0.008s] (666/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_13_63
+        PASS [   0.009s] (667/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_08_16
+        PASS [   0.007s] (668/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_16_127
+        PASS [   0.008s] (669/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_18_255
+        PASS [   0.007s] (670/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_19_256
+        PASS [   0.008s] (671/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_17_128
+        PASS [   0.008s] (672/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_20_257
+        PASS [   0.007s] (673/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_27_26::slice_len_21_513
+        PASS [   0.008s] (674/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_02_1
+        PASS [   0.007s] (675/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_04_7
+        PASS [   0.007s] (676/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_03_2
+        PASS [   0.006s] (677/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_08_16
+        PASS [   0.009s] (678/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_01_0usize
+        PASS [   0.007s] (679/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_09_17
+        PASS [   0.008s] (680/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_05_8
+        PASS [   0.007s] (681/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_10_31
+        PASS [   0.008s] (682/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_06_9
+        PASS [   0.007s] (683/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_11_32
+        PASS [   0.009s] (684/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_07_15
+        PASS [   0.007s] (685/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_12_33
+        PASS [   0.007s] (686/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_14_64
+        PASS [   0.008s] (687/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_13_63
+        PASS [   0.007s] (688/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_16_127
+        PASS [   0.008s] (689/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_15_65
+        PASS [   0.007s] (690/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_17_128
+        PASS [   0.007s] (691/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_18_255
+        PASS [   0.006s] (692/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_21_513
+        PASS [   0.008s] (693/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_19_256
+        PASS [   0.007s] (694/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_01_0usize
+        PASS [   0.006s] (695/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_04_7
+        PASS [   0.007s] (696/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_02_1
+        PASS [   0.008s] (697/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_28_27::slice_len_20_257
+        PASS [   0.007s] (698/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_03_2
+        PASS [   0.007s] (699/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_06_9
+        PASS [   0.007s] (700/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_08_16
+        PASS [   0.009s] (701/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_05_8
+        PASS [   0.008s] (702/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_07_15
+        PASS [   0.007s] (703/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_10_31
+        PASS [   0.007s] (704/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_12_33
+        PASS [   0.007s] (705/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_14_64
+        PASS [   0.008s] (706/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_11_32
+        PASS [   0.007s] (707/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_13_63
+        PASS [   0.006s] (708/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_18_255
+        PASS [   0.007s] (709/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_17_128
+        PASS [   0.007s] (710/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_15_65
+        PASS [   0.010s] (711/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_09_17
+        PASS [   0.007s] (712/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_19_256
+        PASS [   0.008s] (713/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_20_257
+        PASS [   0.007s] (714/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_21_513
+        PASS [   0.009s] (715/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_29_28::slice_len_16_127
+        PASS [   0.007s] (716/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_01_0usize
+        PASS [   0.006s] (717/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_03_2
+        PASS [   0.007s] (718/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_02_1
+        PASS [   0.006s] (719/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_04_7
+        PASS [   0.007s] (720/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_05_8
+        PASS [   0.007s] (721/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_07_15
+        PASS [   0.006s] (722/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_12_33
+        PASS [   0.008s] (723/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_08_16
+        PASS [   0.008s] (724/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_06_9
+        PASS [   0.008s] (725/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_09_17
+        PASS [   0.007s] (726/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_11_32
+        PASS [   0.007s] (727/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_13_63
+        PASS [   0.008s] (728/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_10_31
+        PASS [   0.007s] (729/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_15_65
+        PASS [   0.007s] (730/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_17_128
+        PASS [   0.008s] (731/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_14_64
+        PASS [   0.006s] (732/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_19_256
+        PASS [   0.007s] (733/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_18_255
+        PASS [   0.007s] (734/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_20_257
+        PASS [   0.009s] (735/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_16_127
+        PASS [   0.008s] (736/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_30_29::slice_len_21_513
+        PASS [   0.006s] (737/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_02_1
+        PASS [   0.006s] (738/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_03_2
+        PASS [   0.008s] (739/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_01_0usize
+        PASS [   0.007s] (740/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_06_9
+        PASS [   0.007s] (741/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_07_15
+        PASS [   0.008s] (742/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_05_8
+        PASS [   0.008s] (743/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_04_7
+        PASS [   0.007s] (744/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_08_16
+        PASS [   0.006s] (745/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_09_17
+        PASS [   0.007s] (746/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_11_32
+        PASS [   0.007s] (747/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_12_33
+        PASS [   0.008s] (748/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_10_31
+        PASS [   0.007s] (749/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_13_63
+        PASS [   0.007s] (750/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_15_65
+        PASS [   0.008s] (751/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_14_64
+        PASS [   0.007s] (752/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_16_127
+        PASS [   0.007s] (753/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_19_256
+        PASS [   0.007s] (754/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_20_257
+        PASS [   0.007s] (755/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_21_513
+        PASS [   0.008s] (756/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_17_128
+        PASS [   0.008s] (757/833) vortex-buffer bit::count_ones::tests::test_count_ones_matches_iteration_for_slices::offset_31_30::slice_len_18_255
+        PASS [   0.007s] (758/833) vortex-buffer bit::ops::tests::binary_op_matches_naive::case_1_aligned
+        PASS [   0.007s] (759/833) vortex-buffer bit::ops::tests::binary_op_matches_naive::case_3_byte_aligned_mismatch
+        PASS [   0.008s] (760/833) vortex-buffer bit::ops::tests::binary_op_matches_naive::case_2_byte_aligned
+        PASS [   0.007s] (761/833) vortex-buffer bit::ops::tests::binary_op_matches_naive::case_5_sub_byte_mismatch
+        PASS [   0.007s] (762/833) vortex-buffer bit::ops::tests::lhs_owned_matches_reference::case_2_equal_nonzero
+        PASS [   0.008s] (763/833) vortex-buffer bit::ops::tests::binary_op_matches_naive::case_4_sub_byte
+        PASS [   0.007s] (764/833) vortex-buffer bit::ops::tests::lhs_owned_matches_reference::case_3_equal_seven
+        PASS [   0.008s] (765/833) vortex-buffer bit::ops::tests::lhs_owned_matches_reference::case_1_aligned
+        PASS [   0.006s] (766/833) vortex-buffer bit::ops::tests::test_bitwise_binary_and
+        PASS [   0.007s] (767/833) vortex-buffer bit::ops::tests::lhs_owned_matches_reference::case_5_mismatch_hi
+        PASS [   0.006s] (768/833) vortex-buffer bit::ops::tests::test_bitwise_binary_or
+        PASS [   0.008s] (769/833) vortex-buffer bit::ops::tests::lhs_owned_matches_reference::case_4_mismatch_lo
+        PASS [   0.007s] (770/833) vortex-buffer bit::ops::tests::test_lhs_owned_offset_mismatch_regression
+        PASS [   0.007s] (771/833) vortex-buffer bit::ops::tests::test_bitwise_binary_xor
+        PASS [   0.007s] (772/833) vortex-buffer bit::select::tests::test_select_agrees_with_naive::case_01
+        PASS [   0.007s] (773/833) vortex-buffer bit::ops::tests::test_bitwise_unary_not_misaligned_buffer
+        PASS [   0.007s] (774/833) vortex-buffer bit::select::tests::test_select_agrees_with_naive::case_03
+        PASS [   0.007s] (775/833) vortex-buffer bit::select::tests::test_select_agrees_with_naive::case_06
+        PASS [   0.007s] (776/833) vortex-buffer bit::select::tests::test_select_agrees_with_naive::case_04
+        PASS [   0.010s] (777/833) vortex-buffer bit::ops::tests::test_bitwise_unary_not
+        PASS [   0.006s] (778/833) vortex-buffer bit::select::tests::test_select_agrees_with_naive::case_07
+        PASS [   0.008s] (779/833) vortex-buffer bit::select::tests::test_select_agrees_with_naive::case_05
+        PASS [   0.009s] (780/833) vortex-buffer bit::select::tests::test_select_agrees_with_naive::case_02
+        PASS [   0.007s] (781/833) vortex-buffer bit::select::tests::test_select_agrees_with_naive::case_08
+        PASS [   0.007s] (782/833) vortex-buffer bit::select::tests::test_select_agrees_with_naive::case_09
+        PASS [   0.007s] (783/833) vortex-buffer bit::select::tests::test_select_agrees_with_naive::case_11
+        PASS [   0.007s] (784/833) vortex-buffer bit::select::tests::test_select_agrees_with_naive::case_10
+        PASS [   0.007s] (785/833) vortex-buffer bit::select::tests::test_select_agrees_with_naive::case_12
+        PASS [   0.007s] (786/833) vortex-buffer bit::select::tests::test_select_all_set
+        PASS [   0.007s] (787/833) vortex-buffer bit::select::tests::test_select_every_other
+        PASS [   0.007s] (788/833) vortex-buffer bit::select::tests::test_select_in_word_all_set
+        PASS [   0.008s] (789/833) vortex-buffer bit::select::tests::test_select_in_byte_basic
+        PASS [   0.010s] (790/833) vortex-buffer bit::select::tests::test_select_agrees_with_naive::case_13
+        PASS [   0.007s] (791/833) vortex-buffer bit::select::tests::test_select_in_word_basic
+        PASS [   0.006s] (792/833) vortex-buffer bit::select::tests::test_select_single_bit
+        PASS [   0.007s] (793/833) vortex-buffer bit::tests::collect_bool_word_empty
+        PASS [   0.007s] (794/833) vortex-buffer bit::tests::collect_bool_word_packs_lsb_first
+        PASS [   0.008s] (795/833) vortex-buffer bit::select::tests::test_select_out_of_bounds_returns_none
+        PASS [   0.008s] (796/833) vortex-buffer bit::tests::collect_bool_word_rejects_too_many_bits
+        PASS [   0.009s] (797/833) vortex-buffer bit::select::tests::test_select_large_buffer
+        PASS [   0.006s] (798/833) vortex-buffer bit::tests::pack_bools_unaligned_crossing_words
+        PASS [   0.006s] (799/833) vortex-buffer bit::tests::read_u64_le_zero_pads_tail
+        PASS [   0.007s] (800/833) vortex-buffer bit::tests::pack_bools_aligned_multi_word_with_tail
+        PASS [   0.008s] (801/833) vortex-buffer bit::tests::pack_bools_preserves_low_bits_of_leading_word
+        PASS [   0.007s] (802/833) vortex-buffer bit::view::tests::mut_view_set_unset
+        PASS [   0.006s] (803/833) vortex-buffer bit::view::tests::view_offset_buffer
+        PASS [   0.008s] (804/833) vortex-buffer bit::view::tests::mut_view_with_offset
+        PASS [   0.007s] (805/833) vortex-buffer bit::view::tests::view_slice_preserves_offset
+        PASS [   0.007s] (806/833) vortex-compute lane_kernels::map_in_place::tests::reinterpret_sink_same_width_f32_u32
+        PASS [   0.007s] (807/833) vortex-buffer bit::view::tests::view_reads_match_buffer
+        PASS [   0.007s] (808/833) vortex-compute lane_kernels::map_in_place::tests::try_map_masked_in_place_first_failing_chunk_wins
+        PASS [   0.008s] (809/833) vortex-compute lane_kernels::map_in_place::tests::reinterpret_sink_failure_reports_lane
+        PASS [   0.008s] (810/833) vortex-compute lane_kernels::map_in_place::tests::try_map_masked_in_place_all_ok
+        PASS [   0.008s] (811/833) vortex-compute lane_kernels::map_in_place::tests::try_map_masked_in_place_null_bypass
+        PASS [   0.007s] (812/833) vortex-compute lane_kernels::map_in_place::tests::try_map_masked_in_place_remainder_overflow
+        PASS [   0.007s] (813/833) vortex-compute lane_kernels::map_in_place::tests::try_map_masked_in_place_sliced_mask
+        PASS [   0.008s] (814/833) vortex-compute lane_kernels::map_in_place::tests::try_map_masked_in_place_partial_chunk_success
+        PASS [   0.007s] (815/833) vortex-compute lane_kernels::map_in_place::tests::try_map_masked_in_place_single_failure_lane_exact
+        PASS [   0.007s] (816/833) vortex-compute lane_kernels::map_into::tests::map_bits_into_lane_zip_compare
+        PASS [   0.008s] (817/833) vortex-compute lane_kernels::map_in_place::tests::try_map_masked_in_place_within_chunk_reports_lowest
+        PASS [   0.007s] (818/833) vortex-compute lane_kernels::map_into::tests::map_bits_into_packs_full_and_remainder_words
+        PASS [   0.007s] (819/833) vortex-compute lane_kernels::map_into::tests::map_checked_into_writes_all_lanes_and_reduces_flag
+        PASS [   0.007s] (820/833) vortex-compute lane_kernels::map_into::tests::map_bits_into_words_too_short_panics
+        PASS [   0.007s] (821/833) vortex-compute lane_kernels::map_into::tests::try_map_masked_into_all_ok
+        PASS [   0.007s] (822/833) vortex-compute lane_kernels::map_into::tests::try_map_masked_into_null_lane_bypasses_check
+        PASS [   0.007s] (823/833) vortex-compute lane_kernels::map_into::tests::try_map_masked_into_branchful_matches_branchless
+        PASS [   0.007s] (824/833) vortex-compute lane_kernels::map_into::tests::try_map_masked_into_overflow_fails
+        PASS [   0.006s] (825/833) vortex-compute lane_kernels::map_into::tests::try_map_masked_into_overflow_reports_first_failing_lane
+        PASS [   0.007s] (826/833) vortex-compute lane_kernels::map_into::tests::try_map_masked_into_overflow_in_remainder
+        PASS [   0.006s] (827/833) vortex-compute lane_kernels::map_into::tests::try_map_masked_into_sliced_mask_null_lanes
+        PASS [   0.006s] (828/833) vortex-compute lane_kernels::map_into::tests::try_map_masked_into_partial_chunk
+        PASS [   0.006s] (829/833) vortex-compute lane_kernels::map_into::tests::try_map_masked_into_sliced_mask_unaligned_offset
+        PASS [   0.006s] (830/833) vortex-compute lane_kernels::map_into::tests::try_map_masked_into_value_only_closure_filters_null_overflow
+        PASS [   0.007s] (831/833) vortex-compute lane_kernels::map_into::tests::try_map_masked_into_sliced_mask_with_overflow
+        PASS [   0.006s] (832/833) vortex-compute lane_kernels::map_into::tests::try_map_masked_into_value_only_closure_reports_first_valid_failure
+        PASS [   0.006s] (833/833) vortex-compute lane_kernels::source::tests::rejects_mismatched_lengths
+────────────
+     Summary [   0.401s] 833 tests run: 833 passed, 3859 skipped

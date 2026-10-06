@@ -1,0 +1,3 @@
+   Compiling rofl-examples v0.1.0 (/Users/connor/spiral/vortex-data/vortex4/rofl-examples)
+    Finished `bench` profile [optimized + debuginfo] target(s) in 1.32s
+  Executable benches/arrow_scalar.rs (target/release/deps/arrow_scalar-604cd22b3782d6c3)

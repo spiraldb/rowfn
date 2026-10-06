@@ -1,0 +1,15 @@
+   Compiling arrow-string v59.3.0
+   Compiling rofl-examples v0.1.0 (/Users/connor/spiral/vortex-data/vortex4/rofl-examples)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.90s
+────────────
+ Nextest run ID 581c32ea-6558-484e-97fe-3be575c8f154 with nextest profile: default
+    Starting 7 tests across 1 binary
+        PASS [   0.024s] (1/7) rofl-examples::scalar_kernels string_predicates_on_both_hosts::case_4_ascii_case
+        PASS [   0.024s] (2/7) rofl-examples::scalar_kernels string_predicates_on_both_hosts::case_1_prefix
+        PASS [   0.024s] (3/7) rofl-examples::scalar_kernels string_predicates_on_both_hosts::case_2_suffix
+        PASS [   0.024s] (4/7) rofl-examples::scalar_kernels string_predicates_on_both_hosts::case_3_contains
+        PASS [   0.025s] (5/7) rofl-examples::scalar_kernels concat_owns_strings_and_combines_both_validities
+        PASS [   0.025s] (6/7) rofl-examples::scalar_kernels multiply_only_suppresses_null_row_overflow
+        PASS [   0.027s] (7/7) rofl-examples::scalar_kernels contains_reprepares_constants_and_preserves_null_patterns
+────────────
+     Summary [   0.027s] 7 tests run: 7 passed, 0 skipped

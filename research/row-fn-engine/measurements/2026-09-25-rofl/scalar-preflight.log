@@ -1,0 +1,148 @@
+arrow_scalar
+├─ arrow_native
+│  ├─ 0
+│  │  ├─ AsciiEqArray
+│  │  ├─ AsciiEqScalar
+│  │  ├─ ConcatLong
+│  │  ├─ ConcatLongDense
+│  │  ├─ ConcatShort
+│  │  ├─ ContainsArray
+│  │  ├─ ContainsScalar
+│  │  ├─ ContainsScalarDense
+│  │  ├─ ContainsUtf8Scalar
+│  │  ├─ EndsWithArray
+│  │  ├─ EndsWithScalar
+│  │  ├─ MultiplyArray
+│  │  ├─ MultiplyArrayDense
+│  │  ├─ MultiplyScalar
+│  │  ├─ StartsWithArray
+│  │  ├─ StartsWithScalar
+│  │  ╰─ StartsWithUtf8Scalar
+│  ├─ 64
+│  │  ├─ AsciiEqArray
+│  │  ├─ AsciiEqScalar
+│  │  ├─ ConcatLong
+│  │  ├─ ConcatLongDense
+│  │  ├─ ConcatShort
+│  │  ├─ ContainsArray
+│  │  ├─ ContainsScalar
+│  │  ├─ ContainsScalarDense
+│  │  ├─ ContainsUtf8Scalar
+│  │  ├─ EndsWithArray
+│  │  ├─ EndsWithScalar
+│  │  ├─ MultiplyArray
+│  │  ├─ MultiplyArrayDense
+│  │  ├─ MultiplyScalar
+│  │  ├─ StartsWithArray
+│  │  ├─ StartsWithScalar
+│  │  ╰─ StartsWithUtf8Scalar
+│  ├─ 1024
+│  │  ├─ AsciiEqArray
+│  │  ├─ AsciiEqScalar
+│  │  ├─ ConcatLong
+│  │  ├─ ConcatLongDense
+│  │  ├─ ConcatShort
+│  │  ├─ ContainsArray
+│  │  ├─ ContainsScalar
+│  │  ├─ ContainsScalarDense
+│  │  ├─ ContainsUtf8Scalar
+│  │  ├─ EndsWithArray
+│  │  ├─ EndsWithScalar
+│  │  ├─ MultiplyArray
+│  │  ├─ MultiplyArrayDense
+│  │  ├─ MultiplyScalar
+│  │  ├─ StartsWithArray
+│  │  ├─ StartsWithScalar
+│  │  ╰─ StartsWithUtf8Scalar
+│  ╰─ 16384
+│     ├─ AsciiEqArray
+│     ├─ AsciiEqScalar
+│     ├─ ConcatLong
+│     ├─ ConcatLongDense
+│     ├─ ConcatShort
+│     ├─ ContainsArray
+│     ├─ ContainsScalar
+│     ├─ ContainsScalarDense
+│     ├─ ContainsUtf8Scalar
+│     ├─ EndsWithArray
+│     ├─ EndsWithScalar
+│     ├─ MultiplyArray
+│     ├─ MultiplyArrayDense
+│     ├─ MultiplyScalar
+│     ├─ StartsWithArray
+│     ├─ StartsWithScalar
+│     ╰─ StartsWithUtf8Scalar
+╰─ arrow_rofl
+   ├─ 0
+   │  ├─ AsciiEqArray
+   │  ├─ AsciiEqScalar
+   │  ├─ ConcatLong
+   │  ├─ ConcatLongDense
+   │  ├─ ConcatShort
+   │  ├─ ContainsArray
+   │  ├─ ContainsScalar
+   │  ├─ ContainsScalarDense
+   │  ├─ ContainsUtf8Scalar
+   │  ├─ EndsWithArray
+   │  ├─ EndsWithScalar
+   │  ├─ MultiplyArray
+   │  ├─ MultiplyArrayDense
+   │  ├─ MultiplyScalar
+   │  ├─ StartsWithArray
+   │  ├─ StartsWithScalar
+   │  ╰─ StartsWithUtf8Scalar
+   ├─ 64
+   │  ├─ AsciiEqArray
+   │  ├─ AsciiEqScalar
+   │  ├─ ConcatLong
+   │  ├─ ConcatLongDense
+   │  ├─ ConcatShort
+   │  ├─ ContainsArray
+   │  ├─ ContainsScalar
+   │  ├─ ContainsScalarDense
+   │  ├─ ContainsUtf8Scalar
+   │  ├─ EndsWithArray
+   │  ├─ EndsWithScalar
+   │  ├─ MultiplyArray
+   │  ├─ MultiplyArrayDense
+   │  ├─ MultiplyScalar
+   │  ├─ StartsWithArray
+   │  ├─ StartsWithScalar
+   │  ╰─ StartsWithUtf8Scalar
+   ├─ 1024
+   │  ├─ AsciiEqArray
+   │  ├─ AsciiEqScalar
+   │  ├─ ConcatLong
+   │  ├─ ConcatLongDense
+   │  ├─ ConcatShort
+   │  ├─ ContainsArray
+   │  ├─ ContainsScalar
+   │  ├─ ContainsScalarDense
+   │  ├─ ContainsUtf8Scalar
+   │  ├─ EndsWithArray
+   │  ├─ EndsWithScalar
+   │  ├─ MultiplyArray
+   │  ├─ MultiplyArrayDense
+   │  ├─ MultiplyScalar
+   │  ├─ StartsWithArray
+   │  ├─ StartsWithScalar
+   │  ╰─ StartsWithUtf8Scalar
+   ╰─ 16384
+      ├─ AsciiEqArray
+      ├─ AsciiEqScalar
+      ├─ ConcatLong
+      ├─ ConcatLongDense
+      ├─ ConcatShort
+      ├─ ContainsArray
+      ├─ ContainsScalar
+      ├─ ContainsScalarDense
+      ├─ ContainsUtf8Scalar
+      ├─ EndsWithArray
+      ├─ EndsWithScalar
+      ├─ MultiplyArray
+      ├─ MultiplyArrayDense
+      ├─ MultiplyScalar
+      ├─ StartsWithArray
+      ├─ StartsWithScalar
+      ╰─ StartsWithUtf8Scalar
+
