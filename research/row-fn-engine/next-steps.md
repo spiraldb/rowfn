@@ -5,6 +5,9 @@
 
 [Overview](README.md)
 
+This roadmap includes follow-up work from the earlier Vortex-based experiments. The
+[current status](../../STATUS.md) describes the standalone workspace and its implemented integrations.
+
 Earlier revisions of the [rowfn implementation](implementation.md) have executable evidence on
 Vortex and Arrow. Focused debug, optimized, and compile-fail tests passed for their recorded source.
 The later package split, concrete text dispatch, and rename have source review only. The
@@ -40,8 +43,10 @@ strict contract.
 
 ## Extend hosts at batch boundaries
 
-A DataFusion wrapper can use `rowfn-arrow` for typed execution. It still needs DataFusion signatures,
-coercion, scalar arguments, output fields, and optimizer metadata.
+The [DataFusion wrapper](../../rowfn-datafusion/README.md) now delegates to `rowfn-arrow`. It preserves
+scalar arguments, logical row counts, and fields, and owns registration identity and volatility.
+Its execution and performance checks remain unrun. Custom coercion and optimizer rules remain
+possible follow-up work.
 
 DuckDB and Velox need batch-level FFI designs with explicit registration and invocation contracts.
 Rust traits are not a stable binary ABI, and Arrow C Data alone does not define those contracts.

@@ -5,6 +5,10 @@
 
 [Research overview](../README.md)
 
+This page records the September 21 host-integration investigation. The active workspace now includes
+the [Arrow backend](../../../rowfn-arrow/README.md) and [DataFusion wrapper](../../../rowfn-datafusion/README.md).
+The source snapshots and proposed foreign interfaces below remain research context.
+
 A shared row kernel can serve Arrow, DataFusion, and DuckDB. A shared type descriptor is only one
 part of that integration. Each host still needs an adapter for binding, input access, output
 ownership, errors, and optimizer metadata.
@@ -74,7 +78,8 @@ The Arrow Rust and DataFusion versions match this Vortex checkout's selected dep
 
 The Vortex manifest permits Arrow 59.2 and DataFusion 55.0.0. Its lockfile selects 59.3.0 and
 55.1.0 for these integrations. Other workspace consumers also use older major versions.
-[Manifest](../../../Cargo.toml), [lockfile](../../../Cargo.lock),
+[Snapshot manifest](https://github.com/vortex-data/vortex/blob/96bd521eb0565555def2af7b8e97e96891728da6/Cargo.toml),
+[snapshot lockfile](https://github.com/vortex-data/vortex/blob/96bd521eb0565555def2af7b8e97e96891728da6/Cargo.lock),
 [DuckDB version pin](https://github.com/vortex-data/vortex/blob/24a96cece436409dc4f60f94c6b846d6af017804/vortex-duckdb/build.rs).
 
 This investigation reads source and describes proposed adapters. It does not implement, compile,

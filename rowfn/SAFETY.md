@@ -1,59 +1,44 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 <!-- SPDX-FileCopyrightText: Copyright the Vortex contributors -->
 
-# Source review of unsafe contracts
+# Safety contracts
 
-This record describes the cleanup's source review. It does not certify memory safety. Existing test
-and benchmark reports concern the source revisions recorded in those reports. The cleanup has not
-run tests, doctests, Miri, builds, linting, formatting, codegen experiments, or benchmarks.
+[Overview](../README.md) · [Adapter guide](ADAPTERS.md) · [Status and verification](../STATUS.md)
 
-| Boundary | Invariant and enforcement inspected |
+The executor relies on backend bindings to provide valid borrowed views, stable output slots, and
+safe publication. This page maps those obligations to their enforcement. Source review does not
+certify memory safety. Executed verification and historical evidence are listed in [STATUS.md](../STATUS.md).
+
+| Boundary | Contract and enforcement |
 | --- | --- |
-| Borrowed input | `RowView` is unsafe. Decoded owners remain live through preparation and traversal. Sources validate exact view lengths before unchecked access. A successful view must provide valid values at every in-range index. |
-| Concrete text layouts | Arrow offset views borrow the decoded owner's matching offsets and bytes. The offset slice has one sentinel beyond the row domain. Arrow view rows borrow matching headers and backing buffers. These immutable borrows retain valid null payloads and the original slice offsets. |
-| Scalar input | Decoding checks one retained row. Source construction checks that count again. Scalar-only execution can reduce logical evaluation to one row before host broadcasting. |
-| Selection | The unsafe trait guarantees stable bounds, order, uniqueness, count, and immediate error propagation. Executors check the input and output domains before selected or filtered traversal. |
-| Owned output | The unsafe buffer contract preserves slots and contents. Owned traversal excludes types that require destruction and publishes only initialized prefixes. Errors abandon partial storage. |
-| Initialized scalar output | `ElementSink` writes defaults before lending `&mut T`. The conversion from `MaybeUninit<T>` covers only that initialized prefix. Safe mutable values cannot remove initialization. It uses `()` rather than an unsafe token. |
-| Uninitialized scalar and list output | Token constructors remain unsafe. They require the current callback's exact entire row and preservation of initialization. The tokens themselves do not encode identity. |
-| Fixed-size lists | Allocation checks row-count multiplication. The explicit row count survives width zero. Each non-empty row lends its own bounded child range. |
-| Strings | Output writers retain owned bytes, check representation limits, and preserve initialized empty placeholders. Arrow publication uses an unchecked constructor only after those invariants. Vortex input decoding retains validation and null sanitation. |
-| Boolean packing | Collectors can invoke closures containing unchecked reads. The unsafe host contract bounds callback indices, and shared kernels handle sliced borrowed bitmaps without assuming padding. |
-| Deferred errors | Only rejected row evidence enters validity-based suppression or retry. Decoder, allocation, shape-validation, and publication errors return directly. |
+| [Borrowed input](src/input.rs) | `RowView` is unsafe to implement. Decoded owners stay live through preparation and traversal. Sources validate lengths before unchecked access. Every in-range index must return a valid value, including null payloads after successful decoding. |
+| [Concrete text layouts](../rowfn-arrow/src/input.rs) | Offset views borrow matching offsets and bytes. Their offset slice has one sentinel beyond the row domain. View rows borrow matching headers and backing buffers. Slices retain their original offsets and owners. |
+| [Scalar input](src/tuple.rs) | A scalar decode retains exactly one addressable row. Source construction checks that count. Scalar-only execution can compute one valid result before broadcasting to the logical row count. |
+| [Selection](src/host.rs) | The unsafe trait requires stable bounds, order, uniqueness, count, and immediate error propagation. Executors check input and output domains before selected or filtered traversal. |
+| [Owned output](src/output.rs) | `OutputBuffer` preserves stable slots and permits safe partial abandonment. Owned traversal excludes values that require destruction. Publication reads only the initialized prefix. |
+| [Initialized scalar output](src/sink/initialized.rs) | `ElementSink` writes defaults before lending mutable values. The initialized prefix covers every exposed slot, and safe mutation cannot remove initialization. |
+| [Uninitialized output](src/sink/element.rs) | A token must prove initialization of the exact complete row supplied to the callback. Its unsafe constructor requires that initialization to remain intact until return. |
+| [Fixed-size lists](src/sink/list.rs) | Allocation checks row-count multiplication. The explicit row count survives width zero. Each nonempty row lends its own bounded child range. Initialization evidence covers that entire range. |
+| [Strings](../rowfn-arrow/src/string.rs) | Writers own output bytes, check representation limits, and retain initialized empty placeholders. Unchecked Arrow construction follows those checks. |
+| [Boolean packing](src/output.rs) | The unsafe host contract bounds callback indices and order. No callback runs for zero rows. Shared kernels support sliced bitmaps without assuming padding. |
+| [Deferred errors](src/execute/mod.rs) | Only rejected row evidence permits null-based suppression or retry. Decoder, allocation, validation, and publication failures return directly. |
+| [DataFusion invocation](../rowfn-datafusion/src/udf.rs) | The wrapper preserves scalar markers, fields, and row count, then delegates to Arrow. It adds no unsafe code or row traversal. Infrastructure errors remain terminal. |
 
-The low-level initialization tokens remain intentionally unsafe. Making only their constructors
-safe would permit a callback to return evidence for an unrelated slot. `ElementSink` offers a safe
-alternative by establishing initialization at allocation, with an explicit cost in default writes.
-The cleanup does not add runtime row identities or change existing uninitialized sink behavior.
+The low-level initialization tokens do not encode row identity. Making their constructors safe would
+permit a callback to return evidence for an unrelated slot. `ElementSink` provides a safe alternative
+by initializing scalar storage before traversal, with the cost of those default writes.
 
-The existing deferred Boolean code retains its combined-state mutable borrow and separate terminal
-and retry loops. The lane and packing algorithms remain unchanged. Moving shared function definitions
-to another crate can affect compiled code even when callbacks are unchanged, so historical timings
-do not measure the cleanup.
+Borrowed views cannot escape their decoded owners. Preparation belongs to one invocation and can
+run again during an eligible retry. Callbacks cannot panic or have observable side effects outside
+their supplied output row. These requirements apply even when the invocation fails.
 
-## Focused follow-up checks
+## Verification targets
 
-These commands are references for an explicitly requested verification run:
+For an explicitly requested run, focus on borrowed lifetimes, exact-row tokens, partial abandonment,
+sliced validity, dictionary nulls, output ownership, and zero-row behavior. Compare fields as well as
+values for list shape, timestamps, and semantic extensions.
 
-```sh
-cargo nextest run -p rowfn -p rowfn-arrow -p rowfn-examples
-cargo test --doc -p rowfn -p rowfn-arrow
-cargo check --locked -p rowfn-functions --no-default-features
-cargo check --locked -p rowfn-functions --features arrow --example arrow
-```
-
-The new initialized-sink fixtures cover preserved defaults across views and moves, empty publication,
-valid-only division, and abandonment after an error following a successful write. Existing fixtures
-cover lifetime and token compile failures, partially initialized abandonment, dictionary nulls,
-metadata, sliced bitmaps, custom bindings, and cross-host registration.
-
-For compiler-sensitive changes, compare primitive and scalar specialization, deferred arithmetic,
-Boolean packing, and nullable retry with a matching compiler, target, CGU count, and LTO mode.
-The current boundary benchmarks use 16 CGUs and no LTO. A vector operation found in one loop does
-not establish that all relevant branches vectorize. Full timing and codegen checks remain opt-in.
-
-The text dispatch follow-up changes `TextBinding` and moves shared function selection to concrete
-layout families. It adds Arrow-only binding fixtures, mixed-layout function fixtures, and direct
-versus shared length collection controls. No tests, compiler checks, or benchmarks ran for this
-follow-up. Increased layout specialization can change code size and inlining, so its generated code
-and performance remain unresolved.
+Compiler-sensitive changes also need matched source, target, CGU, and LTO settings. In particular,
+the Boolean implementation retains its combined-state borrow and separate terminal and retry loops.
+A source refactor can change inlining or vectorization even when the row callback is unchanged.
+See the [comparison guide](COMPARING.md) for benchmark boundaries and commands.

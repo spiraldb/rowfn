@@ -3,7 +3,7 @@
 
 # Architecture
 
-[Overview](../README.md) · [Rust interfaces](INTERFACES.md)
+[Overview](../README.md) · [Rust interfaces](INTERFACES.md) · [Backends](BACKENDS.md)
 
 A function selects typed work through `RowVisitor`. Planning checks that selection. Execution runs
 it through the host bindings. Types describe the values and metadata passed across those interfaces.
@@ -82,7 +82,8 @@ remain terminal. Preparation belongs to the invocation and can run again during 
 | [`rowfn`](README.md) | Types, visitors, planning, execution, and sinks. |
 | [`rowfn-kernels`](../rowfn-kernels/README.md) | Lane sources, borrowed bitmaps, and Boolean packing. |
 | [`rowfn-arrow`](../rowfn-arrow/README.md) | Arrow bindings and invocation. |
+| [`rowfn-datafusion`](../rowfn-datafusion/README.md) | DataFusion scalar UDF registration over Arrow. |
 | [`rowfn-examples`](../rowfn-examples/README.md) | Function examples and benchmarks using the included backend. |
 
-The framework and kernels have no backend dependency. Registration and whole-batch functions remain
-backend concerns. [Backends](BACKENDS.md) lists current and potential integrations.
+The framework and kernels have no backend dependency. DataFusion uses the Arrow backend through a
+scalar UDF wrapper. Registration and whole-batch functions remain backend concerns.

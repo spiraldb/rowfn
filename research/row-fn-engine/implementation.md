@@ -5,6 +5,10 @@
 
 [Overview](README.md)
 
+This page records the earlier Vortex-based extraction. Package layouts and verification below
+describe those source revisions. See the [project overview](../../README.md) and
+[status](../../STATUS.md) for the active standalone workspace.
+
 The extraction now has framework, kernel, Vortex, and Arrow source implementations. Shared proof
 functions execute on both adapters through one visitor binder. Earlier validated revisions passed
 focused tests in debug and optimized profiles. The
@@ -150,7 +154,7 @@ performance upper bound.
 
 Package READMEs now link to those entry points. Historical reports state that their tables predate
 the package split, concrete text dispatch, and rename. The current checkout remains a modified
-Vortex workspace; standalone distribution is separate work. No Rust source, benchmark fixture,
+Vortex workspace, with standalone distribution as separate work. No Rust source, benchmark fixture,
 unsafe contract, or measurement artifact changed during this documentation cleanup. No tests,
 builds, formatting, linting, codegen experiments, or benchmarks ran.
 

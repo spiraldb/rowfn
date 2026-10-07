@@ -71,3 +71,6 @@ source qualifications.
 For a new comparison, use the [comparison guide](rowfn/COMPARING.md), preserve the exact compiled
 source and configuration, and record both absolute times and ratios. Benchmark execution remains
 opt-in.
+
+The [DataFusion boundary fixtures](rowfn-datafusion/README.md#benchmark-boundaries) add direct Arrow,
+UDF wrapper, and native DataFusion comparisons. They remain unrun and add no measurement results.

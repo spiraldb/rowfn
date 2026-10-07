@@ -25,7 +25,7 @@ and supplies focused commands. Use matching compiler, target, allocator, CGU, an
 
 Text-length controls in `boundaries` use the same output allocation. Decoding is outside timing,
 while shared collection includes view construction and length validation. These new controls have
-not run. The [project status](../README.md#status) also identifies other unverified changes.
+not run. See [status and verification](../../../STATUS.md) for other unverified changes.
 
 <details>
 <summary>Function and path inventory</summary>
@@ -64,7 +64,7 @@ added. Whole-batch functions can use `ScalarFnVTable` directly.
 
 Pattern preparation belongs to one invocation. RowFn's LIKE example retains all distinct patterns,
 while Arrow 59.3.0 array LIKE retains the preceding pattern. Error and output differences are listed
-in the [comparison guide](../../../rowfn/COMPARING.md#match-the-operation).
+in the [comparison guide](../../../rowfn/COMPARING.md#match-the-contract).
 
 ## Recorded evidence
 

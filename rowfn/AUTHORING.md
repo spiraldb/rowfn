@@ -10,6 +10,10 @@ Start with a fixed signature. Add runtime type dispatch only when the function n
 [Architecture](ARCHITECTURE.md) shows the execution path. [Rust interfaces](INTERFACES.md) shows the
 actual traits and types.
 
+The visitor authoring model grew out of Vortex's [RowFn epic](https://github.com/vortex-data/vortex/issues/9128)
+and [API tracking issue](https://github.com/vortex-data/vortex/issues/9129). The examples below use
+this repository's backend-independent `RowFn<H>` interface.
+
 ## Choose a visit
 
 | The function needs | Use |

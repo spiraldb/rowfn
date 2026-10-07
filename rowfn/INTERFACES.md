@@ -8,6 +8,9 @@
 These diagrams use the actual API names. Generic arguments are shown where they help. Only selected
 methods are listed. Source links contain the full contracts.
 
+These are the standalone interfaces. Vortex's [API tracking issue](https://github.com/vortex-data/vortex/issues/9129)
+documents the related Vortex interface and its design history.
+
 ## 1. Select typed work
 
 ```mermaid

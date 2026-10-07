@@ -5,8 +5,9 @@
 
 [Overview](../README.md) · [Author guide](../rowfn/AUTHORING.md)
 
-Backend-independent function definitions. Each function keeps its type dispatch and row operation
-together. Backend mappings interpret native metadata without duplicating that function logic.
+Portable function definitions for RowFn. Each function keeps its semantic type dispatch and row
+operation together. Backend mappings interpret native metadata. Callers can invoke the same
+definitions directly on Arrow or through the DataFusion integration.
 
 ## Examples
 
@@ -28,8 +29,9 @@ included backend:
 cargo run --locked -p rowfn-functions --features arrow --example arrow
 ```
 
-An earlier Vortex mapping and manifest are preserved in the
-[integration snapshot](../integrations/vortex/README.md). Other backend mappings have yet to be added.
+The [DataFusion example](../rowfn-datafusion/examples/sql.rs) registers these definitions as scalar
+UDFs through `rowfn-arrow`. It uses the same Arrow mappings. An earlier Vortex mapping and manifest
+remain in the [integration snapshot](../integrations/vortex/README.md).
 
 ## Extend or compare
 
@@ -40,4 +42,4 @@ orphan rules. Functions are not registered automatically. Registration belongs t
 also shows `ElementSink`, which supplies safe initialized rows. [Examples and benchmarks](../rowfn-examples/README.md)
 exercise the included backend.
 
-The package is unpublished. See [project status](../README.md#status) for the evidence boundary.
+See [status and verification](../STATUS.md) for publication and verification status.

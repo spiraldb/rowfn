@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["rowfn-kernels", "rowfn", "rowfn-arrow", "rowfn-functions", "rowfn-examples"]
+members = ["rowfn-kernels", "rowfn", "rowfn-arrow", "rowfn-datafusion", "rowfn-functions", "rowfn-examples"]
 exclude = ["integrations/vortex/rowfn-examples"]
 
 [workspace.package]
@@ -22,6 +22,9 @@ arrow-ord = "=59.3.0"
 arrow-schema = "=59.3.0"
 arrow-select = "=59.3.0"
 arrow-string = "=59.3.0"
+datafusion = { version = "=55.1.0", default-features = false }
+datafusion-common = { version = "=55.1.0", default-features = false }
+datafusion-expr = { version = "=55.1.0", default-features = false }
 divan = { package = "codspeed-divan-compat", version = "=5.0.1" }
 memchr = "=2.8.3"
 regex = "=1.13.1"
@@ -29,8 +32,10 @@ regex-syntax = "=0.8.11"
 rstest = "=0.26.1"
 rowfn = { version = "0.1.0", path = "rowfn" }
 rowfn-arrow = { version = "0.1.0", path = "rowfn-arrow" }
+rowfn-datafusion = { version = "0.1.0", path = "rowfn-datafusion" }
 rowfn-kernels = { version = "0.1.0", path = "rowfn-kernels" }
 rowfn-functions = { version = "0.1.0", path = "rowfn-functions" }
+tokio = { version = "=1.53.2", default-features = false }
 
 [workspace.lints.rust]
 unsafe_op_in_unsafe_fn = "deny"

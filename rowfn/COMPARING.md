@@ -52,18 +52,22 @@ explanations need the exact generated code that was timed.
 
 ## Use the current harness
 
-The included backend is Arrow. Its [fixture package](../rowfn-examples/README.md) supplies the
-current comparisons. These reference commands select one behavior test and two benchmark pairs:
+The [Arrow fixture package](../rowfn-examples/README.md) compares direct collection, shared
+collection, full invocation, and native kernels. The [DataFusion fixtures](../rowfn-datafusion/README.md#benchmark-boundaries)
+compare direct Arrow calls, UDF wrapper invocation, and native DataFusion operations.
+
+These reference commands select one Arrow behavior test and benchmark boundaries:
 
 ```sh
 cargo test --locked -p rowfn-examples --test text_layouts
 cargo bench --locked -p rowfn-examples --bench arrow_families -- ByteLengthUtf8
 cargo bench --locked -p rowfn-examples --bench boundaries -- text_length_collection
+cargo bench --locked -p rowfn-datafusion --bench boundaries
 ```
 
 The final argument filters benchmark names. Keep both sides of a pair. Record the command, compiler,
 target, environment, fixture, raw results, and source state, including uncommitted changes.
-Verification remains opt-in. These commands have not run for the latest changes.
+Verification remains opt-in. See [status and verification](../STATUS.md) for executed checks.
 
 ## Read existing evidence
 

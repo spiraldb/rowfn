@@ -6,7 +6,8 @@
 [Overview](../README.md) · [Rust interfaces](../rowfn/INTERFACES.md)
 
 `rowfn-arrow` runs shared row functions directly on Arrow arrays. It owns decoding, validity,
-allocation, and output fields. It has no Vortex dependency, including through its tests.
+allocation, and output fields. The [DataFusion integration](../rowfn-datafusion/README.md) delegates
+to this same invocation boundary. This package has no DataFusion or Vortex dependency.
 
 ## Invoke a function
 
@@ -64,10 +65,10 @@ whose adapter retains validation and null sanitation.
 
 ## Evidence
 
-Arrow-only tests live in this package. Current examples and benchmarks live in
-[`rowfn-examples`](../rowfn-examples/README.md). Earlier cross-host fixtures remain in the Vortex snapshot. The adapter is unpublished and uses locked Arrow
-59.3.0. The [comparison guide](../rowfn/COMPARING.md) explains baseline qualifications, and the
-[project status](../README.md#status) identifies the latest unverified changes.
+Arrow-only tests live in this package. Direct Arrow fixtures and benchmarks live in
+[`rowfn-examples`](../rowfn-examples/README.md). Earlier cross-host fixtures remain in the
+[Vortex snapshot](../integrations/vortex/README.md). The workspace pins Arrow 59.3.0. See
+[status and verification](../STATUS.md) for the current evidence boundary.
 
 ## Native comparisons
 

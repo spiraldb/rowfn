@@ -6,6 +6,10 @@
 The standalone workspace has no Vortex dependency. This directory preserves the Vortex adapter,
 full cross-host fixtures, and original function manifest from the experimental checkout.
 
+Vortex's [RowFn epic](https://github.com/vortex-data/vortex/issues/9128) and
+[API tracking issue](https://github.com/vortex-data/vortex/issues/9129) provide the original project
+context. This snapshot preserves one experiment, rather than tracking Vortex's current API.
+
 | File | Contains |
 | --- | --- |
 | [adapter](adapter/mod.rs) | Native decoding, allocation, validity, and registry wrapper. |
@@ -37,6 +41,7 @@ The patch declares those package paths in the Vortex workspace and restores its 
 edges. The independent crate sources are shared with this repository. Cross-host function mappings
 remain in the function package to satisfy Rust's orphan rules.
 
-This reconstruction command is a reference, not an executed check. No builds, tests, or benchmarks
-ran for the standalone export or reconstruction. Keep the original compiler, target, CGU, and LTO
-settings when repeating a recorded comparison. Historical timings do not measure later source.
+This reconstruction command is a reference, not an executed check. See
+[status and verification](../../STATUS.md) for the evidence boundary. Keep the original compiler,
+target, CGU, and LTO settings when repeating a recorded comparison. Historical timings do not measure
+later source.

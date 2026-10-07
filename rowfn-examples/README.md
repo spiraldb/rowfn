@@ -5,8 +5,9 @@
 
 [Overview](../README.md) · [Comparison guide](../rowfn/COMPARING.md)
 
-Examples and benchmarks for the shared function definitions. The current harness uses Arrow because
-it is the first included backend. Future backend harnesses can use the same functions and fixtures.
+Arrow fixtures and benchmarks for the shared function definitions. The
+[DataFusion integration](../rowfn-datafusion/README.md#benchmark-boundaries) has separate fixtures
+for SQL execution and UDF wrapper costs.
 
 | Harness | Compares |
 | --- | --- |
@@ -18,6 +19,6 @@ it is the first included backend. Future backend harnesses can use the same func
 When run, fixtures compare results before timing. Some references compose native kernels or use
 different output layouts. The [comparison guide](../rowfn/COMPARING.md) explains those limits.
 
-The standalone export has not been built, tested, or benchmarked. [Recorded measurements](../BENCHMARKS.md)
-describe earlier source. Full cross-host fixtures are preserved with the
-[Vortex prototype](../integrations/vortex/README.md).
+[Recorded measurements](../BENCHMARKS.md) describe earlier source. See
+[status and verification](../STATUS.md) for the current evidence boundary. Full cross-host fixtures
+remain in the [Vortex snapshot](../integrations/vortex/README.md).

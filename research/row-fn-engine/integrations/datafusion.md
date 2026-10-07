@@ -3,6 +3,9 @@
 
 # DataFusion adapter
 
+This is the earlier integration investigation. The implemented wrapper and its current contracts
+are documented in [rowfn-datafusion](../../../rowfn-datafusion/README.md).
+
 DataFusion is the closest additional host. A Rust `ScalarUDFImpl` can wrap the Arrow adapter and
 register through `SessionContext::register_udf`. This shares the row implementation and Arrow
 storage code. DataFusion planning and expression execution remain host responsibilities.

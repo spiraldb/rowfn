@@ -1,0 +1,37 @@
+[package]
+name = "rowfn-datafusion"
+version = "0.1.0"
+edition.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+categories.workspace = true
+keywords.workspace = true
+license.workspace = true
+rust-version.workspace = true
+readme = "README.md"
+publish = false
+description = "Experimental DataFusion scalar UDF integration for rowfn"
+
+[dependencies]
+arrow-schema.workspace = true
+datafusion-common.workspace = true
+datafusion-expr.workspace = true
+rowfn.workspace = true
+rowfn-arrow.workspace = true
+
+[dev-dependencies]
+arrow-array.workspace = true
+arrow-buffer.workspace = true
+datafusion = { workspace = true, features = ["sql", "string_expressions"] }
+divan.workspace = true
+rowfn-functions = { workspace = true, features = ["arrow"] }
+rstest.workspace = true
+tokio = { workspace = true, features = ["macros", "rt"] }
+
+[lints]
+workspace = true
+
+[[bench]]
+name = "boundaries"
+harness = false
