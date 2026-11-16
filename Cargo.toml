@@ -7,7 +7,6 @@ exclude = ["integrations/vortex/rowfn-examples"]
 authors = ["Vortex Authors <hello@vortex.dev>"]
 categories = ["database-implementations", "data-structures"]
 edition = "2024"
-homepage = "https://github.com/spiraldb/rowfn"
 repository = "https://github.com/spiraldb/rowfn"
 keywords = ["columnar", "kernels", "experimental"]
 license = "Apache-2.0"
